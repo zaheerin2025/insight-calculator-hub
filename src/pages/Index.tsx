@@ -5,6 +5,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const calculatorCategories = [
   {
@@ -16,6 +17,7 @@ const calculatorCategories = [
     calculators: [
       { name: 'Mortgage Calculator', path: '/calculators/finance/mortgage-calculator' },
       { name: 'Compound Interest Calculator', path: '/calculators/finance/compound-interest-calculator' },
+      { name: 'Loan EMI Calculator', path: '/calculators/finance/loan-emi-calculator', comingSoon: true },
     ]
   },
   {
@@ -26,6 +28,8 @@ const calculatorCategories = [
     path: '/calculators/health',
     calculators: [
       { name: 'BMI Calculator', path: '/calculators/health/bmi-calculator' },
+      { name: 'Body Fat Calculator', path: '/calculators/health/body-fat-calculator', comingSoon: true },
+      { name: 'Calorie Needs Calculator', path: '/calculators/health/calorie-needs-calculator', comingSoon: true },
     ]
   },
   {
@@ -36,6 +40,8 @@ const calculatorCategories = [
     path: '/calculators/math',
     calculators: [
       { name: 'Percentage Calculator', path: '/calculators/math/percentage-calculator' },
+      { name: 'Age Calculator', path: '/calculators/math/age-calculator', comingSoon: true },
+      { name: 'Discount Calculator', path: '/calculators/math/discount-calculator', comingSoon: true },
     ]
   },
   {
@@ -44,7 +50,11 @@ const calculatorCategories = [
     icon: <DollarSign className="h-10 w-10 text-white" />,
     background: 'bg-gradient-to-br from-green-500 to-emerald-400',
     path: '/calculators/business',
-    calculators: []
+    calculators: [
+      { name: 'Profit Margin Calculator', path: '/calculators/business/profit-margin-calculator', comingSoon: true },
+      { name: 'ROI Calculator', path: '/calculators/business/roi-calculator', comingSoon: true },
+      { name: 'Sales Tax Calculator', path: '/calculators/business/sales-tax-calculator', comingSoon: true },
+    ]
   },
   {
     title: 'Construction Calculators',
@@ -52,7 +62,11 @@ const calculatorCategories = [
     icon: <Construction className="h-10 w-10 text-white" />,
     background: 'bg-gradient-to-br from-amber-500 to-yellow-400',
     path: '/calculators/construction',
-    calculators: []
+    calculators: [
+      { name: 'Concrete Calculator', path: '/calculators/construction/concrete-calculator', comingSoon: true },
+      { name: 'Paint Calculator', path: '/calculators/construction/paint-calculator', comingSoon: true },
+      { name: 'Flooring Calculator', path: '/calculators/construction/flooring-calculator', comingSoon: true },
+    ]
   }
 ];
 
@@ -80,6 +94,57 @@ const features = [
     description: 'Visual breakdowns and analysis of your results.',
     icon: <BarChart className="h-6 w-6 text-white" />,
     color: 'from-blue-500 to-indigo-400'
+  }
+];
+
+const faqs = [
+  {
+    question: "How accurate are the calculators on Calculators-Hub?",
+    answer: "All calculators on Calculators-Hub are designed to provide highly accurate results based on the most up-to-date formulas and methodologies. They undergo rigorous testing to ensure reliability. However, for critical financial or health decisions, we always recommend consulting with a professional."
+  },
+  {
+    question: "Is my data saved when I use a calculator?",
+    answer: "No. All calculations are performed directly in your browser, and we do not store any of your input data on our servers. Your privacy is important to us, and we design our calculators with this principle in mind."
+  },
+  {
+    question: "Can I use these calculators on my mobile device?",
+    answer: "Yes! All our calculators are fully responsive and work on any device, including smartphones, tablets, laptops, and desktop computers."
+  },
+  {
+    question: "Are the financial calculators up-to-date with current rates?",
+    answer: "Our financial calculators allow you to input current market rates, but do not automatically fetch rates. For the most accurate results, we recommend checking current rates from reliable financial sources and then using those figures in our calculators."
+  },
+  {
+    question: "How often are new calculators added?",
+    answer: "We regularly add new calculators based on user feedback and emerging needs. Our team is constantly working to expand our library with useful tools across all categories."
+  },
+  {
+    question: "Can I suggest a new calculator?",
+    answer: "Absolutely! We welcome suggestions for new calculators. Please visit our Contact page to send us your ideas."
+  }
+];
+
+const blogPosts = [
+  {
+    title: "How to Choose the Right Mortgage Calculator for Your Home Purchase",
+    slug: "choosing-right-mortgage-calculator",
+    excerpt: "Buying a home is one of life's major financial decisions. Learn how to use mortgage calculators to make an informed choice.",
+    date: "2025-04-12",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    title: "5 Ways BMI Calculators Can Help Monitor Your Health",
+    slug: "bmi-calculator-health-benefits",
+    excerpt: "Learn how Body Mass Index (BMI) calculations can provide insights into your overall health and weight management goals.",
+    date: "2025-04-05",
+    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aGVhbHRoeSUyMGxpZmVzdHlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    title: "Understanding Compound Interest: The Eighth Wonder of the World",
+    slug: "understanding-compound-interest",
+    excerpt: "Discover how compound interest works and why it's considered one of the most powerful forces in finance.",
+    date: "2025-03-27",
+    image: "https://images.unsplash.com/photo-1559526324-593bc073d938?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aW52ZXN0bWVudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
   }
 ];
 
@@ -141,13 +206,21 @@ const Index: React.FC = () => {
                   <ul className="space-y-3 mb-6">
                     {category.calculators.map((calculator, i) => (
                       <li key={i}>
-                        <Link 
-                          to={calculator.path} 
-                          className="text-primary hover:text-primary-hover hover:underline transition-colors flex items-center"
-                        >
-                          <Calculator className="h-4 w-4 mr-2" />
-                          {calculator.name}
-                        </Link>
+                        {calculator.comingSoon ? (
+                          <div className="flex items-center text-muted-foreground">
+                            <Calculator className="h-4 w-4 mr-2" />
+                            {calculator.name}
+                            <span className="text-xs ml-2 py-1 px-2 bg-muted rounded-full">Coming Soon</span>
+                          </div>
+                        ) : (
+                          <Link 
+                            to={calculator.path} 
+                            className="text-primary hover:text-primary-hover hover:underline transition-colors flex items-center"
+                          >
+                            <Calculator className="h-4 w-4 mr-2" />
+                            {calculator.name}
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -176,6 +249,76 @@ const Index: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+      
+      {/* Latest Blog Posts Section */}
+      <div className="bg-muted/30 py-16">
+        <div className="container">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-10">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Latest from Our Blog</h2>
+              <p className="text-muted-foreground max-w-2xl">
+                Read our latest articles about calculators, financial planning, health metrics, and more.
+              </p>
+            </div>
+            <Button asChild variant="outline" className="mt-4 md:mt-0">
+              <Link to="/blog">View All Posts</Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post, index) => (
+              <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img 
+                    src={post.image} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">
+                    <Link to={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
+                      {post.title}
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="text-muted-foreground line-clamp-3 mb-4">{post.excerpt}</p>
+                  <Button asChild variant="link" className="p-0 h-auto font-medium">
+                    <Link to={`/blog/${post.slug}`}>
+                      Read More
+                      <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* FAQ Section */}
+      <div className="container py-16 md:py-24">
+        <h2 className="text-3xl font-bold text-center mb-2">Frequently Asked Questions</h2>
+        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+          Get answers to common questions about our calculators and how to use them effectively.
+        </p>
+        
+        <div className="max-w-3xl mx-auto">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="text-lg">{faq.question}</AccordionTrigger>
+                <AccordionContent>
+                  <p className="text-muted-foreground">{faq.answer}</p>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
       

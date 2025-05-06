@@ -42,7 +42,7 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
   relatedCalculators,
 }) => {
   // Filter out any related calculators marked as "Coming Soon"
-  const availableRelatedCalculators = relatedCalculators?.filter(calc => !calc.comingSoon);
+  const availableRelatedCalculators = relatedCalculators?.filter(calc => !calc.comingSoon) || [];
   
   return (
     <>
@@ -80,7 +80,7 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
             </div>
           )}
           
-          {availableRelatedCalculators && availableRelatedCalculators.length > 0 && (
+          {availableRelatedCalculators.length > 0 && (
             <div className="mb-10">
               <h2 className="text-2xl font-semibold mb-4">Related Calculators</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

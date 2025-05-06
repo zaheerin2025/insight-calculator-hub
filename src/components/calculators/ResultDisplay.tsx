@@ -1,46 +1,42 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
-interface ResultDisplayProps {
-  title?: string;
-  label?: string;  // Added label prop
+export interface ResultDisplayProps {
+  label: string;
   value: string | number;
-  description?: string;
-  isLoading?: boolean;
-  highlight?: boolean;
-  icon?: React.ReactNode; // Added icon prop
+  icon?: React.ReactNode;
+  className?: string;
+  isHighlighted?: boolean;
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({
-  title,
-  label,  // Added label prop
+  label,
   value,
-  description,
-  isLoading = false,
-  highlight = false,
-  icon,   // Added icon prop
+  icon,
+  className,
+  isHighlighted = false
 }) => {
-  // Use label if provided, otherwise fall back to title
-  const displayTitle = label || title;
-  
   return (
-    <Card className={`${highlight ? 'border-primary border-2' : 'border border-border'}`}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2">
-          {icon && <span className="text-primary">{icon}</span>}
-          <h3 className="text-sm font-medium text-muted-foreground">{displayTitle}</h3>
+    <div
+      className={cn(
+        'flex items-center p-4 rounded-lg border',
+        isHighlighted
+          ? 'bg-primary/5 border-primary/20'
+          : 'bg-muted/30 border-muted',
+        className
+      )}
+    >
+      {icon && (
+        <div className="mr-3 p-2 bg-muted rounded-md">
+          {icon}
         </div>
-        {isLoading ? (
-          <div className="h-8 bg-muted animate-pulse rounded-md mt-1"></div>
-        ) : (
-          <p className={`text-2xl font-bold mt-1 ${highlight ? 'text-primary' : ''}`}>
-            {value}
-          </p>
-        )}
-        {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
-      </CardContent>
-    </Card>
+      )}
+      <div>
+        <div className="text-sm font-medium text-muted-foreground mb-1">{label}</div>
+        <div className="text-lg font-semibold">{value}</div>
+      </div>
+    </div>
   );
 };
 

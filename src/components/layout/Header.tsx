@@ -38,9 +38,18 @@ const Header: React.FC = () => {
                 <Link to="/calculators/math" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
                   Math
                 </Link>
+                <Link to="/calculators/business" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
+                  Business
+                </Link>
+                <Link to="/calculators/construction" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
+                  Construction
+                </Link>
               </div>
             </div>
           </div>
+          <Link to="/blog" className="text-foreground font-medium hover:text-primary transition-colors">
+            Blog
+          </Link>
           <Link to="/about" className="text-foreground font-medium hover:text-primary transition-colors">
             About
           </Link>
@@ -80,8 +89,17 @@ const Header: React.FC = () => {
                   <Link to="/calculators/math" className="block text-muted-foreground hover:text-primary transition-colors">
                     Math
                   </Link>
+                  <Link to="/calculators/business" className="block text-muted-foreground hover:text-primary transition-colors">
+                    Business
+                  </Link>
+                  <Link to="/calculators/construction" className="block text-muted-foreground hover:text-primary transition-colors">
+                    Construction
+                  </Link>
                 </div>
               </div>
+              <Link to="/blog" className="text-lg font-medium">
+                Blog
+              </Link>
               <Link to="/about" className="text-lg font-medium">
                 About
               </Link>

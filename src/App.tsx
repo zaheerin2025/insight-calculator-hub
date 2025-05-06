@@ -17,6 +17,8 @@ import MortgageCalculatorPage from "./pages/calculator-pages/MortgageCalculatorP
 import CompoundInterestCalculatorPage from "./pages/calculator-pages/CompoundInterestCalculatorPage";
 import BMICalculatorPage from "./pages/calculator-pages/BMICalculatorPage";
 import PercentageCalculatorPage from "./pages/calculator-pages/PercentageCalculatorPage";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +39,8 @@ const App = () => (
           {/* Main Pages */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           
           {/* Calculator Category Pages */}
           <Route path="/calculators/finance" element={<CalculatorsFinance />} />
