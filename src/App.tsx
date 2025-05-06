@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -15,7 +16,6 @@ import CompoundInterestCalculatorPage from "./pages/calculator-pages/CompoundInt
 import BMICalculatorPage from "./pages/calculator-pages/BMICalculatorPage";
 import PercentageCalculatorPage from "./pages/calculator-pages/PercentageCalculatorPage";
 import NotFound from "./pages/NotFound";
-import { Helmet } from "react-helmet";
 
 const queryClient = new QueryClient();
 
