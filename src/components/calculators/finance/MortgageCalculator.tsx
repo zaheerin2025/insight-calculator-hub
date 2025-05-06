@@ -7,18 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import ResultDisplay from '../ResultDisplay';
 import { useMemo } from 'react';
-import {
-  Chart,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartData,
-  ChartOptions,
-} from '@/components/ui/chart';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { BanknoteIcon, Calculator, Home, PiggyBank } from 'lucide-react';
-
-// Register the required chart components
-Chart.register(ArcElement, Tooltip, Legend);
+import { ChartContainer } from '@/components/ui/chart';
 
 const MortgageCalculator: React.FC = () => {
   const [loanAmount, setLoanAmount] = useState<number>(300000);
@@ -49,40 +40,13 @@ const MortgageCalculator: React.FC = () => {
   }, [loanAmount, interestRate, loanTerm, downPayment]);
 
   // Pie chart data
-  const chartData: ChartData<'pie'> = {
-    labels: ['Principal', 'Interest'],
-    datasets: [
-      {
-        data: [parseFloat(results.principal), parseFloat(results.totalInterest)],
-        backgroundColor: ['#9333EA', '#D8B4FE'],
-        hoverBackgroundColor: ['#7E22CE', '#C084FC'],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const chartData = [
+    { name: 'Principal', value: parseFloat(results.principal), fill: '#9333EA' },
+    { name: 'Interest', value: parseFloat(results.totalInterest), fill: '#D8B4FE' },
+  ];
 
-  // Chart options
-  const chartOptions: ChartOptions<'pie'> = {
-    plugins: {
-      legend: {
-        position: 'bottom',
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.label || '';
-            const value = context.parsed || 0;
-            const total =
-              parseFloat(results.principal) + parseFloat(results.totalInterest);
-            const percentage = ((value / total) * 100).toFixed(2);
-            return `${label}: $${value.toLocaleString()} (${percentage}%)`;
-          },
-        },
-      },
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-  };
+  // Chart colors
+  const COLORS = ['#9333EA', '#D8B4FE'];
 
   const relatedCalculators = [
     {
@@ -276,7 +240,28 @@ const MortgageCalculator: React.FC = () => {
 
           <div className="h-[280px] mt-6">
             <h3 className="text-center font-medium mb-4">Payment Breakdown</h3>
-            <Chart type="pie" data={chartData} options={chartOptions} />
+            <ChartContainer config={{}} className="h-[250px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
           </div>
         </div>
       </div>
