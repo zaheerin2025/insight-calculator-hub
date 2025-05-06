@@ -1,6 +1,7 @@
+
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Home, Plus, Calculator } from 'lucide-react';
+import { Home, Calculator, CreditCard, PiggyBank, DollarSign, BanknoteIcon, ChartLine } from 'lucide-react';
 
 const calculators = [
   {
@@ -12,10 +13,9 @@ const calculators = [
   {
     title: 'Compound Interest Calculator',
     description: 'Calculate how your investments will grow over time with compound interest, including regular contributions.',
-    icon: <Plus className="h-6 w-6 text-primary" />,
+    icon: <ChartLine className="h-6 w-6 text-primary" />,
     path: '/calculators/finance/compound-interest-calculator'
   },
-  // Placeholders for future calculators
   {
     title: 'Loan EMI Calculator',
     description: 'Calculate your Equated Monthly Installment (EMI) for any loan based on principal amount, interest rate, and loan tenure.',
@@ -23,6 +23,55 @@ const calculators = [
     path: '/calculators/finance/loan-emi-calculator',
     comingSoon: true
   },
+  {
+    title: 'Simple Interest Calculator',
+    description: 'Calculate the interest earned on a principal amount at a fixed rate over a period of time.',
+    icon: <DollarSign className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/simple-interest-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Retirement Savings Calculator',
+    description: 'Plan for your retirement by calculating how much you need to save to reach your retirement goals.',
+    icon: <PiggyBank className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/retirement-savings-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Investment Return Calculator',
+    description: 'Calculate the potential returns on your investments based on initial investment, additional contributions, and expected rate of return.',
+    icon: <ChartLine className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/investment-return-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Credit Card Payoff Calculator',
+    description: 'Determine how long it will take to pay off your credit card debt and how much interest you\'ll pay.',
+    icon: <CreditCard className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/credit-card-payoff-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Debt-to-Income Ratio Calculator',
+    description: 'Calculate your debt-to-income ratio to see how lenders evaluate your financial health.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/debt-to-income-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Home Affordability Calculator',
+    description: 'Estimate how much home you can afford based on your income, expenses, and down payment.',
+    icon: <Home className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/home-affordability-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Auto Loan Calculator',
+    description: 'Calculate your monthly car payment, total interest paid, and the true cost of your auto loan.',
+    icon: <BanknoteIcon className="h-6 w-6 text-primary" />,
+    path: '/calculators/finance/auto-loan-calculator',
+    comingSoon: true
+  }
 ];
 
 const CalculatorsFinance: React.FC = () => {
@@ -32,7 +81,7 @@ const CalculatorsFinance: React.FC = () => {
       description="Access our collection of free finance calculators. Calculate mortgages, compound interest, loans, and more with precision and ease."
       intro="Plan your financial future with our comprehensive suite of financial calculators. Make informed decisions about mortgages, investments, loans, and more."
       calculators={calculators}
-      canonicalUrl="https://example.com/calculators/finance"
+      canonicalUrl="https://calculators-hub.com/calculators/finance"
     />
   );
 };

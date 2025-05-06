@@ -1,204 +1,284 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CalculatorLayout from '../CalculatorLayout';
-import CalculatorInput from '@/components/ui/calculator-input';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import ResultDisplay from '../ResultDisplay';
-import { toast } from 'sonner';
-import { Card, CardContent } from '@/components/ui/card';
+import { useMemo } from 'react';
+import {
+  Chart,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartData,
+  ChartOptions,
+} from '@/components/ui/chart';
+import { BanknoteIcon, Calculator, Home, PiggyBank } from 'lucide-react';
+
+// Register the required chart components
+Chart.register(ArcElement, Tooltip, Legend);
 
 const MortgageCalculator: React.FC = () => {
-  const [loanAmount, setLoanAmount] = useState<number>(200000);
-  const [interestRate, setInterestRate] = useState<number>(5);
+  const [loanAmount, setLoanAmount] = useState<number>(300000);
+  const [interestRate, setInterestRate] = useState<number>(4.5);
   const [loanTerm, setLoanTerm] = useState<number>(30);
-  const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
-  const [totalPayment, setTotalPayment] = useState<number>(0);
-  const [totalInterest, setTotalInterest] = useState<number>(0);
-  const [isCalculated, setIsCalculated] = useState<boolean>(false);
+  const [downPayment, setDownPayment] = useState<number>(60000);
 
-  const calculateMortgage = () => {
-    try {
-      if (loanAmount <= 0 || interestRate <= 0 || loanTerm <= 0) {
-        toast.error('Please enter valid values for all fields');
-        return;
-      }
+  // Calculate results
+  const results = useMemo(() => {
+    const principal = loanAmount - downPayment;
+    const monthlyRate = interestRate / 100 / 12;
+    const numberOfPayments = loanTerm * 12;
+    
+    // Monthly payment formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+    const monthlyPayment =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    
+    const totalPayment = monthlyPayment * numberOfPayments;
+    const totalInterest = totalPayment - principal;
+    
+    return {
+      monthlyPayment: monthlyPayment.toFixed(2),
+      totalPayment: totalPayment.toFixed(2),
+      totalInterest: totalInterest.toFixed(2),
+      principal: principal.toFixed(2),
+    };
+  }, [loanAmount, interestRate, loanTerm, downPayment]);
 
-      // Convert annual interest rate to monthly and decimal
-      const monthlyInterestRate = interestRate / 100 / 12;
-      const numberOfPayments = loanTerm * 12;
-
-      // Calculate monthly payment using the formula:
-      // P = L[c(1 + c)^n]/[(1 + c)^n - 1]
-      // where P = payment, L = loan amount, c = monthly interest rate, n = number of payments
-      const x = Math.pow(1 + monthlyInterestRate, numberOfPayments);
-      const monthly = (loanAmount * monthlyInterestRate * x) / (x - 1);
-
-      if (isNaN(monthly) || !isFinite(monthly)) {
-        toast.error('Calculation failed. Please check your inputs.');
-        return;
-      }
-
-      setMonthlyPayment(monthly);
-      setTotalPayment(monthly * numberOfPayments);
-      setTotalInterest(monthly * numberOfPayments - loanAmount);
-      setIsCalculated(true);
-      toast.success('Mortgage calculated successfully!');
-    } catch (error) {
-      console.error('Calculation error:', error);
-      toast.error('An error occurred during calculation');
-    }
+  // Pie chart data
+  const chartData: ChartData<'pie'> = {
+    labels: ['Principal', 'Interest'],
+    datasets: [
+      {
+        data: [parseFloat(results.principal), parseFloat(results.totalInterest)],
+        backgroundColor: ['#9333EA', '#D8B4FE'],
+        hoverBackgroundColor: ['#7E22CE', '#C084FC'],
+        borderWidth: 1,
+      },
+    ],
   };
 
-  const handleLoanAmountChange = (value: string) => {
-    const amount = parseFloat(value.replace(/,/g, ''));
-    setLoanAmount(isNaN(amount) ? 0 : amount);
-    setIsCalculated(false);
-  };
-
-  const handleInterestRateChange = (value: string) => {
-    const rate = parseFloat(value);
-    setInterestRate(isNaN(rate) ? 0 : rate);
-    setIsCalculated(false);
-  };
-
-  const handleLoanTermChange = (value: string) => {
-    const term = parseInt(value);
-    setLoanTerm(isNaN(term) ? 0 : term);
-    setIsCalculated(false);
-  };
-
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
-
-  const schemaMarkup = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Mortgage Calculator",
-    "applicationCategory": "FinanceApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
+  // Chart options
+  const chartOptions: ChartOptions<'pie'> = {
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const total =
+              parseFloat(results.principal) + parseFloat(results.totalInterest);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: $${value.toLocaleString()} (${percentage}%)`;
+          },
+        },
+      },
     },
-    "operatingSystem": "Web Browser"
+    responsive: true,
+    maintainAspectRatio: false,
   };
+
+  const relatedCalculators = [
+    {
+      title: "Home Affordability Calculator",
+      path: "/calculators/finance/home-affordability-calculator",
+      category: "Finance"
+    },
+    {
+      title: "Compound Interest Calculator",
+      path: "/calculators/finance/compound-interest-calculator",
+      category: "Finance"
+    },
+    {
+      title: "Loan EMI Calculator",
+      path: "/calculators/finance/loan-emi-calculator",
+      category: "Finance"
+    },
+    {
+      title: "Auto Loan Calculator",
+      path: "/calculators/finance/auto-loan-calculator",
+      category: "Finance"
+    }
+  ];
 
   return (
     <CalculatorLayout
       title="Mortgage Calculator"
-      description="Calculate your monthly mortgage payment, total payment, and total interest paid based on loan amount, interest rate, and loan term."
-      intro="Our mortgage calculator helps you estimate your monthly mortgage payment and understand the total cost of your loan over time. Enter your loan details below to see your potential mortgage payments."
+      description="Calculate your monthly mortgage payment, total interest, and more with our free mortgage calculator. Make informed home buying decisions."
+      intro="Use our mortgage calculator to estimate your monthly mortgage payment, including principal, interest, and the total cost over the life of the loan."
+      canonicalUrl="https://calculators-hub.com/calculators/finance/mortgage-calculator"
+      relatedCalculators={relatedCalculators}
       formula={
         <div>
-          <p>The mortgage calculator uses the following formula to calculate your monthly payment:</p>
-          <div className="bg-muted p-4 rounded-md my-4 overflow-x-auto">
-            <code>Monthly Payment = P × [r(1 + r)^n] ÷ [(1 + r)^n - 1]</code>
+          <p className="mb-4">
+            The monthly mortgage payment is calculated using the following formula:
+          </p>
+          <div className="bg-muted p-4 rounded-md mb-4 font-mono text-sm overflow-auto">
+            M = P [ r(1 + r)^n ] / [ (1 + r)^n - 1]
           </div>
-          <p>Where:</p>
-          <ul className="list-disc ml-6 space-y-2">
-            <li><strong>P</strong> = Principal loan amount</li>
-            <li><strong>r</strong> = Monthly interest rate (annual rate divided by 12 and then by 100)</li>
-            <li><strong>n</strong> = Total number of payments (loan term in years multiplied by 12)</li>
+          <p className="mb-2">Where:</p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>M = Monthly payment</li>
+            <li>P = Principal loan amount</li>
+            <li>r = Monthly interest rate (annual rate divided by 12)</li>
+            <li>n = Number of payments (loan term in years × 12)</li>
           </ul>
         </div>
       }
       faq={[
         {
-          question: "How accurate is this mortgage calculator?",
-          answer: "This calculator provides an estimate of your monthly mortgage payment based on the information you provide. The actual payment may vary slightly due to factors such as rounding, additional fees, or specific lender requirements."
+          question: "How is a mortgage payment calculated?",
+          answer: "A mortgage payment is calculated using a formula that takes into account the loan principal, interest rate, and term of the loan. The formula calculates the monthly payment needed to pay off the loan in full by the end of the term, including both principal and interest."
         },
         {
-          question: "Does this calculator include property taxes and insurance?",
-          answer: "No, this calculator only estimates your principal and interest payment. To get your total monthly payment, you should add property taxes, homeowner's insurance, and mortgage insurance (if applicable)."
+          question: "Should I include property taxes and insurance in my mortgage calculation?",
+          answer: "Our calculator provides the base mortgage payment (principal and interest). You should add property taxes, homeowner's insurance, and possibly mortgage insurance (PMI) if your down payment is less than 20% to get your total monthly payment, often referred to as PITI (Principal, Interest, Taxes, Insurance)."
+        },
+        {
+          question: "How does the down payment affect my mortgage?",
+          answer: "A larger down payment reduces the loan amount, which lowers your monthly payment and the total interest paid over the life of the loan. It may also help you avoid paying for private mortgage insurance (PMI) if your down payment is at least 20% of the home's value."
         },
         {
           question: "How does the loan term affect my mortgage?",
-          answer: "A longer loan term (such as 30 years) results in lower monthly payments but higher total interest paid over the life of the loan. A shorter term (such as 15 years) means higher monthly payments but significant savings on total interest."
+          answer: "A longer loan term (like 30 years) will result in lower monthly payments but higher total interest paid over time. A shorter term (like 15 years) means higher monthly payments but significant savings on interest and a faster path to full ownership."
         }
       ]}
-      schemaMarkup={schemaMarkup}
-      canonicalUrl="https://example.com/calculators/finance/mortgage-calculator"
+      schemaMarkup={{
+        "@context": "https://schema.org",
+        "@type": "FinancialProduct",
+        "name": "Mortgage Calculator",
+        "description": "Calculate your monthly mortgage payment, total interest, and more with our free mortgage calculator.",
+        "url": "https://calculators-hub.com/calculators/finance/mortgage-calculator",
+        "provider": {
+          "@type": "Organization",
+          "name": "Calculators-Hub",
+          "url": "https://calculators-hub.com"
+        }
+      }}
     >
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <CalculatorInput
-            id="loan-amount"
-            label="Loan Amount"
-            type="number"
-            value={loanAmount}
-            onChange={handleLoanAmountChange}
-            prefix="$"
-            min={1000}
-            step={1000}
-            helperText="Enter the total loan amount"
-          />
-          
-          <CalculatorInput
-            id="interest-rate"
-            label="Interest Rate"
-            type="number"
-            value={interestRate}
-            onChange={handleInterestRateChange}
-            suffix="%"
-            min={0.1}
-            max={20}
-            step={0.125}
-            helperText="Annual interest rate"
-          />
-          
-          <CalculatorInput
-            id="loan-term"
-            label="Loan Term"
-            type="number"
-            value={loanTerm}
-            onChange={handleLoanTermChange}
-            suffix="years"
-            min={1}
-            max={50}
-            step={1}
-            helperText="Length of your mortgage"
-          />
-        </div>
-        
-        <div className="flex justify-center">
-          <Button 
-            onClick={calculateMortgage}
-            size="lg"
-            className="bg-primary hover:bg-primary-hover text-white font-medium px-8"
-          >
-            Calculate Mortgage
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="homePrice">Home Price ($)</Label>
+            <Input
+              id="homePrice"
+              type="number"
+              value={loanAmount}
+              onChange={(e) => setLoanAmount(Number(e.target.value))}
+              min="0"
+              step="1000"
+            />
+            <Slider
+              value={[loanAmount]}
+              min={50000}
+              max={1000000}
+              step={10000}
+              className="mt-2"
+              onValueChange={(value) => setLoanAmount(value[0])}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="downPayment">Down Payment ($)</Label>
+            <Input
+              id="downPayment"
+              type="number"
+              value={downPayment}
+              onChange={(e) => setDownPayment(Number(e.target.value))}
+              min="0"
+              step="1000"
+            />
+            <Slider
+              value={[downPayment]}
+              min={0}
+              max={loanAmount * 0.5}
+              step={5000}
+              className="mt-2"
+              onValueChange={(value) => setDownPayment(value[0])}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="interestRate">Interest Rate (%)</Label>
+            <Input
+              id="interestRate"
+              type="number"
+              value={interestRate}
+              onChange={(e) => setInterestRate(Number(e.target.value))}
+              min="0"
+              max="20"
+              step="0.1"
+            />
+            <Slider
+              value={[interestRate]}
+              min={0}
+              max={10}
+              step={0.1}
+              className="mt-2"
+              onValueChange={(value) => setInterestRate(value[0])}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="loanTerm">Loan Term (years)</Label>
+            <Input
+              id="loanTerm"
+              type="number"
+              value={loanTerm}
+              onChange={(e) => setLoanTerm(Number(e.target.value))}
+              min="1"
+              max="40"
+            />
+            <Slider
+              value={[loanTerm]}
+              min={5}
+              max={40}
+              step={5}
+              className="mt-2"
+              onValueChange={(value) => setLoanTerm(value[0])}
+            />
+          </div>
+
+          <Button className="w-full" size="lg">
+            Calculate
           </Button>
         </div>
-        
-        {isCalculated && (
-          <div className="mt-8 animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Results</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <ResultDisplay
-                title="Monthly Payment"
-                value={formatCurrency(monthlyPayment)}
-                highlight={true}
-              />
-              <ResultDisplay
-                title="Total Payment"
-                value={formatCurrency(totalPayment)}
-                description={`Over ${loanTerm} years`}
-              />
-              <ResultDisplay
-                title="Total Interest"
-                value={formatCurrency(totalInterest)}
-                description="Interest paid over loan term"
-              />
-            </div>
+
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-1">
+            <ResultDisplay
+              label="Monthly Payment"
+              value={`$${parseFloat(results.monthlyPayment).toLocaleString()}`}
+              icon={<BanknoteIcon className="h-5 w-5" />}
+            />
+            <ResultDisplay
+              label="Total Principal"
+              value={`$${parseFloat(results.principal).toLocaleString()}`}
+              icon={<Home className="h-5 w-5" />}
+            />
+            <ResultDisplay
+              label="Total Interest"
+              value={`$${parseFloat(results.totalInterest).toLocaleString()}`}
+              icon={<Calculator className="h-5 w-5" />}
+            />
+            <ResultDisplay
+              label="Total Cost"
+              value={`$${parseFloat(results.totalPayment).toLocaleString()}`}
+              icon={<PiggyBank className="h-5 w-5" />}
+            />
           </div>
-        )}
+
+          <div className="h-[280px] mt-6">
+            <h3 className="text-center font-medium mb-4">Payment Breakdown</h3>
+            <Chart type="pie" data={chartData} options={chartOptions} />
+          </div>
+        </div>
       </div>
     </CalculatorLayout>
   );

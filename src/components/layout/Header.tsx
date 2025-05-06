@@ -10,9 +10,11 @@ const Header: React.FC = () => {
     <header className="w-full py-4 border-b bg-white sticky top-0 z-50 shadow-sm">
       <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <Calculator className="h-6 w-6 text-primary" />
+          <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-10 w-10">
+            <Calculator className="h-6 w-6 text-white" />
+          </div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
-            InsightCalc
+            Calculators-Hub
           </h1>
         </Link>
         
@@ -57,8 +59,10 @@ const Header: React.FC = () => {
           </SheetTrigger>
           <SheetContent>
             <div className="flex items-center mb-8 mt-4">
-              <Calculator className="h-6 w-6 text-primary mr-2" />
-              <span className="text-xl font-bold text-primary">InsightCalc</span>
+              <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-8 w-8 mr-2">
+                <Calculator className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-primary">Calculators-Hub</span>
             </div>
             <nav className="flex flex-col space-y-4">
               <Link to="/" className="text-lg font-medium">

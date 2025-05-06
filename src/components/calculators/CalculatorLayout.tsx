@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SEOMeta from '../ui/seo-meta';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -8,6 +9,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Calculator } from 'lucide-react';
+
+export interface RelatedCalculator {
+  title: string;
+  path: string;
+  category?: string;
+}
 
 interface CalculatorLayoutProps {
   title: string;
@@ -18,6 +26,7 @@ interface CalculatorLayoutProps {
   faq?: Array<{ question: string; answer: string }>;
   canonicalUrl?: string;
   schemaMarkup?: Record<string, any>;
+  relatedCalculators?: RelatedCalculator[];
 }
 
 const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
@@ -29,11 +38,12 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
   faq,
   canonicalUrl,
   schemaMarkup,
+  relatedCalculators,
 }) => {
   return (
     <>
       <SEOMeta
-        title={`${title} | InsightCalc`}
+        title={`${title} | Calculators-Hub`}
         description={description}
         canonicalUrl={canonicalUrl}
         schemaMarkup={schemaMarkup}
@@ -63,6 +73,31 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
                   {formula}
                 </div>
               </Card>
+            </div>
+          )}
+          
+          {relatedCalculators && relatedCalculators.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4">Related Calculators</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {relatedCalculators.map((calc, index) => (
+                  <Link 
+                    key={index} 
+                    to={calc.path} 
+                    className="flex items-center p-4 border rounded-md hover:bg-muted/50 transition-colors group"
+                  >
+                    <div className="bg-primary/10 p-2 rounded-md mr-3 group-hover:bg-primary/20 transition-colors">
+                      <Calculator className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-foreground">{calc.title}</h3>
+                      {calc.category && (
+                        <p className="text-sm text-muted-foreground">{calc.category}</p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
           

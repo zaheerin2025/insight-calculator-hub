@@ -80,7 +80,7 @@ const Index: React.FC = () => {
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
-              InsightCalc
+              Calculators-Hub
             </h1>
             <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm inline-flex items-center mb-6 border border-white/20">
               <Award className="h-4 w-4 mr-2" />
@@ -125,7 +125,10 @@ const Index: React.FC = () => {
                   <ul className="space-y-3 mb-6">
                     {category.calculators.map((calculator, i) => (
                       <li key={i}>
-                        <Link to={calculator.path} className="text-primary hover:text-primary-hover hover:underline transition-colors flex items-center">
+                        <Link 
+                          to={calculator.path} 
+                          className="text-primary hover:text-primary-hover hover:underline transition-colors flex items-center"
+                        >
                           <Calculator className="h-4 w-4 mr-2" />
                           {calculator.name}
                         </Link>
@@ -142,7 +145,7 @@ const Index: React.FC = () => {
         </div>
         
         <div className="mt-24 text-center">
-          <h2 className="text-3xl font-bold mb-2">Why Choose InsightCalc?</h2>
+          <h2 className="text-3xl font-bold mb-2">Why Choose Calculators-Hub?</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Our calculators are designed to give you the most accurate information with the best user experience.
           </p>
