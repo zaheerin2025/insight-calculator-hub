@@ -2,6 +2,12 @@
 import React from 'react';
 import SEOMeta from '../ui/seo-meta';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 interface CalculatorLayoutProps {
   title: string;
@@ -32,41 +38,52 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
         canonicalUrl={canonicalUrl}
         schemaMarkup={schemaMarkup}
       />
-      <div className="container py-8 md:py-12">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6">{title}</h1>
-        
-        <div className="prose max-w-none mb-8">
-          <p>{intro}</p>
-        </div>
-        
-        <Card className="mb-12 shadow-sm border border-muted">
-          <CardContent className="pt-6">
-            {children}
-          </CardContent>
-        </Card>
-        
-        {formula && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
-            <div className="prose max-w-none">
-              {formula}
-            </div>
+      <div className="container py-8 md:py-12 animate-fade-in">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">{title}</h1>
+          
+          <div className="prose max-w-none mb-8 text-muted-foreground">
+            <p className="text-lg">{intro}</p>
           </div>
-        )}
-        
-        {faq && faq.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              {faq.map((item, index) => (
-                <div key={index}>
-                  <h3 className="text-xl font-medium mb-2">{item.question}</h3>
-                  <p className="text-muted-foreground">{item.answer}</p>
+          
+          <Card className="mb-10 shadow-md border border-muted overflow-hidden">
+            <div className="bg-muted px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Calculator</h2>
+            </div>
+            <CardContent className="pt-6">
+              {children}
+            </CardContent>
+          </Card>
+          
+          {formula && (
+            <div className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
+              <Card className="border border-muted p-6 bg-muted/30">
+                <div className="prose max-w-none">
+                  {formula}
                 </div>
-              ))}
+              </Card>
             </div>
-          </div>
-        )}
+          )}
+          
+          {faq && faq.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
+              <Accordion type="single" collapsible className="w-full">
+                {faq.map((item, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-lg font-medium text-left">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-muted-foreground py-2">{item.answer}</p>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

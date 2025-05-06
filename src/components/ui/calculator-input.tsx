@@ -37,12 +37,12 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className={`space-y-2 ${className}`}>
-      <Label htmlFor={id}>{label}</Label>
+    <div className={`space-y-2 ${className} group transition-all duration-200`}>
+      <Label htmlFor={id} className="group-focus-within:text-primary transition-colors">{label}</Label>
       <div className="relative">
         {prefix && (
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <span className="text-muted-foreground">{prefix}</span>
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+            <span>{prefix}</span>
           </div>
         )}
         <Input
@@ -54,12 +54,12 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({
           min={min}
           max={max}
           step={step}
-          className={`${prefix ? 'pl-8' : ''} ${suffix ? 'pr-8' : ''}`}
+          className={`${prefix ? 'pl-8' : ''} ${suffix ? 'pr-8' : ''} transition-all duration-200 focus:border-primary focus:ring focus:ring-primary/20`}
           disabled={disabled}
         />
         {suffix && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <span className="text-muted-foreground">{suffix}</span>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-muted-foreground">
+            <span>{suffix}</span>
           </div>
         )}
       </div>
