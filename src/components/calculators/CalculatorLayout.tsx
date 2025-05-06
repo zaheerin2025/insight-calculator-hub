@@ -8,7 +8,7 @@ interface CalculatorLayoutProps {
   description: string;
   intro: string;
   children: React.ReactNode;
-  formula?: string;
+  formula?: React.ReactNode;
   faq?: Array<{ question: string; answer: string }>;
   canonicalUrl?: string;
   schemaMarkup?: Record<string, any>;
