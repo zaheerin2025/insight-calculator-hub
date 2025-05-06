@@ -1,3 +1,4 @@
+
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
 import { Percent, Calculator } from 'lucide-react';
@@ -9,7 +10,6 @@ const calculators = [
     icon: <Percent className="h-6 w-6 text-primary" />,
     path: '/calculators/math/percentage-calculator'
   },
-  // Placeholders for future calculators
   {
     title: 'Age Calculator',
     description: 'Calculate the exact age between two dates in years, months, weeks, and days.',
@@ -31,6 +31,48 @@ const calculators = [
     path: '/calculators/math/area-calculator',
     comingSoon: true
   },
+  {
+    title: 'Volume Calculator',
+    description: 'Calculate the volume of various 3D shapes including cubes, spheres, cylinders, and more.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/volume-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Pythagorean Theorem Calculator',
+    description: 'Calculate the sides of a right triangle using the Pythagorean theorem.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/pythagorean-theorem-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Square Root Calculator',
+    description: 'Calculate the square root of any positive number with precision.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/square-root-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Factorial Calculator',
+    description: 'Calculate the factorial of any positive integer quickly and efficiently.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/factorial-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Fractions Calculator',
+    description: 'Add, subtract, multiply, and divide fractions with step-by-step solutions.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/fractions-calculator',
+    comingSoon: true
+  },
+  {
+    title: 'Mean, Median, Mode Calculator',
+    description: 'Calculate statistical measures including mean, median, and mode from a data set.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/mean-median-mode-calculator',
+    comingSoon: true
+  },
 ];
 
 const CalculatorsMath: React.FC = () => {
@@ -40,7 +82,7 @@ const CalculatorsMath: React.FC = () => {
       description="Access our collection of free math calculators. Calculate percentages, ages, discounts, areas, and more with precision and ease."
       intro="Solve everyday math problems quickly and accurately with our comprehensive suite of math calculators. From percentages to geometric calculations, we've got you covered."
       calculators={calculators}
-      canonicalUrl="https://example.com/calculators/math"
+      canonicalUrl="https://calculators-hub.com/calculators/math"
     />
   );
 };

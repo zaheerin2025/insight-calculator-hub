@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart } from 'lucide-react';
+import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign } from 'lucide-react';
 
 const calculatorCategories = [
   {
@@ -37,6 +37,22 @@ const calculatorCategories = [
     calculators: [
       { name: 'Percentage Calculator', path: '/calculators/math/percentage-calculator' },
     ]
+  },
+  {
+    title: 'Business Calculators',
+    description: 'Make better business decisions with our analytical tools.',
+    icon: <DollarSign className="h-10 w-10 text-white" />,
+    background: 'bg-gradient-to-br from-green-500 to-emerald-400',
+    path: '/calculators/business',
+    calculators: []
+  },
+  {
+    title: 'Construction Calculators',
+    description: 'Plan your construction projects with accuracy and efficiency.',
+    icon: <Construction className="h-10 w-10 text-white" />,
+    background: 'bg-gradient-to-br from-amber-500 to-yellow-400',
+    path: '/calculators/construction',
+    calculators: []
   }
 ];
 
@@ -87,7 +103,7 @@ const Index: React.FC = () => {
               <span>Trusted by thousands of users daily</span>
             </div>
             <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto animate-fade-in text-white/90" style={{ animationDelay: '0.1s' }}>
-              Simple, accurate calculators for all your financial, health, and mathematical needs.
+              Simple, accurate calculators for all your financial, health, mathematical, business, and construction needs.
             </p>
             <div className="animate-fade-in flex flex-wrap justify-center gap-4" style={{ animationDelay: '0.2s' }}>
               <Button asChild size="lg" variant="secondary" className="font-medium">
@@ -107,7 +123,7 @@ const Index: React.FC = () => {
           Explore our comprehensive suite of calculators designed to help you make informed decisions.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {calculatorCategories.map((category, index) => (
             <div key={index} className="animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <Card className="h-full border border-muted hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">

@@ -11,6 +11,8 @@ import Contact from "./pages/Contact";
 import CalculatorsFinance from "./pages/CalculatorsFinance";
 import CalculatorsHealth from "./pages/CalculatorsHealth";
 import CalculatorsMath from "./pages/CalculatorsMath";
+import CalculatorsBusiness from "./pages/CalculatorsBusiness";
+import CalculatorsConstruction from "./pages/CalculatorsConstruction";
 import MortgageCalculatorPage from "./pages/calculator-pages/MortgageCalculatorPage";
 import CompoundInterestCalculatorPage from "./pages/calculator-pages/CompoundInterestCalculatorPage";
 import BMICalculatorPage from "./pages/calculator-pages/BMICalculatorPage";
@@ -25,8 +27,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <Helmet>
-        <title>InsightCalc | Your Ultimate Calculator Hub</title>
-        <meta name="description" content="Access powerful calculators for finance, health, and math. Make informed decisions with InsightCalc's simple, accurate tools." />
+        <title>Calculators-Hub | Your Ultimate Calculator Hub</title>
+        <meta name="description" content="Access powerful calculators for finance, health, math, business, and construction. Make informed decisions with Calculators-Hub's simple, accurate tools." />
       </Helmet>
       <BrowserRouter>
         <Routes>
@@ -40,6 +42,8 @@ const App = () => (
           <Route path="/calculators/finance" element={<CalculatorsFinance />} />
           <Route path="/calculators/health" element={<CalculatorsHealth />} />
           <Route path="/calculators/math" element={<CalculatorsMath />} />
+          <Route path="/calculators/business" element={<CalculatorsBusiness />} />
+          <Route path="/calculators/construction" element={<CalculatorsConstruction />} />
           
           {/* Finance Calculator Pages */}
           <Route path="/calculators/finance/mortgage-calculator" element={<MortgageCalculatorPage />} />
