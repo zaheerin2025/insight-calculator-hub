@@ -46,24 +46,9 @@ const BlogPost: React.FC = () => {
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-8">
               <div className="flex items-center">
-                <Avatar className="h-8 w-8 mr-2">
-                  <AvatarImage src={post.author?.avatar || ''} alt={post.author?.name || 'Author'} />
-                  <AvatarFallback>{post.author?.name?.substring(0, 2) || 'AU'}</AvatarFallback>
-                </Avatar>
-                <span>{post.author?.name || 'Admin'}</span>
-              </div>
-              
-              <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>{formatDate(post.date)}</span>
               </div>
-              
-              {post.category && (
-                <div className="flex items-center">
-                  <Tag className="h-4 w-4 mr-2" />
-                  <span>{post.category}</span>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -85,32 +70,11 @@ const BlogPost: React.FC = () => {
             {post.content}
           </div>
 
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-10">
-              {post.tags.map((tag, i) => (
-                <span key={i} className="bg-muted px-3 py-1 rounded-full text-sm">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="border-t border-b py-8 my-10">
+          <div className="border-t py-8 my-10">
             <div className="flex items-center">
-              {post.author?.avatar ? (
-                <Avatar className="h-16 w-16 mr-4">
-                  <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} />
-                  <AvatarFallback>{post.author.name?.substring(0, 2) || 'AU'}</AvatarFallback>
-                </Avatar>
-              ) : (
-                <Avatar className="h-16 w-16 mr-4">
-                  <AvatarFallback>AU</AvatarFallback>
-                </Avatar>
-              )}
-              
-              <div>
-                <h3 className="font-medium text-lg">{post.author?.name || 'Admin'}</h3>
-                <p className="text-muted-foreground text-sm">{post.author?.bio || 'Calculator Expert'}</p>
+              <div className="flex flex-col">
+                <h3 className="font-medium text-lg">Calculators-Hub</h3>
+                <p className="text-muted-foreground text-sm">Calculator Experts</p>
               </div>
             </div>
           </div>

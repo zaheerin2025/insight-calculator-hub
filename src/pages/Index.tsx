@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -128,29 +127,7 @@ const faqs = [
   }
 ];
 
-const blogPosts = [
-  {
-    title: "How to Choose the Right Mortgage Calculator for Your Home Purchase",
-    slug: "choosing-right-mortgage-calculator",
-    excerpt: "Buying a home is one of life's major financial decisions. Learn how to use mortgage calculators to make an informed choice.",
-    date: "2025-04-12",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
-  },
-  {
-    title: "5 Ways BMI Calculators Can Help Monitor Your Health",
-    slug: "bmi-calculator-health-benefits",
-    excerpt: "Learn how Body Mass Index (BMI) calculations can provide insights into your overall health and weight management goals.",
-    date: "2025-04-05",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aGVhbHRoeSUyMGxpZmVzdHlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
-  },
-  {
-    title: "Understanding Compound Interest: The Eighth Wonder of the World",
-    slug: "understanding-compound-interest",
-    excerpt: "Discover how compound interest works and why it's considered one of the most powerful forces in finance.",
-    date: "2025-03-27",
-    image: "https://images.unsplash.com/photo-1559526324-593bc073d938?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aW52ZXN0bWVudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
-  }
-];
+// Use the imported blogPosts directly in the component instead of redefining it
 
 const Index: React.FC = () => {
   return (
