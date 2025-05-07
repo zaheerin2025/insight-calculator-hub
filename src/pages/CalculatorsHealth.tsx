@@ -32,43 +32,37 @@ const calculators = [
     title: 'Heart Rate Calculator',
     description: 'Calculate your target heart rate zones for optimal exercise intensity.',
     icon: <Heart className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/heart-rate-calculator',
-    comingSoon: true
+    path: '/calculators/health/heart-rate-calculator'
   },
   {
     title: 'BMR Calculator',
     description: 'Calculate your Basal Metabolic Rate (BMR) to understand your daily calorie requirements at rest.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/bmr-calculator',
-    comingSoon: true
+    path: '/calculators/health/bmr-calculator'
   },
   {
     title: 'Water Intake Calculator',
     description: 'Calculate your recommended daily water intake based on weight, activity level, and climate.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/water-intake-calculator',
-    comingSoon: true
+    path: '/calculators/health/water-intake-calculator'
   },
   {
     title: 'Pregnancy Due Date Calculator',
     description: 'Calculate your pregnancy due date based on last menstrual period or conception date.',
     icon: <Heart className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/pregnancy-due-date-calculator',
-    comingSoon: true
+    path: '/calculators/health/pregnancy-due-date-calculator'
   },
   {
     title: 'Macro Nutrient Calculator',
     description: 'Calculate your ideal macronutrient distribution based on your goals and body type.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/macro-nutrient-calculator',
-    comingSoon: true
+    path: '/calculators/health/macro-nutrient-calculator'
   },
   {
     title: 'Waist-to-Hip Ratio Calculator',
     description: 'Calculate your waist-to-hip ratio to assess health risks related to weight distribution.',
     icon: <Heart className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/waist-hip-ratio-calculator',
-    comingSoon: true
+    path: '/calculators/health/waist-hip-ratio-calculator'
   },
 ];
 
