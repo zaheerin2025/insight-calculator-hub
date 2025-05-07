@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Man, Woman, Info } from 'lucide-react';
+import { User, UserRound, Info } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import CalculatorLayout from '../CalculatorLayout';
@@ -120,6 +120,7 @@ const IdealWeightCalculator: React.FC = () => {
     <CalculatorLayout
       title="Ideal Weight Calculator"
       description="Calculate your ideal weight based on height, gender, frame size, and various medical formulas."
+      intro="Find your ideal weight range based on your height, gender, and body frame using multiple medical formulas. This calculator helps you understand what a healthy weight might be for your specific body characteristics."
     >
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -149,7 +150,7 @@ const IdealWeightCalculator: React.FC = () => {
                           className="flex items-center justify-center gap-2 h-12"
                           onClick={() => setGender("male")}
                         >
-                          <Man size={18} />
+                          <User size={18} />
                           <span>Male</span>
                         </Button>
                         <Button
@@ -158,7 +159,7 @@ const IdealWeightCalculator: React.FC = () => {
                           className="flex items-center justify-center gap-2 h-12"
                           onClick={() => setGender("female")}
                         >
-                          <Woman size={18} />
+                          <UserRound size={18} />
                           <span>Female</span>
                         </Button>
                       </div>
