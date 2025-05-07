@@ -7,6 +7,7 @@ import ResultDisplay from '../ResultDisplay';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { formatCurrency } from '@/lib/utils';
 
 const CompoundInterestCalculator: React.FC = () => {
   const [principal, setPrincipal] = useState<number>(10000);
@@ -85,16 +86,6 @@ const CompoundInterestCalculator: React.FC = () => {
       console.error('Calculation error:', error);
       toast.error('An error occurred during calculation');
     }
-  };
-  
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
   };
 
   const schemaMarkup = {
@@ -275,18 +266,18 @@ const CompoundInterestCalculator: React.FC = () => {
             <h2 className="text-xl font-semibold mb-4">Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <ResultDisplay
-                title="Final Amount"
+                label="Final Amount"
                 value={formatCurrency(finalAmount)}
-                highlight={true}
+                isHighlighted={true}
                 description={`After ${time} years`}
               />
               <ResultDisplay
-                title="Total Contributions"
+                label="Total Contributions"
                 value={formatCurrency(totalContributions)}
                 description="Principal plus all deposits"
               />
               <ResultDisplay
-                title="Total Interest Earned"
+                label="Total Interest Earned"
                 value={formatCurrency(totalInterest)}
                 description="Growth from compound interest"
               />

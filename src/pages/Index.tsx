@@ -3,9 +3,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { formatDate } from '@/lib/utils';
+
+// Blog post data
+import { blogPosts } from '@/data/blog-posts';
 
 const calculatorCategories = [
   {
@@ -192,14 +196,20 @@ const Index: React.FC = () => {
           {calculatorCategories.map((category, index) => (
             <div key={index} className="animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <Card className="h-full border border-muted hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
-                <div className={`${category.background} p-6 flex items-center justify-center`}>
-                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent)]"></div>
-                  <div className="backdrop-blur-sm bg-black/10 rounded-full p-4 relative">
-                    {category.icon}
+                <Link to={category.path} className="block">
+                  <div className={`${category.background} p-6 flex items-center justify-center`}>
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent)]"></div>
+                    <div className="backdrop-blur-sm bg-black/10 rounded-full p-4 relative">
+                      {category.icon}
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-2xl">{category.title}</CardTitle>
+                  <CardTitle className="text-2xl">
+                    <Link to={category.path} className="hover:text-primary transition-colors">
+                      {category.title}
+                    </Link>
+                  </CardTitle>
                   <CardDescription className="text-muted-foreground">{category.description}</CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -3,8 +3,11 @@ import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import SEOMeta from '@/components/ui/seo-meta';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Import blog post data
 import { blogPosts, findPostBySlug } from '@/data/blog-posts';
@@ -31,13 +34,43 @@ const BlogPost: React.FC = () => {
         ogType="article"
       />
 
-      <div className="container py-8 md:py-12">
-        <div className="max-w-3xl mx-auto">
-          <Link to="/blog" className="inline-flex items-center text-primary mb-6 hover:underline">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Blog
-          </Link>
+      <div className="bg-muted/30 py-12">
+        <div className="container">
+          <div className="max-w-3xl mx-auto">
+            <Link to="/blog" className="inline-flex items-center text-primary mb-6 hover:underline">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Blog
+            </Link>
 
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
+            
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-8">
+              <div className="flex items-center">
+                <Avatar className="h-8 w-8 mr-2">
+                  <AvatarImage src={post.author?.avatar || ''} alt={post.author?.name || 'Author'} />
+                  <AvatarFallback>{post.author?.name?.substring(0, 2) || 'AU'}</AvatarFallback>
+                </Avatar>
+                <span>{post.author?.name || 'Admin'}</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Calendar className="h-4 w-4 mr-2" />
+                <span>{formatDate(post.date)}</span>
+              </div>
+              
+              {post.category && (
+                <div className="flex items-center">
+                  <Tag className="h-4 w-4 mr-2" />
+                  <span>{post.category}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container py-12">
+        <div className="max-w-3xl mx-auto">
           {post.coverImage && (
             <div className="aspect-[16/9] mb-8 rounded-lg overflow-hidden">
               <img 
@@ -48,42 +81,94 @@ const BlogPost: React.FC = () => {
             </div>
           )}
 
-          <div className="mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
-            <div className="flex items-center text-muted-foreground">
-              <span>{formatDate(post.date)}</span>
-            </div>
-          </div>
-
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg max-w-none mb-12">
             {post.content}
           </div>
 
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-10">
+              {post.tags.map((tag, i) => (
+                <span key={i} className="bg-muted px-3 py-1 rounded-full text-sm">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="border-t border-b py-8 my-10">
+            <div className="flex items-center">
+              {post.author?.avatar ? (
+                <Avatar className="h-16 w-16 mr-4">
+                  <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} />
+                  <AvatarFallback>{post.author.name?.substring(0, 2) || 'AU'}</AvatarFallback>
+                </Avatar>
+              ) : (
+                <Avatar className="h-16 w-16 mr-4">
+                  <AvatarFallback>AU</AvatarFallback>
+                </Avatar>
+              )}
+              
+              <div>
+                <h3 className="font-medium text-lg">{post.author?.name || 'Admin'}</h3>
+                <p className="text-muted-foreground text-sm">{post.author?.bio || 'Calculator Expert'}</p>
+              </div>
+            </div>
+          </div>
+
           {relatedPosts.length > 0 && (
-            <div className="mt-12 pt-8 border-t">
+            <div className="my-12">
               <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedPosts.map((relatedPost) => (
-                  <div key={relatedPost.slug} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <h3 className="font-medium mb-2">
-                      <Link 
-                        to={`/blog/${relatedPost.slug}`} 
-                        className="hover:text-primary transition-colors"
-                      >
-                        {relatedPost.title}
-                      </Link>
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                      {relatedPost.excerpt}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(relatedPost.date)}
-                    </p>
-                  </div>
+                  <Card key={relatedPost.slug} className="hover:shadow-md transition-shadow">
+                    {relatedPost.coverImage && (
+                      <div className="aspect-[16/9] overflow-hidden rounded-t-lg">
+                        <img
+                          src={relatedPost.coverImage}
+                          alt={relatedPost.title}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <CardContent className="p-4">
+                      <h3 className="font-medium text-lg mb-2 line-clamp-2">
+                        <Link 
+                          to={`/blog/${relatedPost.slug}`} 
+                          className="hover:text-primary transition-colors"
+                        >
+                          {relatedPost.title}
+                        </Link>
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        {relatedPost.excerpt}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-muted-foreground">
+                          {formatDate(relatedPost.date)}
+                        </span>
+                        <Button asChild variant="link" className="p-0 h-auto">
+                          <Link to={`/blog/${relatedPost.slug}`}>Read More</Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             </div>
           )}
+          
+          <div className="bg-muted p-6 rounded-lg text-center">
+            <h3 className="text-xl font-semibold mb-2">Subscribe to Our Newsletter</h3>
+            <p className="text-muted-foreground mb-4">Get the latest calculator tips and financial insights delivered to your inbox.</p>
+            <div className="flex max-w-md mx-auto">
+              <input 
+                type="email" 
+                placeholder="Your email address" 
+                className="flex-1 px-4 py-2 rounded-l-md border border-r-0 border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+              <Button className="rounded-l-none">Subscribe</Button>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

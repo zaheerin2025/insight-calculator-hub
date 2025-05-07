@@ -4,6 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SEOMeta from '@/components/ui/seo-meta';
+import { Button } from '@/components/ui/button';
 
 export interface CalculatorItem {
   title: string;
@@ -60,7 +61,13 @@ const CategoryLayout: React.FC<CategoryLayoutProps> = ({
                 </div>
                 <div>
                   <CardTitle className="text-xl">
-                    {calculator.title}
+                    {calculator.comingSoon ? (
+                      <span>{calculator.title}</span>
+                    ) : (
+                      <Link to={calculator.path} className="hover:text-primary transition-colors">
+                        {calculator.title}
+                      </Link>
+                    )}
                     {calculator.comingSoon && (
                       <span className="text-xs ml-2 py-1 px-2 bg-muted rounded-full text-muted-foreground">Coming Soon</span>
                     )}
@@ -70,15 +77,11 @@ const CategoryLayout: React.FC<CategoryLayoutProps> = ({
               <CardContent>
                 <p className="text-muted-foreground mb-6">{calculator.description}</p>
                 {!calculator.comingSoon && (
-                  <Link 
-                    to={calculator.path}
-                    className="text-primary hover:text-primary-hover hover:underline transition-colors inline-flex items-center"
-                  >
-                    Use Calculator
-                    <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link to={calculator.path}>
+                      Use Calculator
+                    </Link>
+                  </Button>
                 )}
               </CardContent>
             </Card>
