@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Calculator } from 'lucide-react';
+import Breadcrumbs from '../layout/Breadcrumbs';
 
 export interface RelatedCalculator {
   title: string;
@@ -52,6 +53,9 @@ const CalculatorLayout: React.FC<CalculatorLayoutProps> = ({
         canonicalUrl={canonicalUrl}
         schemaMarkup={schemaMarkup}
       />
+
+      <Breadcrumbs />
+      
       <div className="container py-8 md:py-12 animate-fade-in">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">{title}</h1>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Home, Calculator, CreditCard, PiggyBank, DollarSign, BanknoteIcon, ChartLine } from 'lucide-react';
+import { Home, Calculator, CreditCard, PiggyBank, BanknoteIcon, ChartLine } from 'lucide-react';
 
 const calculators = [
   {
@@ -20,15 +20,13 @@ const calculators = [
     title: 'Loan EMI Calculator',
     description: 'Calculate your Equated Monthly Installment (EMI) for any loan based on principal amount, interest rate, and loan tenure.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/finance/loan-emi-calculator',
-    comingSoon: true
+    path: '/calculators/finance/loan-emi-calculator'
   },
   {
     title: 'Simple Interest Calculator',
     description: 'Calculate the interest earned on a principal amount at a fixed rate over a period of time.',
     icon: <DollarSign className="h-6 w-6 text-primary" />,
-    path: '/calculators/finance/simple-interest-calculator',
-    comingSoon: true
+    path: '/calculators/finance/simple-interest-calculator'
   },
   {
     title: 'Retirement Savings Calculator',

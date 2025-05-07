@@ -15,6 +15,8 @@ import CalculatorsBusiness from "./pages/CalculatorsBusiness";
 import CalculatorsConstruction from "./pages/CalculatorsConstruction";
 import MortgageCalculatorPage from "./pages/calculator-pages/MortgageCalculatorPage";
 import CompoundInterestCalculatorPage from "./pages/calculator-pages/CompoundInterestCalculatorPage";
+import LoanEMICalculatorPage from "./pages/calculator-pages/LoanEMICalculatorPage";
+import SimpleInterestCalculatorPage from "./pages/calculator-pages/SimpleInterestCalculatorPage";
 import BMICalculatorPage from "./pages/calculator-pages/BMICalculatorPage";
 import PercentageCalculatorPage from "./pages/calculator-pages/PercentageCalculatorPage";
 import Blog from "./pages/Blog";
@@ -52,6 +54,8 @@ const App = () => (
           {/* Finance Calculator Pages */}
           <Route path="/calculators/finance/mortgage-calculator" element={<MortgageCalculatorPage />} />
           <Route path="/calculators/finance/compound-interest-calculator" element={<CompoundInterestCalculatorPage />} />
+          <Route path="/calculators/finance/loan-emi-calculator" element={<LoanEMICalculatorPage />} />
+          <Route path="/calculators/finance/simple-interest-calculator" element={<SimpleInterestCalculatorPage />} />
           
           {/* Health Calculator Pages */}
           <Route path="/calculators/health/bmi-calculator" element={<BMICalculatorPage />} />
