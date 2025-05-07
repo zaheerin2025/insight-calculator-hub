@@ -5,6 +5,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import CalculatorsFinance from './pages/CalculatorsFinance';
 import CalculatorsHealth from './pages/CalculatorsHealth';
+import CalculatorsConstruction from './pages/CalculatorsConstruction';
+import CalculatorsBusiness from './pages/CalculatorsBusiness';
+import NotFound from './pages/NotFound';
 
 // Finance calculator pages
 import MortgageCalculatorPage from './pages/calculator-pages/MortgageCalculatorPage';
@@ -47,6 +50,15 @@ const App = () => {
         <Route path="/calculators/health/body-fat-calculator" element={<BodyFatCalculatorPage />} />
         <Route path="/calculators/health/calorie-needs-calculator" element={<CalorieNeedsCalculatorPage />} />
         <Route path="/calculators/health/ideal-weight-calculator" element={<IdealWeightCalculatorPage />} />
+
+        {/* Business Calculator Routes */}
+        <Route path="/calculators/business" element={<CalculatorsBusiness />} />
+
+        {/* Construction Calculator Routes */}
+        <Route path="/calculators/construction" element={<CalculatorsConstruction />} />
+        
+        {/* 404 Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

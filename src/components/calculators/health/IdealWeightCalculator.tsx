@@ -1,450 +1,440 @@
 
 import React, { useState } from 'react';
-import CalculatorLayout from '../CalculatorLayout';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import CalculatorInput from '@/components/ui/calculator-input';
+import { Slider } from '@/components/ui/slider';
+import { Man, Woman, Info } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import CalculatorLayout from '../CalculatorLayout';
 import ResultDisplay from '../ResultDisplay';
-import { Calculator, Scale } from 'lucide-react';
-import { toast } from 'sonner';
 
 const IdealWeightCalculator: React.FC = () => {
+  const [height, setHeight] = useState<number>(170);
+  const [heightUnit, setHeightUnit] = useState<string>("cm");
   const [gender, setGender] = useState<string>("male");
-  const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
-  const [bodyFrame, setBodyFrame] = useState<string>("medium");
+  const [frameSize, setFrameSize] = useState<string>("medium");
+  const [idealWeight, setIdealWeight] = useState<number | null>(null);
+  const [formula, setFormula] = useState<string>("hamwi");
+  const [results, setResults] = useState<{[key: string]: number | null}>({});
+  const [weightUnit, setWeightUnit] = useState<string>("kg");
   
-  // Metric measurements
-  const [heightCm, setHeightCm] = useState<number>(175);
-  const [currentWeightKg, setCurrentWeightKg] = useState<number>(70);
+  // Convert height to cm for calculations
+  const getHeightInCm = () => {
+    if (heightUnit === "cm") return height;
+    return height * 2.54; // Convert inches to cm
+  };
   
-  // Imperial measurements
-  const [heightFeet, setHeightFeet] = useState<number>(5);
-  const [heightInches, setHeightInches] = useState<number>(9);
-  const [currentWeightLbs, setCurrentWeightLbs] = useState<number>(154);
+  // Convert height to inches for formulas
+  const getHeightInInches = () => {
+    if (heightUnit === "in") return height;
+    return height / 2.54; // Convert cm to inches
+  };
   
-  // Results
-  const [idealWeightHamwi, setIdealWeightHamwi] = useState<number | null>(null);
-  const [idealWeightDevine, setIdealWeightDevine] = useState<number | null>(null);
-  const [idealWeightRobinson, setIdealWeightRobinson] = useState<number | null>(null);
-  const [idealWeightMiller, setIdealWeightMiller] = useState<number | null>(null);
-  const [idealWeightBMI, setIdealWeightBMI] = useState<number | null>(null);
-  const [weightStatus, setWeightStatus] = useState<string>('');
-  const [isCalculated, setIsCalculated] = useState<boolean>(false);
+  // Convert weight from kg to lbs or vice versa
+  const convertWeight = (weight: number, to: string) => {
+    if (to === "kg") return weight / 2.205;
+    return weight * 2.205; // kg to lbs
+  };
+
+  // Format weight based on selected unit
+  const formatWeight = (weight: number | null) => {
+    if (weight === null) return "—";
+    const formattedWeight = weightUnit === "kg" ? 
+      Math.round(weight * 10) / 10 : 
+      Math.round(convertWeight(weight, "lbs") * 10) / 10;
+    return `${formattedWeight} ${weightUnit}`;
+  };
 
   const calculateIdealWeight = () => {
-    try {
-      // Convert imperial to metric if needed
-      let heightInCm = heightCm;
-      let currentWeight = currentWeightKg;
-      
-      if (units === 'imperial') {
-        heightInCm = ((heightFeet * 12) + heightInches) * 2.54; // inches to cm
-        currentWeight = currentWeightLbs * 0.453592; // lbs to kg
-      }
-      
-      const heightInMeters = heightInCm / 100;
-      const heightInInches = heightInCm / 2.54;
-      
-      // Calculate ideal weight using different formulas
-      
-      // Hamwi Formula
-      let hamwiWeight = 0;
-      if (gender === 'male') {
-        hamwiWeight = 48 + 2.7 * (heightInInches - 60);
-      } else {
-        hamwiWeight = 45.5 + 2.2 * (heightInInches - 60);
-      }
-      
-      // Adjust for body frame
-      switch (bodyFrame) {
-        case 'small':
-          hamwiWeight = hamwiWeight * 0.9;
-          break;
-        case 'large':
-          hamwiWeight = hamwiWeight * 1.1;
-          break;
-      }
-      
-      // Devine Formula
-      let devineWeight = 0;
-      if (gender === 'male') {
-        devineWeight = 50 + 2.3 * (heightInInches - 60);
-      } else {
-        devineWeight = 45.5 + 2.3 * (heightInInches - 60);
-      }
-      
-      // Robinson Formula
-      let robinsonWeight = 0;
-      if (gender === 'male') {
-        robinsonWeight = 52 + 1.9 * (heightInInches - 60);
-      } else {
-        robinsonWeight = 49 + 1.7 * (heightInInches - 60);
-      }
-      
-      // Miller Formula
-      let millerWeight = 0;
-      if (gender === 'male') {
-        millerWeight = 56.2 + 1.41 * (heightInInches - 60);
-      } else {
-        millerWeight = 53.1 + 1.36 * (heightInInches - 60);
-      }
-      
-      // BMI-based ideal weight (BMI of 22 is considered ideal)
-      const bmiWeight = 22 * (heightInMeters * heightInMeters);
-      
-      // Calculate weight status
-      const percentDifference = ((currentWeight - bmiWeight) / bmiWeight) * 100;
-      let status = '';
-      
-      if (percentDifference < -10) {
-        status = 'Underweight';
-      } else if (percentDifference >= -10 && percentDifference <= 10) {
-        status = 'Ideal Weight';
-      } else if (percentDifference > 10 && percentDifference <= 20) {
-        status = 'Slightly Overweight';
-      } else if (percentDifference > 20 && percentDifference <= 30) {
-        status = 'Overweight';
-      } else {
-        status = 'Obesity';
-      }
-      
-      setIdealWeightHamwi(hamwiWeight);
-      setIdealWeightDevine(devineWeight);
-      setIdealWeightRobinson(robinsonWeight);
-      setIdealWeightMiller(millerWeight);
-      setIdealWeightBMI(bmiWeight);
-      setWeightStatus(status);
-      setIsCalculated(true);
-      toast.success('Ideal weight calculated successfully!');
-    } catch (error) {
-      console.error('Calculation error:', error);
-      toast.error('An error occurred during calculation');
-    }
-  };
-
-  const getWeightStatusColor = (status: string): string => {
-    switch (status) {
-      case 'Underweight':
-        return 'text-blue-600';
-      case 'Ideal Weight':
-        return 'text-green-600';
-      case 'Slightly Overweight':
-        return 'text-yellow-600';
-      case 'Overweight':
-        return 'text-orange-500';
-      case 'Obesity':
-        return 'text-red-600';
-      default:
-        return '';
-    }
-  };
-
-  const convertWeight = (weight: number | null): string => {
-    if (weight === null) return '0';
+    const heightInInches = getHeightInInches();
+    const heightInCm = getHeightInCm();
+    let idealWeightResults: {[key: string]: number} = {};
     
-    if (units === 'metric') {
-      return `${weight.toFixed(1)} kg`;
+    // Calculate using all formulas
+    
+    // Hamwi Formula
+    if (gender === "male") {
+      idealWeightResults.hamwi = 48.0 + 2.7 * (heightInInches - 60);
     } else {
-      const lbs = weight * 2.20462;
-      return `${lbs.toFixed(1)} lbs`;
+      idealWeightResults.hamwi = 45.5 + 2.2 * (heightInInches - 60);
     }
+    
+    // Devine Formula
+    if (gender === "male") {
+      idealWeightResults.devine = 50.0 + 2.3 * (heightInInches - 60);
+    } else {
+      idealWeightResults.devine = 45.5 + 2.3 * (heightInInches - 60);
+    }
+    
+    // Robinson Formula
+    if (gender === "male") {
+      idealWeightResults.robinson = 52.0 + 1.9 * (heightInInches - 60);
+    } else {
+      idealWeightResults.robinson = 49.0 + 1.7 * (heightInInches - 60);
+    }
+    
+    // Miller Formula
+    if (gender === "male") {
+      idealWeightResults.miller = 56.2 + 1.41 * (heightInInches - 60);
+    } else {
+      idealWeightResults.miller = 53.1 + 1.36 * (heightInInches - 60);
+    }
+    
+    // BMI based ideal weight (BMI of 22 as midpoint of normal range)
+    const bmiIdealWeight = 22 * (heightInCm/100) * (heightInCm/100);
+    idealWeightResults.bmi = bmiIdealWeight;
+    
+    // Adjust for frame size
+    let selectedWeight = idealWeightResults[formula];
+    if (frameSize === "small") {
+      selectedWeight = selectedWeight * 0.9;
+    } else if (frameSize === "large") {
+      selectedWeight = selectedWeight * 1.1;
+    }
+    
+    // Convert to kg if needed
+    if (formula !== "bmi") { // BMI formula already gives result in kg
+      selectedWeight = convertWeight(selectedWeight, "kg");
+    }
+    
+    setIdealWeight(selectedWeight);
+    setResults(idealWeightResults);
   };
-
+  
+  // Calculate min/max for weight range (±10%)
+  const getWeightRange = () => {
+    if (idealWeight === null) return null;
+    const min = Math.round(idealWeight * 0.9 * 10) / 10;
+    const max = Math.round(idealWeight * 1.1 * 10) / 10;
+    return { min, max };
+  };
+  
+  const weightRange = getWeightRange();
+  
   return (
     <CalculatorLayout
       title="Ideal Weight Calculator"
-      description="Calculate your ideal weight based on height, age, gender, and body frame."
-      intro="This calculator uses several standard formulas to estimate your ideal weight based on your height, gender, and body frame."
-      formula={
-        <div>
-          <p className="mb-4">This calculator uses several standard formulas to estimate ideal weight:</p>
-          
-          <h3 className="font-semibold mt-4">1. Hamwi Formula (1964)</h3>
-          <div className="bg-muted p-4 rounded-md my-2 overflow-x-auto">
-            <p><strong>For Men:</strong> <code>Ideal Weight (kg) = 48 + 2.7 × (Height(in) - 60)</code></p>
-            <p className="mt-2"><strong>For Women:</strong> <code>Ideal Weight (kg) = 45.5 + 2.2 × (Height(in) - 60)</code></p>
-            <p className="mt-2">With adjustments for frame size: small frame (−10%), large frame (+10%)</p>
-          </div>
-          
-          <h3 className="font-semibold mt-4">2. Devine Formula (1974)</h3>
-          <div className="bg-muted p-4 rounded-md my-2 overflow-x-auto">
-            <p><strong>For Men:</strong> <code>Ideal Weight (kg) = 50 + 2.3 × (Height(in) - 60)</code></p>
-            <p className="mt-2"><strong>For Women:</strong> <code>Ideal Weight (kg) = 45.5 + 2.3 × (Height(in) - 60)</code></p>
-          </div>
-          
-          <h3 className="font-semibold mt-4">3. Robinson Formula (1983)</h3>
-          <div className="bg-muted p-4 rounded-md my-2 overflow-x-auto">
-            <p><strong>For Men:</strong> <code>Ideal Weight (kg) = 52 + 1.9 × (Height(in) - 60)</code></p>
-            <p className="mt-2"><strong>For Women:</strong> <code>Ideal Weight (kg) = 49 + 1.7 × (Height(in) - 60)</code></p>
-          </div>
-          
-          <h3 className="font-semibold mt-4">4. Miller Formula (1983)</h3>
-          <div className="bg-muted p-4 rounded-md my-2 overflow-x-auto">
-            <p><strong>For Men:</strong> <code>Ideal Weight (kg) = 56.2 + 1.41 × (Height(in) - 60)</code></p>
-            <p className="mt-2"><strong>For Women:</strong> <code>Ideal Weight (kg) = 53.1 + 1.36 × (Height(in) - 60)</code></p>
-          </div>
-          
-          <h3 className="font-semibold mt-4">5. BMI-Based Formula</h3>
-          <div className="bg-muted p-4 rounded-md my-2 overflow-x-auto">
-            <p><code>Ideal Weight (kg) = 22 × Height(m)²</code></p>
-            <p className="mt-2">Based on a BMI of 22, which is in the middle of the healthy BMI range (18.5-24.9)</p>
-          </div>
-        </div>
-      }
-      faq={[
-        {
-          question: "How do I determine my body frame size?",
-          answer: "A simple method is to wrap your thumb and middle finger around your wrist. If they overlap, you likely have a small frame. If they touch, you have a medium frame. If they don't meet, you likely have a large frame. Another method is to divide your height in cm by your wrist circumference in cm. Above 10.4 indicates a small frame, 9.6-10.4 indicates a medium frame, and below 9.6 indicates a large frame."
-        },
-        {
-          question: "Why do the different formulas give different results?",
-          answer: "Each formula was developed at different times by different researchers, and they emphasize different aspects of body composition. Some formulas are more appropriate for certain populations. The average of several formulas may provide a more balanced estimate."
-        },
-        {
-          question: "Is ideal weight the same as healthy weight?",
-          answer: "Not necessarily. 'Ideal weight' traditionally refers to weight associated with lowest mortality, while 'healthy weight' encompasses a broader range. Many healthy people fall outside their calculated ideal weight. Other factors like muscle mass, bone density, and individual health markers are important to consider."
-        },
-        {
-          question: "How important is it to reach my ideal weight?",
-          answer: "While these calculations provide a reference point, they don't account for individual differences in body composition, muscle mass, or specific health considerations. Focus on overall health habits rather than reaching a specific number. Consult with healthcare professionals for personalized advice."
-        }
-      ]}
-      canonicalUrl="https://calculators-hub.com/calculators/health/ideal-weight-calculator"
+      description="Calculate your ideal weight based on height, gender, frame size, and various medical formulas."
     >
-      <div className="space-y-6">
-        <Tabs value={units} onValueChange={(value) => setUnits(value as 'metric' | 'imperial')} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="metric">Metric (cm, kg)</TabsTrigger>
-            <TabsTrigger value="imperial">Imperial (ft/in, lbs)</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="metric" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <Label>Gender</Label>
-                <Select value={gender} onValueChange={setGender}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-4">
-                <Label>Body Frame</Label>
-                <Select value={bodyFrame} onValueChange={setBodyFrame}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select body frame" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="small">Small Frame</SelectItem>
-                    <SelectItem value="medium">Medium Frame</SelectItem>
-                    <SelectItem value="large">Large Frame</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <CalculatorInput
-                id="height-metric"
-                label="Height"
-                type="number"
-                value={heightCm}
-                onChange={(value) => setHeightCm(parseFloat(value) || 0)}
-                suffix="cm"
-                min={100}
-                max={250}
-                helperText="Your height in centimeters"
-              />
-              
-              <CalculatorInput
-                id="weight-metric"
-                label="Current Weight"
-                type="number"
-                value={currentWeightKg}
-                onChange={(value) => setCurrentWeightKg(parseFloat(value) || 0)}
-                suffix="kg"
-                min={30}
-                max={300}
-                helperText="Your current weight in kilograms"
-              />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="imperial" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <Label>Gender</Label>
-                <Select value={gender} onValueChange={setGender}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-4">
-                <Label>Body Frame</Label>
-                <Select value={bodyFrame} onValueChange={setBodyFrame}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select body frame" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="small">Small Frame</SelectItem>
-                    <SelectItem value="medium">Medium Frame</SelectItem>
-                    <SelectItem value="large">Large Frame</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-2">
-                <CalculatorInput
-                  id="height-feet"
-                  label="Height (feet)"
-                  type="number"
-                  value={heightFeet}
-                  onChange={(value) => setHeightFeet(parseInt(value) || 0)}
-                  suffix="ft"
-                  min={3}
-                  max={8}
-                  helperText="Feet"
-                />
-                
-                <CalculatorInput
-                  id="height-inches"
-                  label="Height (inches)"
-                  type="number"
-                  value={heightInches}
-                  onChange={(value) => setHeightInches(parseInt(value) || 0)}
-                  suffix="in"
-                  min={0}
-                  max={11}
-                  helperText="Inches"
-                />
-              </div>
-              
-              <CalculatorInput
-                id="weight-imperial"
-                label="Current Weight"
-                type="number"
-                value={currentWeightLbs}
-                onChange={(value) => setCurrentWeightLbs(parseFloat(value) || 0)}
-                suffix="lbs"
-                min={60}
-                max={660}
-                helperText="Your current weight in pounds"
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-        
-        <div className="flex justify-center">
-          <Button 
-            onClick={calculateIdealWeight}
-            size="lg"
-            className="bg-primary hover:bg-primary-hover text-white font-medium px-8"
-          >
-            Calculate Ideal Weight
-          </Button>
-        </div>
-        
-        {isCalculated && idealWeightBMI !== null && (
-          <div className="mt-8 animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Results</h2>
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle>Ideal Weight Calculator</CardTitle>
+          <CardDescription>
+            Calculate your ideal weight based on different methods and your body frame.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="calculator" className="w-full">
+            <TabsList className="grid grid-cols-2 mb-6">
+              <TabsTrigger value="calculator">Calculator</TabsTrigger>
+              <TabsTrigger value="about">About</TabsTrigger>
+            </TabsList>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ResultDisplay
-                label="Current Weight"
-                value={units === 'metric' ? `${currentWeightKg.toFixed(1)} kg` : `${currentWeightLbs.toFixed(1)} lbs`}
-                icon={<Scale className="h-5 w-5" />}
-              />
-              
-              <ResultDisplay
-                label="Weight Status"
-                value={weightStatus}
-                description="Based on BMI method"
-                icon={<Calculator className="h-5 w-5" />}
-                customValueClass={getWeightStatusColor(weightStatus)}
-              />
-            </div>
+            <TabsContent value="calculator">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="space-y-6">
+                    {/* Gender Selection */}
+                    <div className="space-y-2">
+                      <Label>Gender</Label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <Button
+                          type="button"
+                          variant={gender === "male" ? "default" : "outline"}
+                          className="flex items-center justify-center gap-2 h-12"
+                          onClick={() => setGender("male")}
+                        >
+                          <Man size={18} />
+                          <span>Male</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={gender === "female" ? "default" : "outline"}
+                          className="flex items-center justify-center gap-2 h-12"
+                          onClick={() => setGender("female")}
+                        >
+                          <Woman size={18} />
+                          <span>Female</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Height Input */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <Label htmlFor="height">Height</Label>
+                        <span className="text-sm text-muted-foreground">
+                          {height} {heightUnit}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-4">
+                        <div className="col-span-3">
+                          <Slider 
+                            id="height"
+                            min={heightUnit === "cm" ? 140 : 55}
+                            max={heightUnit === "cm" ? 220 : 86}
+                            step={heightUnit === "cm" ? 1 : 0.5}
+                            value={[height]}
+                            onValueChange={(value) => setHeight(value[0])}
+                          />
+                        </div>
+                        <Select value={heightUnit} onValueChange={setHeightUnit}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cm">cm</SelectItem>
+                            <SelectItem value="in">in</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    {/* Body Frame Size */}
+                    <div className="space-y-2">
+                      <Label htmlFor="frame">Body Frame Size</Label>
+                      <Select value={frameSize} onValueChange={setFrameSize}>
+                        <SelectTrigger id="frame">
+                          <SelectValue placeholder="Select frame size" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="small">Small</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="large">Large</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="text-sm text-muted-foreground">
+                        Body frame size affects your ideal weight calculation. 
+                        <span className="block mt-1">
+                          <Info size={14} className="inline mr-1" />
+                          <span>Measure your wrist circumference to determine your frame size.</span>
+                        </span>
+                      </p>
+                    </div>
+                    
+                    {/* Formula Selection */}
+                    <div className="space-y-2">
+                      <Label htmlFor="formula">Formula</Label>
+                      <Select value={formula} onValueChange={setFormula}>
+                        <SelectTrigger id="formula">
+                          <SelectValue placeholder="Select formula" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="hamwi">Hamwi Formula</SelectItem>
+                          <SelectItem value="devine">Devine Formula</SelectItem>
+                          <SelectItem value="robinson">Robinson Formula</SelectItem>
+                          <SelectItem value="miller">Miller Formula</SelectItem>
+                          <SelectItem value="bmi">BMI-based</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Weight Unit Preference */}
+                    <div className="space-y-2">
+                      <Label>Weight Unit</Label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <Button
+                          type="button"
+                          variant={weightUnit === "kg" ? "default" : "outline"}
+                          onClick={() => setWeightUnit("kg")}
+                        >
+                          Kilograms (kg)
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={weightUnit === "lbs" ? "default" : "outline"}
+                          onClick={() => setWeightUnit("lbs")}
+                        >
+                          Pounds (lbs)
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <Button className="w-full" onClick={calculateIdealWeight}>
+                      Calculate Ideal Weight
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                  {/* Results Display */}
+                  {idealWeight && (
+                    <div className="space-y-6">
+                      <ResultDisplay
+                        label="Ideal Weight"
+                        value={formatWeight(idealWeight)}
+                        description={`Based on the ${formula.charAt(0).toUpperCase() + formula.slice(1)} formula`}
+                        icon={<span className="text-2xl">⚖️</span>}
+                      />
+                      
+                      {weightRange && (
+                        <div className="bg-muted/50 p-4 rounded-lg">
+                          <h4 className="font-medium mb-2">Healthy Weight Range</h4>
+                          <p className="text-muted-foreground">
+                            Your ideal weight range is between <strong>{formatWeight(weightRange.min)}</strong> and <strong>{formatWeight(weightRange.max)}</strong>.
+                          </p>
+                        </div>
+                      )}
+                      
+                      <Separator />
+                      
+                      <div>
+                        <h4 className="font-medium mb-3">Results from all formulas:</h4>
+                        <div className="grid grid-cols-1 gap-2">
+                          <div className="bg-muted p-3 rounded-lg grid grid-cols-2">
+                            <span>Hamwi Formula:</span>
+                            <span className="font-medium text-right">{formatWeight(results.hamwi)}</span>
+                          </div>
+                          <div className="bg-muted p-3 rounded-lg grid grid-cols-2">
+                            <span>Devine Formula:</span>
+                            <span className="font-medium text-right">{formatWeight(results.devine)}</span>
+                          </div>
+                          <div className="bg-muted p-3 rounded-lg grid grid-cols-2">
+                            <span>Robinson Formula:</span>
+                            <span className="font-medium text-right">{formatWeight(results.robinson)}</span>
+                          </div>
+                          <div className="bg-muted p-3 rounded-lg grid grid-cols-2">
+                            <span>Miller Formula:</span>
+                            <span className="font-medium text-right">{formatWeight(results.miller)}</span>
+                          </div>
+                          <div className="bg-muted p-3 rounded-lg grid grid-cols-2">
+                            <span>BMI-based:</span>
+                            <span className="font-medium text-right">{formatWeight(results.bmi)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {!idealWeight && (
+                    <div className="h-full flex items-center justify-center p-8 border-2 border-dashed border-muted-foreground/20 rounded-lg">
+                      <div className="text-center">
+                        <h3 className="text-lg font-medium mb-2">Enter your details</h3>
+                        <p className="text-muted-foreground">
+                          Fill in your information and click "Calculate" to see your ideal weight.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
             
-            <div className="mt-6 p-6 border rounded-md bg-muted/20">
-              <h3 className="font-semibold mb-4">Ideal Weight Range (different methods)</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+            <TabsContent value="about">
+              <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-muted-foreground">BMI Method</p>
-                  <p className="text-xl font-medium">{convertWeight(idealWeightBMI)}</p>
-                  <p className="text-xs text-muted-foreground">Based on a BMI of 22</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-muted-foreground">Hamwi Formula</p>
-                  <p className="text-xl font-medium">{convertWeight(idealWeightHamwi)}</p>
-                  <p className="text-xs text-muted-foreground">Adjusted for {bodyFrame} frame</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-muted-foreground">Devine Formula</p>
-                  <p className="text-xl font-medium">{convertWeight(idealWeightDevine)}</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-muted-foreground">Robinson Formula</p>
-                  <p className="text-xl font-medium">{convertWeight(idealWeightRobinson)}</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-muted-foreground">Miller Formula</p>
-                  <p className="text-xl font-medium">{convertWeight(idealWeightMiller)}</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-muted-foreground">Average</p>
-                  <p className="text-xl font-medium font-bold">
-                    {convertWeight((idealWeightHamwi + idealWeightDevine + idealWeightRobinson + idealWeightMiller + idealWeightBMI) / 5)}
+                  <h3 className="text-lg font-medium mb-2">About Ideal Weight</h3>
+                  <p className="text-muted-foreground">
+                    Ideal weight calculations are estimates of a healthy weight based on your height and frame size. 
+                    These formulas were developed by medical researchers to provide guidelines for healthy weight ranges.
                   </p>
                 </div>
+                
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="formulas">
+                    <AccordionTrigger className="text-base font-medium">
+                      Formulas Explained
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground space-y-3">
+                      <p className="font-medium">This calculator uses several established medical formulas:</p>
+                      
+                      <div>
+                        <p className="font-medium">Hamwi Formula (1964)</p>
+                        <ul className="list-disc list-inside pl-4 space-y-1 mt-1">
+                          <li>Men: 48 kg + 2.7 kg for each inch over 5 feet</li>
+                          <li>Women: 45.5 kg + 2.2 kg for each inch over 5 feet</li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium">Devine Formula (1974)</p>
+                        <ul className="list-disc list-inside pl-4 space-y-1 mt-1">
+                          <li>Men: 50 kg + 2.3 kg for each inch over 5 feet</li>
+                          <li>Women: 45.5 kg + 2.3 kg for each inch over 5 feet</li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium">Robinson Formula (1983)</p>
+                        <ul className="list-disc list-inside pl-4 space-y-1 mt-1">
+                          <li>Men: 52 kg + 1.9 kg for each inch over 5 feet</li>
+                          <li>Women: 49 kg + 1.7 kg for each inch over 5 feet</li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium">Miller Formula (1983)</p>
+                        <ul className="list-disc list-inside pl-4 space-y-1 mt-1">
+                          <li>Men: 56.2 kg + 1.41 kg for each inch over 5 feet</li>
+                          <li>Women: 53.1 kg + 1.36 kg for each inch over 5 feet</li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium">BMI-based Formula</p>
+                        <p className="pl-4 mt-1">
+                          Based on BMI of 22 (midpoint of normal BMI range): weight = 22 × (height in meters)²
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="frame">
+                    <AccordionTrigger className="text-base font-medium">
+                      Body Frame Size
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
+                      <p>Body frame size refers to the bone structure and can be small, medium, or large. Frame size affects ideal weight:</p>
+                      
+                      <div className="mt-3">
+                        <p className="font-medium">How to determine your frame size:</p>
+                        <p className="mt-1">Measure your wrist circumference at its narrowest point:</p>
+                        
+                        <div className="bg-muted p-4 rounded-lg mt-2 space-y-3">
+                          <p className="font-medium">For women:</p>
+                          <ul className="list-disc list-inside pl-4 space-y-1">
+                            <li>Small: Wrist size less than 5.5 inches</li>
+                            <li>Medium: Wrist size 5.5 to 5.75 inches</li>
+                            <li>Large: Wrist size over 5.75 inches</li>
+                          </ul>
+                          
+                          <p className="font-medium">For men:</p>
+                          <ul className="list-disc list-inside pl-4 space-y-1">
+                            <li>Small: Wrist size 5.5 to 6.5 inches</li>
+                            <li>Medium: Wrist size 6.5 to 7.5 inches</li>
+                            <li>Large: Wrist size over 7.5 inches</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="limitations">
+                    <AccordionTrigger className="text-base font-medium">
+                      Limitations
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
+                      <p>Ideal weight calculations have limitations:</p>
+                      <ul className="list-disc list-inside pl-4 space-y-2 mt-2">
+                        <li>They don't account for muscle mass, body composition, or age</li>
+                        <li>Athletes may have higher weights due to muscle mass</li>
+                        <li>These formulas are general guidelines, not definitive measures of health</li>
+                        <li>Individual health factors should be considered alongside these calculations</li>
+                      </ul>
+                      <p className="mt-3">Consult with a healthcare provider for personalized weight assessment.</p>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </div>
-              
-              <div className="mt-6 pt-4 border-t">
-                <h4 className="font-medium mb-2">Difference from Ideal Weight</h4>
-                <p className="text-sm">
-                  {(() => {
-                    // Calculate average ideal weight
-                    const avgIdealWeight = (idealWeightHamwi + idealWeightDevine + idealWeightRobinson + idealWeightMiller + idealWeightBMI) / 5;
-                    const currentWeight = units === 'metric' ? currentWeightKg : currentWeightLbs / 2.20462; // Convert to kg
-                    const difference = currentWeight - avgIdealWeight;
-                    const diffString = Math.abs(difference).toFixed(1);
-                    const unit = units === 'metric' ? 'kg' : 'lbs';
-                    const diffInSelectedUnit = units === 'metric' ? Math.abs(difference) : Math.abs(difference) * 2.20462;
-                    
-                    if (Math.abs(difference) < 1) {
-                      return <span className="text-green-600">You are at your ideal weight!</span>;
-                    } else if (difference < 0) {
-                      return <span>You are <span className="font-medium">{diffInSelectedUnit.toFixed(1)} {unit}</span> below your ideal weight.</span>;
-                    } else {
-                      return <span>You are <span className="font-medium">{diffInSelectedUnit.toFixed(1)} {unit}</span> above your ideal weight.</span>;
-                    }
-                  })()}
-                </p>
-              </div>
-            </div>
-            
-            <div className="mt-4 text-sm text-muted-foreground">
-              <p>Note: These calculations are estimates and should be used as general guidelines only. Many factors influence healthy weight including age, muscle mass, bone density, and overall body composition.</p>
-            </div>
-          </div>
-        )}
-      </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </CalculatorLayout>
   );
 };
