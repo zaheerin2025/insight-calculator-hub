@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -259,7 +260,7 @@ const Index: React.FC = () => {
               <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
                 <div className="aspect-[16/9] overflow-hidden">
                   <img 
-                    src={post.image} 
+                    src={post.coverImage} 
                     alt={post.title} 
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
