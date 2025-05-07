@@ -14,22 +14,19 @@ const calculators = [
     title: 'Body Fat Calculator',
     description: 'Estimate your body fat percentage using various methods based on your measurements.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/body-fat-calculator',
-    comingSoon: true
+    path: '/calculators/health/body-fat-calculator'
   },
   {
     title: 'Calorie Needs Calculator',
     description: 'Calculate your daily calorie requirements based on your activity level, age, weight, height, and gender.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/calorie-needs-calculator',
-    comingSoon: true
+    path: '/calculators/health/calorie-needs-calculator'
   },
   {
     title: 'Ideal Weight Calculator',
     description: 'Calculate your ideal weight based on height, age, gender, and body frame.',
     icon: <Heart className="h-6 w-6 text-primary" />,
-    path: '/calculators/health/ideal-weight-calculator',
-    comingSoon: true
+    path: '/calculators/health/ideal-weight-calculator'
   },
   {
     title: 'Heart Rate Calculator',

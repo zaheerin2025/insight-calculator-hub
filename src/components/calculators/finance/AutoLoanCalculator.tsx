@@ -5,88 +5,68 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import ResultDisplay from '../ResultDisplay';
-import { BanknoteIcon, Calculator, Calendar } from 'lucide-react';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BanknoteIcon, Calculator, Car, PiggyBank } from 'lucide-react';
+import { ChartContainer } from '@/components/ui/chart';
 import { toast } from 'sonner';
 
 const AutoLoanCalculator: React.FC = () => {
-  const [carPrice, setCarPrice] = useState<number>(30000);
+  const [vehiclePrice, setVehiclePrice] = useState<number>(25000);
   const [downPayment, setDownPayment] = useState<number>(5000);
-  const [tradeInValue, setTradeInValue] = useState<number>(0);
-  const [loanTerm, setLoanTerm] = useState<number>(60);
-  const [interestRate, setInterestRate] = useState<number>(5.9);
-  const [paymentFrequency, setPaymentFrequency] = useState<string>("monthly");
+  const [interestRate, setInterestRate] = useState<number>(4.5);
+  const [loanTerm, setLoanTerm] = useState<number>(5);
   const [salesTaxRate, setSalesTaxRate] = useState<number>(6);
   const [calculationDone, setCalculationDone] = useState<boolean>(false);
 
-  // Calculate auto loan details
+  // Calculate auto loan
   const results = useMemo(() => {
-    // Calculate sales tax
-    const salesTax = (carPrice - tradeInValue) * (salesTaxRate / 100);
+    // Calculate tax amount
+    const taxAmount = vehiclePrice * (salesTaxRate / 100);
     
-    // Calculate total price with tax
-    const totalPrice = carPrice + salesTax;
+    // Calculate total vehicle cost including tax
+    const totalVehicleCost = vehiclePrice + taxAmount;
     
-    // Calculate loan amount
-    const loanAmount = totalPrice - downPayment - tradeInValue;
+    // Calculate loan amount (total cost minus down payment)
+    const principal = totalVehicleCost - downPayment;
     
-    // Calculate payment frequency multiplier
-    let paymentsPerYear: number;
-    let paymentFrequencyText: string;
+    // Calculate monthly payment using the formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+    const monthlyRate = interestRate / 100 / 12;
+    const numberOfPayments = loanTerm * 12;
     
-    switch (paymentFrequency) {
-      case "weekly":
-        paymentsPerYear = 52;
-        paymentFrequencyText = "weekly";
-        break;
-      case "biweekly":
-        paymentsPerYear = 26;
-        paymentFrequencyText = "biweekly";
-        break;
-      case "monthly":
-        paymentsPerYear = 12;
-        paymentFrequencyText = "monthly";
-        break;
-      default:
-        paymentsPerYear = 12;
-        paymentFrequencyText = "monthly";
-    }
+    const monthlyPayment =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
     
-    // Calculate total number of payments
-    const totalPayments = (loanTerm / 12) * paymentsPerYear;
-    
-    // Calculate interest rate per payment period
-    const interestRatePerPayment = (interestRate / 100) / paymentsPerYear;
-    
-    // Calculate payment amount using amortization formula
-    const paymentAmount = loanAmount * 
-      (interestRatePerPayment * Math.pow(1 + interestRatePerPayment, totalPayments)) / 
-      (Math.pow(1 + interestRatePerPayment, totalPayments) - 1);
-    
-    // Calculate total cost of loan
-    const totalCost = paymentAmount * totalPayments;
-    
-    // Calculate total interest paid
-    const totalInterest = totalCost - loanAmount;
+    // Calculate total cost and interest
+    const totalPayment = monthlyPayment * numberOfPayments;
+    const totalInterest = totalPayment - principal;
+    const totalCost = totalVehicleCost + totalInterest;
     
     return {
-      loanAmount: loanAmount.toFixed(2),
-      paymentAmount: paymentAmount.toFixed(2),
+      loanAmount: principal.toFixed(2),
+      monthlyPayment: monthlyPayment.toFixed(2),
       totalInterest: totalInterest.toFixed(2),
       totalCost: totalCost.toFixed(2),
-      salesTax: salesTax.toFixed(2),
-      totalPrice: totalPrice.toFixed(2),
-      paymentFrequencyText,
-      numberOfPayments: totalPayments
+      salesTax: taxAmount.toFixed(2)
     };
-  }, [carPrice, downPayment, tradeInValue, loanTerm, interestRate, paymentFrequency, salesTaxRate]);
+  }, [vehiclePrice, downPayment, interestRate, loanTerm, salesTaxRate]);
 
-  // Handle calculate button click
+  // Handle calculation
   const handleCalculate = () => {
     setCalculationDone(true);
     toast.success("Auto loan calculated successfully");
   };
+
+  // Pie chart data
+  const chartData = [
+    { name: 'Vehicle Price', value: vehiclePrice, fill: '#9333EA' },
+    { name: 'Sales Tax', value: parseFloat(results.salesTax), fill: '#A855F7' },
+    { name: 'Interest', value: parseFloat(results.totalInterest), fill: '#D8B4FE' },
+  ];
+
+  // Chart colors
+  const COLORS = ['#9333EA', '#A855F7', '#D8B4FE'];
 
   const relatedCalculators = [
     {
@@ -95,7 +75,12 @@ const AutoLoanCalculator: React.FC = () => {
       category: "Finance"
     },
     {
-      title: "Debt-to-Income Ratio Calculator",
+      title: "Mortgage Calculator",
+      path: "/calculators/finance/mortgage-calculator",
+      category: "Finance"
+    },
+    {
+      title: "Debt-to-Income Calculator",
       path: "/calculators/finance/debt-to-income-calculator",
       category: "Finance"
     }
@@ -104,60 +89,69 @@ const AutoLoanCalculator: React.FC = () => {
   return (
     <CalculatorLayout
       title="Auto Loan Calculator"
-      description="Calculate your monthly car payment, total interest paid, and the true cost of your auto loan."
-      intro="Use our auto loan calculator to estimate your car payment and see the full cost of financing, including interest and taxes."
+      description="Calculate your monthly car loan payment, total interest, and total cost with our free auto loan calculator."
+      intro="Use our auto loan calculator to estimate your monthly car payment, including principal, interest, taxes, and see the total cost of your vehicle purchase."
       canonicalUrl="https://calculators-hub.com/calculators/finance/auto-loan-calculator"
       relatedCalculators={relatedCalculators}
       formula={
         <div>
           <p className="mb-4">
-            The auto loan calculator uses this formula to determine your payment amount:
+            The auto loan calculator uses the following formulas:
           </p>
-          <div className="bg-muted p-4 rounded-md mb-4 font-mono text-sm overflow-auto">
-            Payment = P × (r × (1 + r)ⁿ) / ((1 + r)ⁿ - 1)
-          </div>
-          <p className="mb-2">Where:</p>
-          <ul className="list-disc pl-6 space-y-2 mb-4">
-            <li>P = Principal loan amount</li>
-            <li>r = Interest rate per payment period</li>
-            <li>n = Total number of payments</li>
-          </ul>
-          
-          <p className="mb-4">
-            The calculator first determines your loan amount:
-          </p>
-          <div className="bg-muted p-4 rounded-md mb-4 font-mono text-sm overflow-auto">
-            Loan Amount = (Car Price + Sales Tax) - Down Payment - Trade-in Value
-          </div>
-          <p className="mb-2">With sales tax calculated as:</p>
-          <div className="bg-muted p-4 rounded-md mb-4 font-mono text-sm overflow-auto">
-            Sales Tax = (Car Price - Trade-in Value) × Tax Rate
+          <div className="space-y-4">
+            <div>
+              <p className="mb-2">To calculate the loan amount:</p>
+              <div className="bg-muted p-4 rounded-md mb-2 font-mono text-sm overflow-auto">
+                Loan Amount = (Vehicle Price + Sales Tax) - Down Payment
+              </div>
+              <p className="mb-2">Where Sales Tax = Vehicle Price × Tax Rate</p>
+            </div>
+            
+            <div>
+              <p className="mb-2">To calculate the monthly payment:</p>
+              <div className="bg-muted p-4 rounded-md mb-2 font-mono text-sm overflow-auto">
+                Monthly Payment = P × r × (1 + r)^n / [(1 + r)^n - 1]
+              </div>
+              <p className="mb-2">Where:</p>
+              <ul className="list-disc pl-6 space-y-1">
+                <li>P = Principal (loan amount)</li>
+                <li>r = Monthly interest rate (annual rate ÷ 12 ÷ 100)</li>
+                <li>n = Total number of payments (years × 12)</li>
+              </ul>
+            </div>
+            
+            <div>
+              <p className="mb-2">To calculate the total interest paid:</p>
+              <div className="bg-muted p-4 rounded-md font-mono text-sm overflow-auto">
+                Total Interest = (Monthly Payment × Number of Payments) - Principal
+              </div>
+            </div>
           </div>
         </div>
       }
       faq={[
         {
-          question: "How does the down payment affect my auto loan?",
-          answer: "A larger down payment reduces your loan amount, which lowers your monthly payment, reduces the total interest paid over the life of the loan, and may help you qualify for better interest rates. It can also help avoid being 'underwater' on your loan (owing more than the car is worth)."
+          question: "How much car can I afford?",
+          answer: "Financial experts recommend spending no more than 10-15% of your monthly take-home pay on car payments. Additionally, your total car expenses (including insurance, fuel, maintenance) should not exceed 20% of your monthly income."
         },
         {
-          question: "Should I choose a longer or shorter loan term?",
-          answer: "A longer term (60-72 months) means lower monthly payments but higher overall interest costs. A shorter term (36-48 months) means higher monthly payments but less total interest and you'll build equity faster. Choose based on what fits your budget and financial goals."
+          question: "Should I make a larger down payment?",
+          answer: "A larger down payment reduces your loan amount, which lowers your monthly payment and total interest paid. It also reduces the risk of becoming 'upside down' on your loan (owing more than the car is worth). Aim for at least 20% down if possible."
         },
         {
-          question: "How does my credit score affect my auto loan?",
-          answer: "Your credit score significantly impacts the interest rate you're offered. Borrowers with excellent credit (740+) often receive rates several percentage points lower than those with poor credit, potentially saving thousands over the life of the loan."
+          question: "How does the loan term affect my auto loan?",
+          answer: "Longer loan terms (e.g., 6 or 7 years) mean lower monthly payments but significantly more interest paid over time. Shorter loan terms (3-4 years) have higher monthly payments but less total interest and you'll build equity faster."
         },
         {
-          question: "Is it better to finance through a dealer or a bank?",
-          answer: "It's best to shop around. Dealerships offer convenience but may charge higher rates. Banks, credit unions, and online lenders often have competitive rates. Get pre-approved before shopping to strengthen your negotiating position and ensure you're getting the best rate."
+          question: "Is it better to finance through a dealer or get a pre-approved loan?",
+          answer: "Getting pre-approved for an auto loan from your bank or credit union before shopping gives you leverage when negotiating and helps you focus on the vehicle price rather than the monthly payment. However, sometimes dealers offer special financing rates that may be better than what you can get elsewhere."
         }
       ]}
       schemaMarkup={{
         "@context": "https://schema.org",
         "@type": "FinancialProduct",
         "name": "Auto Loan Calculator",
-        "description": "Calculate your monthly car payment, total interest paid, and the true cost of your auto loan.",
+        "description": "Calculate your monthly car loan payment, total interest, and total cost.",
         "url": "https://calculators-hub.com/calculators/finance/auto-loan-calculator",
         "provider": {
           "@type": "Organization",
@@ -169,22 +163,22 @@ const AutoLoanCalculator: React.FC = () => {
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="carPrice">Car Price ($)</Label>
+            <Label htmlFor="vehiclePrice">Vehicle Price ($)</Label>
             <Input
-              id="carPrice"
+              id="vehiclePrice"
               type="number"
-              value={carPrice}
-              onChange={(e) => setCarPrice(Number(e.target.value))}
+              value={vehiclePrice}
+              onChange={(e) => setVehiclePrice(Number(e.target.value))}
               min="1000"
               step="500"
             />
             <Slider
-              value={[carPrice]}
-              min={1000}
+              value={[vehiclePrice]}
+              min={5000}
               max={100000}
               step={1000}
               className="mt-2"
-              onValueChange={(value) => setCarPrice(value[0])}
+              onValueChange={(value) => setVehiclePrice(value[0])}
             />
           </div>
 
@@ -201,7 +195,7 @@ const AutoLoanCalculator: React.FC = () => {
             <Slider
               value={[downPayment]}
               min={0}
-              max={carPrice / 2}
+              max={vehiclePrice / 2}
               step={500}
               className="mt-2"
               onValueChange={(value) => setDownPayment(value[0])}
@@ -209,61 +203,20 @@ const AutoLoanCalculator: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tradeInValue">Trade-in Value ($)</Label>
-            <Input
-              id="tradeInValue"
-              type="number"
-              value={tradeInValue}
-              onChange={(e) => setTradeInValue(Number(e.target.value))}
-              min="0"
-              step="500"
-            />
-            <Slider
-              value={[tradeInValue]}
-              min={0}
-              max={carPrice / 2}
-              step={500}
-              className="mt-2"
-              onValueChange={(value) => setTradeInValue(value[0])}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="loanTerm">Loan Term (months)</Label>
-            <Input
-              id="loanTerm"
-              type="number"
-              value={loanTerm}
-              onChange={(e) => setLoanTerm(Number(e.target.value))}
-              min="12"
-              max="84"
-              step="12"
-            />
-            <Slider
-              value={[loanTerm]}
-              min={12}
-              max={84}
-              step={12}
-              className="mt-2"
-              onValueChange={(value) => setLoanTerm(value[0])}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="interestRate">Interest Rate (%)</Label>
+            <Label htmlFor="interestRate">Interest Rate (% per annum)</Label>
             <Input
               id="interestRate"
               type="number"
               value={interestRate}
               onChange={(e) => setInterestRate(Number(e.target.value))}
-              min="0"
-              max="36"
+              min="0.1"
               step="0.1"
+              max="25"
             />
             <Slider
               value={[interestRate]}
-              min={0}
-              max={20}
+              min={0.5}
+              max={15}
               step={0.1}
               className="mt-2"
               onValueChange={(value) => setInterestRate(value[0])}
@@ -271,25 +224,23 @@ const AutoLoanCalculator: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="paymentFrequency">Payment Frequency</Label>
-            <RadioGroup 
-              value={paymentFrequency}
-              onValueChange={setPaymentFrequency}
-              className="flex space-x-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="monthly" id="monthly" />
-                <Label htmlFor="monthly">Monthly</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="biweekly" id="biweekly" />
-                <Label htmlFor="biweekly">Biweekly</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="weekly" id="weekly" />
-                <Label htmlFor="weekly">Weekly</Label>
-              </div>
-            </RadioGroup>
+            <Label htmlFor="loanTerm">Loan Term (years)</Label>
+            <Input
+              id="loanTerm"
+              type="number"
+              value={loanTerm}
+              onChange={(e) => setLoanTerm(Number(e.target.value))}
+              min="1"
+              max="10"
+            />
+            <Slider
+              value={[loanTerm]}
+              min={1}
+              max={8}
+              step={1}
+              className="mt-2"
+              onValueChange={(value) => setLoanTerm(value[0])}
+            />
           </div>
 
           <div className="space-y-2">
@@ -300,8 +251,16 @@ const AutoLoanCalculator: React.FC = () => {
               value={salesTaxRate}
               onChange={(e) => setSalesTaxRate(Number(e.target.value))}
               min="0"
-              max="20"
+              max="15"
               step="0.1"
+            />
+            <Slider
+              value={[salesTaxRate]}
+              min={0}
+              max={10}
+              step={0.1}
+              className="mt-2"
+              onValueChange={(value) => setSalesTaxRate(value[0])}
             />
           </div>
 
@@ -311,85 +270,92 @@ const AutoLoanCalculator: React.FC = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="grid gap-4">
+          <div className="grid gap-4 md:grid-cols-1">
             <ResultDisplay
-              label={`${results.paymentFrequencyText.charAt(0).toUpperCase() + results.paymentFrequencyText.slice(1)} Payment`}
-              value={`$${parseFloat(results.paymentAmount).toLocaleString()}`}
+              label="Monthly Payment"
+              value={`$${parseFloat(results.monthlyPayment).toLocaleString()}`}
               icon={<BanknoteIcon className="h-5 w-5" />}
               isHighlighted={true}
             />
             <ResultDisplay
               label="Loan Amount"
               value={`$${parseFloat(results.loanAmount).toLocaleString()}`}
+              icon={<Car className="h-5 w-5" />}
+            />
+            <ResultDisplay
+              label="Total Interest"
+              value={`$${parseFloat(results.totalInterest).toLocaleString()}`}
               icon={<Calculator className="h-5 w-5" />}
             />
             <ResultDisplay
-              label="Total Interest Paid"
-              value={`$${parseFloat(results.totalInterest).toLocaleString()}`}
-              icon={<Calculator className="h-5 w-5" />}
+              label="Total Cost"
+              value={`$${parseFloat(results.totalCost).toLocaleString()}`}
+              icon={<PiggyBank className="h-5 w-5" />}
+              description="Vehicle + tax + interest"
             />
           </div>
 
           {calculationDone && (
-            <div className="mt-6 p-6 border rounded-md bg-muted/20">
-              <h3 className="text-lg font-medium mb-4">Auto Loan Details</h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Car Price</p>
-                    <p className="text-lg font-medium">${carPrice.toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Sales Tax</p>
-                    <p className="text-lg font-medium">${parseFloat(results.salesTax).toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Down Payment</p>
-                    <p className="text-lg font-medium">${downPayment.toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Trade-in Value</p>
-                    <p className="text-lg font-medium">${tradeInValue.toLocaleString()}</p>
-                  </div>
+            <div className="h-[280px] mt-6">
+              <h3 className="text-center font-medium mb-4">Cost Breakdown</h3>
+              <ChartContainer config={{}} className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </div>
+          )}
+          
+          {calculationDone && (
+            <div className="p-6 border rounded-md bg-muted/20">
+              <h3 className="text-lg font-medium mb-3">Loan Summary</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Vehicle Price:</span>
+                  <span className="font-medium">${vehiclePrice.toLocaleString()}</span>
                 </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">Loan Amount</p>
-                  <p className="text-lg font-medium">${parseFloat(results.loanAmount).toLocaleString()}</p>
+                <div className="flex justify-between">
+                  <span>Sales Tax ({salesTaxRate}%):</span>
+                  <span className="font-medium">${parseFloat(results.salesTax).toLocaleString()}</span>
                 </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Interest Rate</p>
-                    <p className="text-lg font-medium">{interestRate}%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Loan Term</p>
-                    <p className="text-lg font-medium">{loanTerm} months</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Payment Frequency</p>
-                    <p className="text-lg font-medium">{results.paymentFrequencyText.charAt(0).toUpperCase() + results.paymentFrequencyText.slice(1)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Number of Payments</p>
-                    <p className="text-lg font-medium">{results.numberOfPayments}</p>
-                  </div>
+                <div className="flex justify-between">
+                  <span>Down Payment:</span>
+                  <span className="font-medium">${downPayment.toLocaleString()}</span>
                 </div>
-                
-                <div className="pt-4 border-t grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{`${results.paymentFrequencyText.charAt(0).toUpperCase() + results.paymentFrequencyText.slice(1)} Payment`}</p>
-                    <p className="text-xl font-bold text-primary">${parseFloat(results.paymentAmount).toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Cost</p>
-                    <p className="text-xl font-bold">${parseFloat(results.totalCost).toLocaleString()}</p>
-                  </div>
+                <div className="flex justify-between">
+                  <span>Loan Amount:</span>
+                  <span className="font-medium">${parseFloat(results.loanAmount).toLocaleString()}</span>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Interest Paid</p>
-                  <p className="text-lg font-medium">${parseFloat(results.totalInterest).toLocaleString()}</p>
+                <div className="flex justify-between">
+                  <span>Interest Rate:</span>
+                  <span className="font-medium">{interestRate}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Loan Term:</span>
+                  <span className="font-medium">{loanTerm} years ({loanTerm * 12} months)</span>
+                </div>
+                <div className="border-t pt-2 mt-2">
+                  <div className="flex justify-between">
+                    <span>Monthly Payment:</span>
+                    <span className="font-bold text-primary">${parseFloat(results.monthlyPayment).toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
             </div>
