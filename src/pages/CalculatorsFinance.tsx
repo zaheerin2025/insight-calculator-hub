@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Home, Calculator, CreditCard, PiggyBank, BanknoteIcon, ChartLine } from 'lucide-react';
+import { Home, Calculator, CreditCard, PiggyBank, BanknoteIcon, ChartLine, DollarSign } from 'lucide-react';
 
 const calculators = [
   {

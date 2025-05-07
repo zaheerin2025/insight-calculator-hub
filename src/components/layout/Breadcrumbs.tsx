@@ -66,8 +66,10 @@ const Breadcrumbs: React.FC = () => {
                 {index === breadcrumbItems.length - 1 ? (
                   <span className="font-medium text-foreground">{item.label}</span>
                 ) : (
-                  <BreadcrumbLink as={Link} to={item.path}>
-                    {item.isHome ? <Home className="h-4 w-4" /> : item.label}
+                  <BreadcrumbLink asChild>
+                    <Link to={item.path}>
+                      {item.isHome ? <Home className="h-4 w-4" /> : item.label}
+                    </Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
