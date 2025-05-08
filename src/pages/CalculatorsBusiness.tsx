@@ -20,8 +20,7 @@ const calculators = [
     title: 'Break-even Point Calculator',
     description: 'Calculate when your business will become profitable by determining the break-even point.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/breakeven-calculator',
-    comingSoon: true
+    path: '/calculators/business/breakeven-calculator'
   },
   {
     title: 'Markup Calculator',

@@ -26,8 +26,7 @@ const calculators = [
     title: 'Area Calculator',
     description: 'Calculate the area of various shapes including circles, triangles, squares, and more.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/area-calculator',
-    comingSoon: true
+    path: '/calculators/math/area-calculator'
   },
   {
     title: 'Volume Calculator',
