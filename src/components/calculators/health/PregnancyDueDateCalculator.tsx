@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
-import { format, addDays, addWeeks, subWeeks, differenceInDays, differenceInWeeks, isValid, parseISO } from 'date-fns';
+import { format, addDays, addWeeks, subWeeks, subDays, differenceInDays, differenceInWeeks, isValid, parseISO } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Card, CardContent } from '@/components/ui/card';
