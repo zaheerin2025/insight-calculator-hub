@@ -39,6 +39,7 @@ import PercentageCalculatorPage from './pages/calculator-pages/PercentageCalcula
 import AgeCalculatorPage from './pages/calculator-pages/AgeCalculatorPage';
 import DiscountCalculatorPage from './pages/calculator-pages/DiscountCalculatorPage';
 import AreaCalculatorPage from './pages/calculator-pages/AreaCalculatorPage';
+import PythagoreanTheoremCalculatorPage from './pages/calculator-pages/PythagoreanTheoremCalculatorPage';
 
 // Business calculator pages
 import ProfitMarginCalculatorPage from './pages/calculator-pages/ProfitMarginCalculatorPage';
@@ -85,6 +86,7 @@ const App = () => {
         <Route path="/calculators/math/age-calculator" element={<AgeCalculatorPage />} />
         <Route path="/calculators/math/discount-calculator" element={<DiscountCalculatorPage />} />
         <Route path="/calculators/math/area-calculator" element={<AreaCalculatorPage />} />
+        <Route path="/calculators/math/pythagorean-theorem-calculator" element={<PythagoreanTheoremCalculatorPage />} />
         
         {/* Business Calculator Routes */}
         <Route path="/calculators/business" element={<CalculatorsBusiness />} />

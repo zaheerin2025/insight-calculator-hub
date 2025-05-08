@@ -39,8 +39,7 @@ const calculators = [
     title: 'Pythagorean Theorem Calculator',
     description: 'Calculate the sides of a right triangle using the Pythagorean theorem.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/pythagorean-theorem-calculator',
-    comingSoon: true
+    path: '/calculators/math/pythagorean-theorem-calculator'
   },
   {
     title: 'Square Root Calculator',
