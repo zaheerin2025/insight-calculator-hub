@@ -40,6 +40,10 @@ import AgeCalculatorPage from './pages/calculator-pages/AgeCalculatorPage';
 import DiscountCalculatorPage from './pages/calculator-pages/DiscountCalculatorPage';
 import AreaCalculatorPage from './pages/calculator-pages/AreaCalculatorPage';
 import PythagoreanTheoremCalculatorPage from './pages/calculator-pages/PythagoreanTheoremCalculatorPage';
+import SquareRootCalculatorPage from './pages/calculator-pages/SquareRootCalculatorPage';
+import FactorialCalculatorPage from './pages/calculator-pages/FactorialCalculatorPage';
+import FractionsCalculatorPage from './pages/calculator-pages/FractionsCalculatorPage';
+import MeanMedianModeCalculatorPage from './pages/calculator-pages/MeanMedianModeCalculatorPage';
 
 // Business calculator pages
 import ProfitMarginCalculatorPage from './pages/calculator-pages/ProfitMarginCalculatorPage';
@@ -87,6 +91,10 @@ const App = () => {
         <Route path="/calculators/math/discount-calculator" element={<DiscountCalculatorPage />} />
         <Route path="/calculators/math/area-calculator" element={<AreaCalculatorPage />} />
         <Route path="/calculators/math/pythagorean-theorem-calculator" element={<PythagoreanTheoremCalculatorPage />} />
+        <Route path="/calculators/math/square-root-calculator" element={<SquareRootCalculatorPage />} />
+        <Route path="/calculators/math/factorial-calculator" element={<FactorialCalculatorPage />} />
+        <Route path="/calculators/math/fractions-calculator" element={<FractionsCalculatorPage />} />
+        <Route path="/calculators/math/mean-median-mode-calculator" element={<MeanMedianModeCalculatorPage />} />
         
         {/* Business Calculator Routes */}
         <Route path="/calculators/business" element={<CalculatorsBusiness />} />

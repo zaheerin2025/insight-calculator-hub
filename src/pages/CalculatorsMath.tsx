@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Percent, Calculator } from 'lucide-react';
+import { Percent, Calculator, SquareRoot } from 'lucide-react';
 
 const calculators = [
   {
@@ -44,30 +44,26 @@ const calculators = [
   {
     title: 'Square Root Calculator',
     description: 'Calculate the square root of any positive number with precision.',
-    icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/square-root-calculator',
-    comingSoon: true
+    icon: <SquareRoot className="h-6 w-6 text-primary" />,
+    path: '/calculators/math/square-root-calculator'
   },
   {
     title: 'Factorial Calculator',
     description: 'Calculate the factorial of any positive integer quickly and efficiently.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/factorial-calculator',
-    comingSoon: true
+    path: '/calculators/math/factorial-calculator'
   },
   {
     title: 'Fractions Calculator',
     description: 'Add, subtract, multiply, and divide fractions with step-by-step solutions.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/fractions-calculator',
-    comingSoon: true
+    path: '/calculators/math/fractions-calculator'
   },
   {
     title: 'Mean, Median, Mode Calculator',
     description: 'Calculate statistical measures including mean, median, and mode from a data set.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/mean-median-mode-calculator',
-    comingSoon: true
+    path: '/calculators/math/mean-median-mode-calculator'
   },
 ];
 
