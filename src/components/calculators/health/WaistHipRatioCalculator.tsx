@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CalculatorLayout from '../CalculatorLayout';
 import { Input } from '@/components/ui/input';
@@ -152,7 +151,7 @@ const WaistHipRatioCalculator: React.FC = () => {
           <p className="mt-4">Body shapes are typically categorized as:</p>
           <ul className="list-disc ml-6 space-y-1 mt-1">
             <li><strong>Pear/Gynoid:</strong> WHR ≤ 0.8 for women, &lt; 0.9 for men</li>
-            <li><strong>Apple/Android:</strong> WHR > 0.8 for women, ≥ 0.9 for men</li>
+            <li><strong>Apple/Android:</strong> WHR &gt; 0.8 for women, ≥ 0.9 for men</li>
           </ul>
         </div>
       }
