@@ -14,15 +14,13 @@ const calculators = [
     title: 'Age Calculator',
     description: 'Calculate the exact age between two dates in years, months, weeks, and days.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/age-calculator',
-    comingSoon: true
+    path: '/calculators/math/age-calculator'
   },
   {
     title: 'Discount Calculator',
     description: 'Calculate the sale price after discount, the discount amount, and the percentage saved.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/math/discount-calculator',
-    comingSoon: true
+    path: '/calculators/math/discount-calculator'
   },
   {
     title: 'Area Calculator',

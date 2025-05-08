@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -35,6 +36,12 @@ import WaistHipRatioCalculatorPage from './pages/calculator-pages/WaistHipRatioC
 
 // Math calculator pages
 import PercentageCalculatorPage from './pages/calculator-pages/PercentageCalculatorPage';
+import AgeCalculatorPage from './pages/calculator-pages/AgeCalculatorPage';
+import DiscountCalculatorPage from './pages/calculator-pages/DiscountCalculatorPage';
+
+// Business calculator pages
+import ProfitMarginCalculatorPage from './pages/calculator-pages/ProfitMarginCalculatorPage';
+import ROICalculatorPage from './pages/calculator-pages/ROICalculatorPage';
 
 const App = () => {
   return (
@@ -73,9 +80,13 @@ const App = () => {
         {/* Math Calculator Routes */}
         <Route path="/calculators/math" element={<CalculatorsMath />} />
         <Route path="/calculators/math/percentage-calculator" element={<PercentageCalculatorPage />} />
+        <Route path="/calculators/math/age-calculator" element={<AgeCalculatorPage />} />
+        <Route path="/calculators/math/discount-calculator" element={<DiscountCalculatorPage />} />
         
         {/* Business Calculator Routes */}
         <Route path="/calculators/business" element={<CalculatorsBusiness />} />
+        <Route path="/calculators/business/profit-margin-calculator" element={<ProfitMarginCalculatorPage />} />
+        <Route path="/calculators/business/roi-calculator" element={<ROICalculatorPage />} />
 
         {/* Construction Calculator Routes */}
         <Route path="/calculators/construction" element={<CalculatorsConstruction />} />

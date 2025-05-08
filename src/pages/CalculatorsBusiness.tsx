@@ -8,21 +8,19 @@ const calculators = [
     title: 'Profit Margin Calculator',
     description: 'Calculate your profit margins to understand how much of your revenue becomes profit.',
     icon: <DollarSign className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/profit-margin-calculator',
-    comingSoon: true
+    path: '/calculators/business/profit-margin-calculator'
+  },
+  {
+    title: 'ROI Calculator',
+    description: 'Calculate the return on investment to evaluate the efficiency or profitability of an investment.',
+    icon: <DollarSign className="h-6 w-6 text-primary" />,
+    path: '/calculators/business/roi-calculator'
   },
   {
     title: 'Break-even Point Calculator',
     description: 'Calculate when your business will become profitable by determining the break-even point.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
     path: '/calculators/business/breakeven-calculator',
-    comingSoon: true
-  },
-  {
-    title: 'ROI Calculator',
-    description: 'Calculate the return on investment to evaluate the efficiency or profitability of an investment.',
-    icon: <DollarSign className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/roi-calculator',
     comingSoon: true
   },
   {
