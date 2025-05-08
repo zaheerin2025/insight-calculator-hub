@@ -1,10 +1,10 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import CalculatorsFinance from './pages/CalculatorsFinance';
 import CalculatorsHealth from './pages/CalculatorsHealth';
+import CalculatorsMath from './pages/CalculatorsMath';
 import CalculatorsConstruction from './pages/CalculatorsConstruction';
 import CalculatorsBusiness from './pages/CalculatorsBusiness';
 import NotFound from './pages/NotFound';
@@ -32,6 +32,9 @@ import WaterIntakeCalculatorPage from './pages/calculator-pages/WaterIntakeCalcu
 import PregnancyDueDateCalculatorPage from './pages/calculator-pages/PregnancyDueDateCalculatorPage';
 import MacroNutrientCalculatorPage from './pages/calculator-pages/MacroNutrientCalculatorPage';
 import WaistHipRatioCalculatorPage from './pages/calculator-pages/WaistHipRatioCalculatorPage';
+
+// Math calculator pages
+import PercentageCalculatorPage from './pages/calculator-pages/PercentageCalculatorPage';
 
 const App = () => {
   return (
@@ -67,6 +70,10 @@ const App = () => {
         <Route path="/calculators/health/macro-nutrient-calculator" element={<MacroNutrientCalculatorPage />} />
         <Route path="/calculators/health/waist-hip-ratio-calculator" element={<WaistHipRatioCalculatorPage />} />
 
+        {/* Math Calculator Routes */}
+        <Route path="/calculators/math" element={<CalculatorsMath />} />
+        <Route path="/calculators/math/percentage-calculator" element={<PercentageCalculatorPage />} />
+        
         {/* Business Calculator Routes */}
         <Route path="/calculators/business" element={<CalculatorsBusiness />} />
 
