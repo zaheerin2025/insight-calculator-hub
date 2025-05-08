@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 interface CalculatorInputProps {
   id: string;
   label: string;
-  type?: 'text' | 'number';
+  type?: 'text' | 'number' | 'date';
   value: string | number;
   onChange: (value: string) => void;
   placeholder?: string;
