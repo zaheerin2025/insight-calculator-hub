@@ -72,6 +72,15 @@ import WallFramingCalculatorPage from './pages/calculator-pages/WallFramingCalcu
 import TipCalculatorPage from './pages/calculator-pages/TipCalculatorPage';
 import UnitConverterPage from './pages/calculator-pages/UnitConverterPage';
 import ElectricityBillCalculatorPage from './pages/calculator-pages/ElectricityBillCalculatorPage';
+import ApplianceEnergyCalculatorPage from './pages/calculator-pages/ApplianceEnergyCalculatorPage';
+import SolarPanelCalculatorPage from './pages/calculator-pages/SolarPanelCalculatorPage';
+import WaterBillCalculatorPage from './pages/calculator-pages/WaterBillCalculatorPage';
+import HeatingCostCalculatorPage from './pages/calculator-pages/HeatingCostCalculatorPage';
+import CoolingCostCalculatorPage from './pages/calculator-pages/CoolingCostCalculatorPage';
+import LightbulbSavingsCalculatorPage from './pages/calculator-pages/LightbulbSavingsCalculatorPage';
+import CarbonFootprintCalculatorPage from './pages/calculator-pages/CarbonFootprintCalculatorPage';
+import GasMileageCalculatorPage from './pages/calculator-pages/GasMileageCalculatorPage';
+import EVRangeCalculatorPage from './pages/calculator-pages/EVRangeCalculatorPage';
 
 const App = () => {
   return (
@@ -148,6 +157,15 @@ const App = () => {
         <Route path="/calculators/utility/tip-calculator" element={<TipCalculatorPage />} />
         <Route path="/calculators/utility/unit-converter" element={<UnitConverterPage />} />
         <Route path="/calculators/utility/electricity-bill-calculator" element={<ElectricityBillCalculatorPage />} />
+        <Route path="/calculators/utility/appliance-energy-calculator" element={<ApplianceEnergyCalculatorPage />} />
+        <Route path="/calculators/utility/solar-panel-calculator" element={<SolarPanelCalculatorPage />} />
+        <Route path="/calculators/utility/water-bill-calculator" element={<WaterBillCalculatorPage />} />
+        <Route path="/calculators/utility/heating-cost-calculator" element={<HeatingCostCalculatorPage />} />
+        <Route path="/calculators/utility/cooling-cost-calculator" element={<CoolingCostCalculatorPage />} />
+        <Route path="/calculators/utility/lightbulb-savings-calculator" element={<LightbulbSavingsCalculatorPage />} />
+        <Route path="/calculators/utility/carbon-footprint-calculator" element={<CarbonFootprintCalculatorPage />} />
+        <Route path="/calculators/utility/gas-mileage-calculator" element={<GasMileageCalculatorPage />} />
+        <Route path="/calculators/utility/ev-range-calculator" element={<EVRangeCalculatorPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
