@@ -142,6 +142,7 @@ const UnitConverter: React.FC = () => {
     <CalculatorLayout
       title="Unit Converter"
       description="Convert between various units of measurement including length, weight, volume, temperature, area, and time."
+      intro="Use this calculator to convert values between different units of measurement. Select a category, enter a value, and choose your units to get accurate conversions."
     >
       <Card>
         <CardHeader>
@@ -256,9 +257,10 @@ const UnitConverter: React.FC = () => {
           </Tabs>
 
           {showResult && result && (
-            <ResultDisplay title="Conversion Result">
-              <p className="text-lg font-medium text-center">{result}</p>
-            </ResultDisplay>
+            <ResultDisplay 
+              title="Conversion Result"
+              value={result}
+            />
           )}
         </CardContent>
       </Card>
@@ -267,3 +269,4 @@ const UnitConverter: React.FC = () => {
 };
 
 export default UnitConverter;
+
