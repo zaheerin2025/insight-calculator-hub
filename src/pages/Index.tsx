@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign } from 'lucide-react';
+import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign, Wrench } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { formatDate } from '@/lib/utils';
 
