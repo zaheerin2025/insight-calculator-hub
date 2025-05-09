@@ -26,22 +26,19 @@ const calculators = [
     title: 'Markup Calculator',
     description: 'Calculate markup percentage on your products and services to ensure profitability.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/markup-calculator',
-    comingSoon: true
+    path: '/calculators/business/markup-calculator'
   },
   {
     title: 'Sales Tax Calculator',
     description: 'Calculate sales tax for different states and jurisdictions.',
     icon: <DollarSign className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/sales-tax-calculator',
-    comingSoon: true
+    path: '/calculators/business/sales-tax-calculator'
   },
   {
     title: 'Inventory Turnover Calculator',
     description: 'Calculate how efficiently inventory is managed by measuring how many times inventory is sold in a period.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/business/inventory-turnover-calculator',
-    comingSoon: true
+    path: '/calculators/business/inventory-turnover-calculator'
   },
 ];
 

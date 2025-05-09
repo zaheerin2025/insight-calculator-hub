@@ -8,43 +8,37 @@ const calculators = [
     title: 'Concrete Calculator',
     description: 'Calculate the amount of concrete needed for your construction project based on dimensions.',
     icon: <Construction className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/concrete-calculator',
-    comingSoon: true
+    path: '/calculators/construction/concrete-calculator'
   },
   {
     title: 'Flooring Calculator',
     description: 'Calculate how much flooring material you need for your project based on room dimensions.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/flooring-calculator',
-    comingSoon: true
+    path: '/calculators/construction/flooring-calculator'
   },
   {
     title: 'Paint Calculator',
     description: 'Calculate how much paint you need based on wall dimensions and paint coverage.',
     icon: <Construction className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/paint-calculator',
-    comingSoon: true
+    path: '/calculators/construction/paint-calculator'
   },
   {
     title: 'Roofing Calculator',
     description: 'Calculate roofing materials needed based on roof dimensions and type.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/roofing-calculator',
-    comingSoon: true
+    path: '/calculators/construction/roofing-calculator'
   },
   {
     title: 'Tile Calculator',
     description: 'Calculate how many tiles you need for your project based on dimensions and tile size.',
     icon: <Construction className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/tile-calculator',
-    comingSoon: true
+    path: '/calculators/construction/tile-calculator'
   },
   {
     title: 'Wall Framing Calculator',
     description: 'Calculate lumber needed for wall framing based on wall dimensions and stud spacing.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/construction/wall-framing-calculator',
-    comingSoon: true
+    path: '/calculators/construction/wall-framing-calculator'
   },
 ];
 

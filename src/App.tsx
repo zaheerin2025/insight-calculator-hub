@@ -8,6 +8,7 @@ import CalculatorsHealth from './pages/CalculatorsHealth';
 import CalculatorsMath from './pages/CalculatorsMath';
 import CalculatorsConstruction from './pages/CalculatorsConstruction';
 import CalculatorsBusiness from './pages/CalculatorsBusiness';
+import CalculatorsUtility from './pages/CalculatorsUtility';
 import NotFound from './pages/NotFound';
 
 // Finance calculator pages
@@ -49,6 +50,21 @@ import MeanMedianModeCalculatorPage from './pages/calculator-pages/MeanMedianMod
 import ProfitMarginCalculatorPage from './pages/calculator-pages/ProfitMarginCalculatorPage';
 import ROICalculatorPage from './pages/calculator-pages/ROICalculatorPage';
 import BreakEvenCalculatorPage from './pages/calculator-pages/BreakEvenCalculatorPage';
+import MarkupCalculatorPage from './pages/calculator-pages/MarkupCalculatorPage';
+import SalesTaxCalculatorPage from './pages/calculator-pages/SalesTaxCalculatorPage';
+import InventoryTurnoverCalculatorPage from './pages/calculator-pages/InventoryTurnoverCalculatorPage';
+
+// Construction calculator pages
+import ConcreteCalculatorPage from './pages/calculator-pages/ConcreteCalculatorPage';
+import FlooringCalculatorPage from './pages/calculator-pages/FlooringCalculatorPage';
+import PaintCalculatorPage from './pages/calculator-pages/PaintCalculatorPage';
+import RoofingCalculatorPage from './pages/calculator-pages/RoofingCalculatorPage';
+import TileCalculatorPage from './pages/calculator-pages/TileCalculatorPage';
+import WallFramingCalculatorPage from './pages/calculator-pages/WallFramingCalculatorPage';
+
+// Utility calculator pages
+import TipCalculatorPage from './pages/calculator-pages/TipCalculatorPage';
+import UnitConverterPage from './pages/calculator-pages/UnitConverterPage';
 
 const App = () => {
   return (
@@ -101,9 +117,23 @@ const App = () => {
         <Route path="/calculators/business/profit-margin-calculator" element={<ProfitMarginCalculatorPage />} />
         <Route path="/calculators/business/roi-calculator" element={<ROICalculatorPage />} />
         <Route path="/calculators/business/breakeven-calculator" element={<BreakEvenCalculatorPage />} />
+        <Route path="/calculators/business/markup-calculator" element={<MarkupCalculatorPage />} />
+        <Route path="/calculators/business/sales-tax-calculator" element={<SalesTaxCalculatorPage />} />
+        <Route path="/calculators/business/inventory-turnover-calculator" element={<InventoryTurnoverCalculatorPage />} />
 
         {/* Construction Calculator Routes */}
         <Route path="/calculators/construction" element={<CalculatorsConstruction />} />
+        <Route path="/calculators/construction/concrete-calculator" element={<ConcreteCalculatorPage />} />
+        <Route path="/calculators/construction/flooring-calculator" element={<FlooringCalculatorPage />} />
+        <Route path="/calculators/construction/paint-calculator" element={<PaintCalculatorPage />} />
+        <Route path="/calculators/construction/roofing-calculator" element={<RoofingCalculatorPage />} />
+        <Route path="/calculators/construction/tile-calculator" element={<TileCalculatorPage />} />
+        <Route path="/calculators/construction/wall-framing-calculator" element={<WallFramingCalculatorPage />} />
+        
+        {/* Utility Calculator Routes */}
+        <Route path="/calculators/utility" element={<CalculatorsUtility />} />
+        <Route path="/calculators/utility/tip-calculator" element={<TipCalculatorPage />} />
+        <Route path="/calculators/utility/unit-converter" element={<UnitConverterPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />

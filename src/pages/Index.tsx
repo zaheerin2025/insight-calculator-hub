@@ -44,8 +44,8 @@ const calculatorCategories = [
     path: '/calculators/math',
     calculators: [
       { name: 'Percentage Calculator', path: '/calculators/math/percentage-calculator' },
-      { name: 'Age Calculator', path: '/calculators/math/age-calculator', comingSoon: true },
-      { name: 'Discount Calculator', path: '/calculators/math/discount-calculator', comingSoon: true },
+      { name: 'Square Root Calculator', path: '/calculators/math/square-root-calculator' },
+      { name: 'Factorial Calculator', path: '/calculators/math/factorial-calculator' },
     ]
   },
   {
@@ -55,9 +55,9 @@ const calculatorCategories = [
     background: 'bg-gradient-to-br from-green-500 to-emerald-400',
     path: '/calculators/business',
     calculators: [
-      { name: 'Profit Margin Calculator', path: '/calculators/business/profit-margin-calculator', comingSoon: true },
-      { name: 'ROI Calculator', path: '/calculators/business/roi-calculator', comingSoon: true },
-      { name: 'Sales Tax Calculator', path: '/calculators/business/sales-tax-calculator', comingSoon: true },
+      { name: 'Profit Margin Calculator', path: '/calculators/business/profit-margin-calculator' },
+      { name: 'ROI Calculator', path: '/calculators/business/roi-calculator' },
+      { name: 'Break-even Calculator', path: '/calculators/business/breakeven-calculator' },
     ]
   },
   {
@@ -67,9 +67,21 @@ const calculatorCategories = [
     background: 'bg-gradient-to-br from-amber-500 to-yellow-400',
     path: '/calculators/construction',
     calculators: [
-      { name: 'Concrete Calculator', path: '/calculators/construction/concrete-calculator', comingSoon: true },
-      { name: 'Paint Calculator', path: '/calculators/construction/paint-calculator', comingSoon: true },
-      { name: 'Flooring Calculator', path: '/calculators/construction/flooring-calculator', comingSoon: true },
+      { name: 'Concrete Calculator', path: '/calculators/construction/concrete-calculator' },
+      { name: 'Paint Calculator', path: '/calculators/construction/paint-calculator' },
+      { name: 'Flooring Calculator', path: '/calculators/construction/flooring-calculator' },
+    ]
+  },
+  {
+    title: 'Utility Calculators',
+    description: 'Simplify everyday tasks with these practical tools.',
+    icon: <Wrench className="h-10 w-10 text-white" />,
+    background: 'bg-gradient-to-br from-purple-500 to-violet-400',
+    path: '/calculators/utility',
+    calculators: [
+      { name: 'Tip Calculator', path: '/calculators/utility/tip-calculator' },
+      { name: 'Unit Converter', path: '/calculators/utility/unit-converter' },
+      { name: 'Date Calculator', path: '/calculators/utility/date-calculator', comingSoon: true },
     ]
   }
 ];
