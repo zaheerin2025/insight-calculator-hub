@@ -1,7 +1,6 @@
-
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Percent, Calculator, SquareRoot } from 'lucide-react';
+import { Percent, Calculator, Square } from 'lucide-react';
 
 const calculators = [
   {
@@ -44,7 +43,7 @@ const calculators = [
   {
     title: 'Square Root Calculator',
     description: 'Calculate the square root of any positive number with precision.',
-    icon: <SquareRoot className="h-6 w-6 text-primary" />,
+    icon: <Square className="h-6 w-6 text-primary" />,
     path: '/calculators/math/square-root-calculator'
   },
   {

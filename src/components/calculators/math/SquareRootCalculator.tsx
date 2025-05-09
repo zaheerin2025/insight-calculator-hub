@@ -4,7 +4,7 @@ import CalculatorLayout from '@/components/calculators/CalculatorLayout';
 import CalculatorInput from '@/components/ui/calculator-input';
 import { Button } from '@/components/ui/button';
 import ResultDisplay from '@/components/calculators/ResultDisplay';
-import { Square, SquareRoot } from 'lucide-react';
+import { Square, Calculator } from 'lucide-react';
 
 const SquareRootCalculator: React.FC = () => {
   const [number, setNumber] = useState<number>(0);
@@ -76,7 +76,7 @@ const SquareRootCalculator: React.FC = () => {
           onClick={calculateSquareRoot} 
           className="w-full"
         >
-          <SquareRoot className="mr-2" />
+          <Calculator className="mr-2" />
           Calculate Square Root
         </Button>
 
@@ -85,7 +85,7 @@ const SquareRootCalculator: React.FC = () => {
             <ResultDisplay
               label="Square Root"
               value={squareRoot.toFixed(6)}
-              icon={<SquareRoot className="h-5 w-5 text-primary" />}
+              icon={<Calculator className="h-5 w-5 text-primary" />}
               isHighlighted
             />
             
