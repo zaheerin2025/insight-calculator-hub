@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import CalculatorLayout from '../CalculatorLayout';
 import CalculatorInput from '@/components/ui/calculator-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import ResultDisplay from '../ResultDisplay';
-import { ElectricityBill, Calculator } from 'lucide-react';
+import { Zap, Calculator } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ElectricityBillCalculator: React.FC = () => {
@@ -186,25 +185,25 @@ const ElectricityBillCalculator: React.FC = () => {
                   <ResultDisplay
                     label="Energy Charge"
                     value={`$${results.energyCharge.toFixed(2)}`}
-                    icon={<ElectricityBill className="h-5 w-5" />}
+                    icon={<Zap className="h-5 w-5" />}
                   />
                   
                   <ResultDisplay
                     label="Fixed Charges"
                     value={`$${results.fixedCharge.toFixed(2)}`}
-                    icon={<ElectricityBill className="h-5 w-5" />}
+                    icon={<Zap className="h-5 w-5" />}
                   />
                   
                   <ResultDisplay
                     label="Taxes"
                     value={`$${results.taxAmount.toFixed(2)}`}
-                    icon={<ElectricityBill className="h-5 w-5" />}
+                    icon={<Zap className="h-5 w-5" />}
                   />
                   
                   <ResultDisplay
                     label="Total Monthly Bill"
                     value={`$${results.totalBill.toFixed(2)}`}
-                    icon={<ElectricityBill className="h-5 w-5" />}
+                    icon={<Zap className="h-5 w-5" />}
                     isHighlighted={true}
                   />
                 </div>

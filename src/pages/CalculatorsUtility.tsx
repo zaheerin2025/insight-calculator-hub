@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Wrench, Calculator, LightbulbIcon, GasMileage, CarbonFootprint, WaterIcon, ThermometerIcon, SolarPanel, ElectricityBill, EvRange } from 'lucide-react';
+import { Wrench, Calculator, Lightbulb, Activity, Droplet, Thermometer, Sun, Zap, Gauge, Car } from 'lucide-react';
 
 const calculators = [
   {
@@ -19,7 +19,7 @@ const calculators = [
   {
     title: 'Electricity Bill Calculator',
     description: 'Estimate your electricity bill based on usage and rates.',
-    icon: <ElectricityBill className="h-6 w-6 text-primary" />,
+    icon: <Zap className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/electricity-bill-calculator'
   },
   {
@@ -31,49 +31,49 @@ const calculators = [
   {
     title: 'Solar Panel Savings Calculator',
     description: 'Estimate savings from installing solar panels based on your location and energy consumption.',
-    icon: <SolarPanel className="h-6 w-6 text-primary" />,
+    icon: <Sun className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/solar-panel-calculator'
   },
   {
     title: 'Water Bill Calculator',
     description: 'Calculate your water bill based on usage and local rates.',
-    icon: <WaterIcon className="h-6 w-6 text-primary" />,
+    icon: <Droplet className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/water-bill-calculator'
   },
   {
     title: 'Heating Cost Calculator',
     description: 'Estimate heating costs based on your home size and energy source.',
-    icon: <ThermometerIcon className="h-6 w-6 text-primary" />,
+    icon: <Thermometer className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/heating-cost-calculator'
   },
   {
     title: 'Cooling Cost Calculator',
     description: 'Calculate air conditioning and cooling costs during warm months.',
-    icon: <ThermometerIcon className="h-6 w-6 text-primary" />,
+    icon: <Thermometer className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/cooling-cost-calculator'
   },
   {
     title: 'Light Bulb Energy Savings Calculator',
     description: 'Compare different light bulb types and calculate energy savings.',
-    icon: <LightbulbIcon className="h-6 w-6 text-primary" />,
+    icon: <Lightbulb className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/lightbulb-savings-calculator'
   },
   {
     title: 'Carbon Footprint Calculator',
     description: 'Estimate your personal or household carbon footprint based on lifestyle choices.',
-    icon: <CarbonFootprint className="h-6 w-6 text-primary" />,
+    icon: <Activity className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/carbon-footprint-calculator'
   },
   {
     title: 'Gas Mileage (MPG) Calculator',
     description: 'Calculate your vehicle\'s fuel economy and estimate fuel costs for trips.',
-    icon: <GasMileage className="h-6 w-6 text-primary" />,
+    icon: <Gauge className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/gas-mileage-calculator'
   },
   {
     title: 'Electric Vehicle Range Calculator',
     description: 'Estimate how far your electric vehicle can travel on a single charge.',
-    icon: <EvRange className="h-6 w-6 text-primary" />,
+    icon: <Car className="h-6 w-6 text-primary" />,
     path: '/calculators/utility/ev-range-calculator'
   },
   {
