@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Wrench, Calculator } from 'lucide-react';
+import { Wrench, Calculator, LightbulbIcon, GasMileage, CarbonFootprint, WaterIcon, ThermometerIcon, SolarPanel, ElectricityBill, EvRange } from 'lucide-react';
 
 const calculators = [
   {
@@ -17,28 +17,92 @@ const calculators = [
     path: '/calculators/utility/unit-converter'
   },
   {
+    title: 'Electricity Bill Calculator',
+    description: 'Estimate your electricity bill based on usage and rates.',
+    icon: <ElectricityBill className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/electricity-bill-calculator'
+  },
+  {
+    title: 'Appliance Energy Use Calculator',
+    description: 'Calculate the energy consumption and cost of various household appliances.',
+    icon: <Calculator className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/appliance-energy-calculator'
+  },
+  {
+    title: 'Solar Panel Savings Calculator',
+    description: 'Estimate savings from installing solar panels based on your location and energy consumption.',
+    icon: <SolarPanel className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/solar-panel-calculator'
+  },
+  {
+    title: 'Water Bill Calculator',
+    description: 'Calculate your water bill based on usage and local rates.',
+    icon: <WaterIcon className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/water-bill-calculator'
+  },
+  {
+    title: 'Heating Cost Calculator',
+    description: 'Estimate heating costs based on your home size and energy source.',
+    icon: <ThermometerIcon className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/heating-cost-calculator'
+  },
+  {
+    title: 'Cooling Cost Calculator',
+    description: 'Calculate air conditioning and cooling costs during warm months.',
+    icon: <ThermometerIcon className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/cooling-cost-calculator'
+  },
+  {
+    title: 'Light Bulb Energy Savings Calculator',
+    description: 'Compare different light bulb types and calculate energy savings.',
+    icon: <LightbulbIcon className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/lightbulb-savings-calculator'
+  },
+  {
+    title: 'Carbon Footprint Calculator',
+    description: 'Estimate your personal or household carbon footprint based on lifestyle choices.',
+    icon: <CarbonFootprint className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/carbon-footprint-calculator'
+  },
+  {
+    title: 'Gas Mileage (MPG) Calculator',
+    description: 'Calculate your vehicle\'s fuel economy and estimate fuel costs for trips.',
+    icon: <GasMileage className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/gas-mileage-calculator'
+  },
+  {
+    title: 'Electric Vehicle Range Calculator',
+    description: 'Estimate how far your electric vehicle can travel on a single charge.',
+    icon: <EvRange className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/ev-range-calculator'
+  },
+  {
     title: 'Date Calculator',
     description: 'Calculate the difference between dates or add/subtract days, months, or years from a date.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/date-calculator'
+    path: '/calculators/utility/date-calculator',
+    comingSoon: true
   },
   {
     title: 'Password Generator',
     description: 'Create strong, secure passwords with customizable options for length and character types.',
     icon: <Wrench className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/password-generator'
+    path: '/calculators/utility/password-generator',
+    comingSoon: true
   },
   {
     title: 'GPA Calculator',
     description: 'Calculate your Grade Point Average (GPA) based on grades and credit hours.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/gpa-calculator'
+    path: '/calculators/utility/gpa-calculator',
+    comingSoon: true
   },
   {
     title: 'Fuel Cost Calculator',
     description: 'Estimate fuel costs for trips based on distance, fuel efficiency, and current fuel prices.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/fuel-cost-calculator'
+    path: '/calculators/utility/fuel-cost-calculator',
+    comingSoon: true
   },
 ];
 
@@ -46,8 +110,8 @@ const CalculatorsUtility: React.FC = () => {
   return (
     <CategoryLayout
       title="Utility Calculators"
-      description="Access our collection of free utility calculators. Calculate tips, convert units, estimate fuel costs, and more for everyday tasks."
-      intro="Make everyday calculations easier with our suite of utility calculators. From calculating tips to generating secure passwords, these tools simplify common tasks."
+      description="Access our collection of free utility calculators. Calculate electricity costs, estimate energy usage, calculate tips, convert units, and more for everyday tasks."
+      intro="Make everyday calculations easier with our suite of utility calculators. From calculating energy bills to estimating carbon footprint, these tools simplify common tasks."
       calculators={calculators}
       canonicalUrl="https://calculators-hub.com/calculators/utility"
     />

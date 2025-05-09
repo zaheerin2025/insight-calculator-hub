@@ -3,6 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import AllCalculators from './pages/AllCalculators';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
+import Sitemap from './pages/Sitemap';
 import CalculatorsFinance from './pages/CalculatorsFinance';
 import CalculatorsHealth from './pages/CalculatorsHealth';
 import CalculatorsMath from './pages/CalculatorsMath';
@@ -65,6 +71,7 @@ import WallFramingCalculatorPage from './pages/calculator-pages/WallFramingCalcu
 // Utility calculator pages
 import TipCalculatorPage from './pages/calculator-pages/TipCalculatorPage';
 import UnitConverterPage from './pages/calculator-pages/UnitConverterPage';
+import ElectricityBillCalculatorPage from './pages/calculator-pages/ElectricityBillCalculatorPage';
 
 const App = () => {
   return (
@@ -73,6 +80,12 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/all-calculators" element={<AllCalculators />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
+        <Route path="/sitemap" element={<Sitemap />} />
         
         {/* Finance Calculator Routes */}
         <Route path="/calculators/finance" element={<CalculatorsFinance />} />
@@ -134,6 +147,7 @@ const App = () => {
         <Route path="/calculators/utility" element={<CalculatorsUtility />} />
         <Route path="/calculators/utility/tip-calculator" element={<TipCalculatorPage />} />
         <Route path="/calculators/utility/unit-converter" element={<UnitConverterPage />} />
+        <Route path="/calculators/utility/electricity-bill-calculator" element={<ElectricityBillCalculatorPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />

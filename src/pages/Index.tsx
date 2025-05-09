@@ -10,81 +10,8 @@ import { formatDate } from '@/lib/utils';
 
 // Blog post data
 import { blogPosts } from '@/data/blog-posts';
-
-const calculatorCategories = [
-  {
-    title: 'Finance Calculators',
-    description: 'Plan your financial future with precision and confidence.',
-    icon: <Home className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-primary to-primary-light',
-    path: '/calculators/finance',
-    calculators: [
-      { name: 'Mortgage Calculator', path: '/calculators/finance/mortgage-calculator' },
-      { name: 'Compound Interest Calculator', path: '/calculators/finance/compound-interest-calculator' },
-      { name: 'Loan EMI Calculator', path: '/calculators/finance/loan-emi-calculator', comingSoon: true },
-    ]
-  },
-  {
-    title: 'Health Calculators',
-    description: 'Monitor your health metrics for a better quality of life.',
-    icon: <Heart className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-pink-500 to-rose-400',
-    path: '/calculators/health',
-    calculators: [
-      { name: 'BMI Calculator', path: '/calculators/health/bmi-calculator' },
-      { name: 'Body Fat Calculator', path: '/calculators/health/body-fat-calculator', comingSoon: true },
-      { name: 'Calorie Needs Calculator', path: '/calculators/health/calorie-needs-calculator', comingSoon: true },
-    ]
-  },
-  {
-    title: 'Math Calculators',
-    description: 'Solve everyday math problems quickly and accurately.',
-    icon: <Percent className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-blue-500 to-cyan-400',
-    path: '/calculators/math',
-    calculators: [
-      { name: 'Percentage Calculator', path: '/calculators/math/percentage-calculator' },
-      { name: 'Square Root Calculator', path: '/calculators/math/square-root-calculator' },
-      { name: 'Factorial Calculator', path: '/calculators/math/factorial-calculator' },
-    ]
-  },
-  {
-    title: 'Business Calculators',
-    description: 'Make better business decisions with our analytical tools.',
-    icon: <DollarSign className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-green-500 to-emerald-400',
-    path: '/calculators/business',
-    calculators: [
-      { name: 'Profit Margin Calculator', path: '/calculators/business/profit-margin-calculator' },
-      { name: 'ROI Calculator', path: '/calculators/business/roi-calculator' },
-      { name: 'Break-even Calculator', path: '/calculators/business/breakeven-calculator' },
-    ]
-  },
-  {
-    title: 'Construction Calculators',
-    description: 'Plan your construction projects with accuracy and efficiency.',
-    icon: <Construction className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-amber-500 to-yellow-400',
-    path: '/calculators/construction',
-    calculators: [
-      { name: 'Concrete Calculator', path: '/calculators/construction/concrete-calculator' },
-      { name: 'Paint Calculator', path: '/calculators/construction/paint-calculator' },
-      { name: 'Flooring Calculator', path: '/calculators/construction/flooring-calculator' },
-    ]
-  },
-  {
-    title: 'Utility Calculators',
-    description: 'Simplify everyday tasks with these practical tools.',
-    icon: <Wrench className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-purple-500 to-violet-400',
-    path: '/calculators/utility',
-    calculators: [
-      { name: 'Tip Calculator', path: '/calculators/utility/tip-calculator' },
-      { name: 'Unit Converter', path: '/calculators/utility/unit-converter' },
-      { name: 'Date Calculator', path: '/calculators/utility/date-calculator', comingSoon: true },
-    ]
-  }
-];
+// Calculator categories
+import { calculatorCategories } from '@/data/calculator-categories';
 
 const features = [
   {
@@ -166,7 +93,7 @@ const Index: React.FC = () => {
             </p>
             <div className="animate-fade-in flex flex-wrap justify-center gap-4" style={{ animationDelay: '0.2s' }}>
               <Button asChild size="lg" variant="secondary" className="font-medium">
-                <Link to="/calculators/finance">Explore Calculators</Link>
+                <Link to="/all-calculators">Explore All Calculators</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10">
                 <Link to="/about">Learn More</Link>
@@ -177,10 +104,17 @@ const Index: React.FC = () => {
       </div>
       
       <div className="container py-16 md:py-24">
-        <h2 className="text-3xl font-bold text-center mb-2">Our Calculator Categories</h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Explore our comprehensive suite of calculators designed to help you make informed decisions.
-        </p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
+          <div>
+            <h2 className="text-3xl font-bold mb-2">Our Calculator Categories</h2>
+            <p className="text-muted-foreground max-w-2xl">
+              Explore our comprehensive suite of calculators designed to help you make informed decisions.
+            </p>
+          </div>
+          <Button asChild variant="outline" className="mt-4 md:mt-0">
+            <Link to="/all-calculators">View All Calculators</Link>
+          </Button>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {calculatorCategories.map((category, index) => (
@@ -204,7 +138,7 @@ const Index: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3 mb-6">
-                    {category.calculators.map((calculator, i) => (
+                    {category.calculators.slice(0, 3).map((calculator, i) => (
                       <li key={i}>
                         {calculator.comingSoon ? (
                           <div className="flex items-center text-muted-foreground">
@@ -340,10 +274,18 @@ const Index: React.FC = () => {
               </Link>
             </Button>
             <Button asChild className="bg-primary hover:bg-primary-hover text-white">
-              <Link to="/calculators/math/percentage-calculator">
-                Percentage Calculator
+              <Link to="/calculators/utility/electricity-bill-calculator">
+                Electricity Bill Calculator
               </Link>
             </Button>
+          </div>
+          
+          <div className="mt-10 flex flex-wrap justify-center gap-4 text-muted-foreground">
+            <Link to="/privacy-policy" className="hover:text-primary hover:underline transition-colors">Privacy Policy</Link>
+            <span>|</span>
+            <Link to="/terms-of-use" className="hover:text-primary hover:underline transition-colors">Terms of Use</Link>
+            <span>|</span>
+            <Link to="/sitemap" className="hover:text-primary hover:underline transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
