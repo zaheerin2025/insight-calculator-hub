@@ -323,7 +323,7 @@ const WallFramingCalculator: React.FC = () => {
                 </div>
                 
                 <div className="mt-6 text-sm text-muted-foreground border-t pt-4">
-                  <p>For your {wallLength} ft × {wallHeight} ft wall with {studSpacing}" stud spacing:</p>
+                  <p>For your {wallLength} ft × {wallHeight} ft wall with {studSpacing}&quot; stud spacing:</p>
                   <p className="mt-2">You'll need a total of <strong>{results.totalLumber} pieces</strong> of lumber.</p>
                   <p className="mt-2">This includes {results.studsNeeded} full-height studs, {results.platesNeeded} plates, {results.headerBoards} header boards, {results.jackStuds} jack studs, and {results.crippleStuds} cripple studs.</p>
                   <p className="mt-2">Most residential walls use 2×4 lumber for interior walls or 2×6 for exterior walls.</p>

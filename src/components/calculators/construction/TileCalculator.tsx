@@ -208,7 +208,7 @@ const TileCalculator: React.FC = () => {
               min={0}
               step={0.0625}
               suffix=" inches"
-              helperText="Width of grout lines in inches (e.g., 0.25 for 1/4\")"
+              helperText="Width of grout lines in inches (e.g., 0.25 for 1/4&quot;)"
               className="mt-3"
             />
           </div>
@@ -286,9 +286,9 @@ const TileCalculator: React.FC = () => {
                 </div>
                 
                 <div className="mt-6 text-sm text-muted-foreground border-t pt-4">
-                  <p>For your {areaLength} × {areaWidth} ft area using {tileLength}" × {tileWidth}" tiles:</p>
+                  <p>For your {areaLength} × {areaWidth} ft area using {tileLength}&quot; × {tileWidth}&quot; tiles:</p>
                   <p className="mt-2">You'll need <strong>{results.tilesNeeded} tiles</strong> ({results.boxesNeeded} boxes at {tilesPerBox} tiles per box).</p>
-                  <p className="mt-2">Approximately <strong>{Math.ceil(results.groutNeeded)} pounds</strong> of grout will be required for {groutSize}" grout lines.</p>
+                  <p className="mt-2">Approximately <strong>{Math.ceil(results.groutNeeded)} pounds</strong> of grout will be required for {groutSize}&quot; grout lines.</p>
                   <p className="mt-2">This calculation includes {wastePercent}% extra for waste.</p>
                 </div>
               </CardContent>
