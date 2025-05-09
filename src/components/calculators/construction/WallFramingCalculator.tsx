@@ -198,7 +198,7 @@ const WallFramingCalculator: React.FC = () => {
               min={1}
               step={1}
               suffix=" inches"
-              helperText="Spacing between studs (16\" or 24\" is standard)"
+              helperText="Spacing between studs (16&quot; or 24&quot; is standard)"
             />
             
             <CalculatorInput
