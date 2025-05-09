@@ -95,6 +95,7 @@ const App = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         <Route path="/sitemap" element={<Sitemap />} />
+        <Route path="/calculators" element={<AllCalculators />} />
         
         {/* Finance Calculator Routes */}
         <Route path="/calculators/finance" element={<CalculatorsFinance />} />

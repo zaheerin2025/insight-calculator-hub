@@ -1,353 +1,269 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Layout from '@/components/layout/Layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, Award, Home, Heart, Percent, Shield, Zap, BarChart, Construction, DollarSign, Wrench } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { formatDate } from '@/lib/utils';
 
-// Blog post data
-import { blogPosts } from '@/data/blog-posts';
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import CalculatorLayout from '@/components/calculators/CalculatorLayout';
+import ResultDisplay from '@/components/calculators/ResultDisplay';
+import { ArrowRightLeft } from 'lucide-react';
 
-const calculatorCategories = [
-  {
-    title: 'Finance Calculators',
-    description: 'Plan your financial future with precision and confidence.',
-    icon: <Home className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-primary to-primary-light',
-    path: '/calculators/finance',
-    calculators: [
-      { name: 'Mortgage Calculator', path: '/calculators/finance/mortgage-calculator' },
-      { name: 'Compound Interest Calculator', path: '/calculators/finance/compound-interest-calculator' },
-      { name: 'Loan EMI Calculator', path: '/calculators/finance/loan-emi-calculator', comingSoon: true },
-    ]
+// Unit conversion constants
+const UNITS = {
+  length: {
+    meter: 1,
+    kilometer: 1000,
+    centimeter: 0.01,
+    millimeter: 0.001,
+    mile: 1609.34,
+    yard: 0.9144,
+    foot: 0.3048,
+    inch: 0.0254
   },
-  {
-    title: 'Health Calculators',
-    description: 'Monitor your health metrics for a better quality of life.',
-    icon: <Heart className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-pink-500 to-rose-400',
-    path: '/calculators/health',
-    calculators: [
-      { name: 'BMI Calculator', path: '/calculators/health/bmi-calculator' },
-      { name: 'Body Fat Calculator', path: '/calculators/health/body-fat-calculator', comingSoon: true },
-      { name: 'Calorie Needs Calculator', path: '/calculators/health/calorie-needs-calculator', comingSoon: true },
-    ]
+  weight: {
+    kilogram: 1,
+    gram: 0.001,
+    milligram: 0.000001,
+    pound: 0.453592,
+    ounce: 0.0283495,
+    ton: 1000
   },
-  {
-    title: 'Math Calculators',
-    description: 'Solve everyday math problems quickly and accurately.',
-    icon: <Percent className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-blue-500 to-cyan-400',
-    path: '/calculators/math',
-    calculators: [
-      { name: 'Percentage Calculator', path: '/calculators/math/percentage-calculator' },
-      { name: 'Square Root Calculator', path: '/calculators/math/square-root-calculator' },
-      { name: 'Factorial Calculator', path: '/calculators/math/factorial-calculator' },
-    ]
+  volume: {
+    liter: 1,
+    milliliter: 0.001,
+    gallon: 3.78541,
+    quart: 0.946353,
+    pint: 0.473176,
+    cup: 0.236588,
+    tablespoon: 0.0147868,
+    teaspoon: 0.00492892
   },
-  {
-    title: 'Business Calculators',
-    description: 'Make better business decisions with our analytical tools.',
-    icon: <DollarSign className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-green-500 to-emerald-400',
-    path: '/calculators/business',
-    calculators: [
-      { name: 'Profit Margin Calculator', path: '/calculators/business/profit-margin-calculator' },
-      { name: 'ROI Calculator', path: '/calculators/business/roi-calculator' },
-      { name: 'Break-even Calculator', path: '/calculators/business/breakeven-calculator' },
-    ]
+  temperature: {
+    celsius: 'C',
+    fahrenheit: 'F',
+    kelvin: 'K'
   },
-  {
-    title: 'Construction Calculators',
-    description: 'Plan your construction projects with accuracy and efficiency.',
-    icon: <Construction className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-amber-500 to-yellow-400',
-    path: '/calculators/construction',
-    calculators: [
-      { name: 'Concrete Calculator', path: '/calculators/construction/concrete-calculator' },
-      { name: 'Paint Calculator', path: '/calculators/construction/paint-calculator' },
-      { name: 'Flooring Calculator', path: '/calculators/construction/flooring-calculator' },
-    ]
+  area: {
+    squareMeter: 1,
+    squareKilometer: 1000000,
+    squareCentimeter: 0.0001,
+    squareMillimeter: 0.000001,
+    squareMile: 2590000,
+    acre: 4046.86,
+    hectare: 10000,
+    squareYard: 0.836127,
+    squareFoot: 0.092903,
+    squareInch: 0.00064516
   },
-  {
-    title: 'Utility Calculators',
-    description: 'Simplify everyday tasks with these practical tools.',
-    icon: <Wrench className="h-10 w-10 text-white" />,
-    background: 'bg-gradient-to-br from-purple-500 to-violet-400',
-    path: '/calculators/utility',
-    calculators: [
-      { name: 'Tip Calculator', path: '/calculators/utility/tip-calculator' },
-      { name: 'Unit Converter', path: '/calculators/utility/unit-converter' },
-      { name: 'Date Calculator', path: '/calculators/utility/date-calculator', comingSoon: true },
-    ]
+  time: {
+    second: 1,
+    minute: 60,
+    hour: 3600,
+    day: 86400,
+    week: 604800,
+    month: 2629800, // average month (365.25/12 days)
+    year: 31557600 // 365.25 days
   }
-];
+};
 
-const features = [
-  {
-    title: 'Precision',
-    description: 'Fast, accurate calculations every time you need them.',
-    icon: <Calculator className="h-6 w-6 text-white" />,
-    color: 'from-primary to-primary-light'
-  },
-  {
-    title: 'Speed',
-    description: 'Lightning fast results with no delays or waiting.',
-    icon: <Zap className="h-6 w-6 text-white" />,
-    color: 'from-amber-500 to-yellow-400'
-  },
-  {
-    title: 'Privacy',
-    description: 'All calculations happen in your browser. No data stored.',
-    icon: <Shield className="h-6 w-6 text-white" />,
-    color: 'from-green-500 to-emerald-400'
-  },
-  {
-    title: 'Analytics',
-    description: 'Visual breakdowns and analysis of your results.',
-    icon: <BarChart className="h-6 w-6 text-white" />,
-    color: 'from-blue-500 to-indigo-400'
-  }
-];
+const UnitConverter: React.FC = () => {
+  const [category, setCategory] = useState<string>('length');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [fromUnit, setFromUnit] = useState<string>('meter');
+  const [toUnit, setToUnit] = useState<string>('kilometer');
+  const [result, setResult] = useState<string | null>(null);
+  const [showResult, setShowResult] = useState<boolean>(false);
 
-const faqs = [
-  {
-    question: "How accurate are the calculators on Calculators-Hub?",
-    answer: "All calculators on Calculators-Hub are designed to provide highly accurate results based on the most up-to-date formulas and methodologies. They undergo rigorous testing to ensure reliability. However, for critical financial or health decisions, we always recommend consulting with a professional."
-  },
-  {
-    question: "Is my data saved when I use a calculator?",
-    answer: "No. All calculations are performed directly in your browser, and we do not store any of your input data on our servers. Your privacy is important to us, and we design our calculators with this principle in mind."
-  },
-  {
-    question: "Can I use these calculators on my mobile device?",
-    answer: "Yes! All our calculators are fully responsive and work on any device, including smartphones, tablets, laptops, and desktop computers."
-  },
-  {
-    question: "Are the financial calculators up-to-date with current rates?",
-    answer: "Our financial calculators allow you to input current market rates, but do not automatically fetch rates. For the most accurate results, we recommend checking current rates from reliable financial sources and then using those figures in our calculators."
-  },
-  {
-    question: "How often are new calculators added?",
-    answer: "We regularly add new calculators based on user feedback and emerging needs. Our team is constantly working to expand our library with useful tools across all categories."
-  },
-  {
-    question: "Can I suggest a new calculator?",
-    answer: "Absolutely! We welcome suggestions for new calculators. Please visit our Contact page to send us your ideas."
-  }
-];
+  // Get available units for the current category
+  const getUnitsForCategory = (cat: string) => {
+    return Object.keys(UNITS[cat as keyof typeof UNITS]);
+  };
 
-// Use the imported blogPosts directly in the component instead of redefining it
+  const handleConvert = () => {
+    if (!inputValue || isNaN(parseFloat(inputValue))) {
+      setResult('Please enter a valid number');
+      setShowResult(true);
+      return;
+    }
 
-const Index: React.FC = () => {
+    const input = parseFloat(inputValue);
+    let convertedValue: number | string;
+
+    // Special handling for temperature conversions
+    if (category === 'temperature') {
+      if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
+        convertedValue = (input * 9/5) + 32;
+      } else if (fromUnit === 'celsius' && toUnit === 'kelvin') {
+        convertedValue = input + 273.15;
+      } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
+        convertedValue = (input - 32) * 5/9;
+      } else if (fromUnit === 'fahrenheit' && toUnit === 'kelvin') {
+        convertedValue = (input - 32) * 5/9 + 273.15;
+      } else if (fromUnit === 'kelvin' && toUnit === 'celsius') {
+        convertedValue = input - 273.15;
+      } else if (fromUnit === 'kelvin' && toUnit === 'fahrenheit') {
+        convertedValue = (input - 273.15) * 9/5 + 32;
+      } else {
+        // Same unit conversion
+        convertedValue = input;
+      }
+    } else {
+      // For other units, use the conversion factors
+      const units = UNITS[category as keyof typeof UNITS];
+      const fromFactor = units[fromUnit as keyof typeof units];
+      const toFactor = units[toUnit as keyof typeof units];
+      convertedValue = (input * (fromFactor as number)) / (toFactor as number);
+    }
+
+    // Format result based on size
+    if (typeof convertedValue === 'number') {
+      if (Math.abs(convertedValue) >= 1000 || Math.abs(convertedValue) < 0.001) {
+        convertedValue = convertedValue.toExponential(6);
+      } else {
+        convertedValue = parseFloat(convertedValue.toFixed(6)).toString();
+      }
+    }
+
+    setResult(`${input} ${fromUnit} = ${convertedValue} ${toUnit}`);
+    setShowResult(true);
+  };
+
+  const handleSwapUnits = () => {
+    const temp = fromUnit;
+    setFromUnit(toUnit);
+    setToUnit(temp);
+    if (showResult) {
+      handleConvert();
+    }
+  };
+
   return (
-    <Layout>
-      <div className="relative bg-gradient-to-br from-primary to-primary-light text-white py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.15] bg-[length:16px_16px]"></div>
-        <div className="absolute h-full w-full inset-0">
-          <div className="absolute top-1/4 -left-10 w-40 h-40 rounded-full bg-white/10 filter blur-3xl"></div>
-          <div className="absolute top-1/2 right-0 w-60 h-60 rounded-full bg-white/10 filter blur-3xl"></div>
-        </div>
-        
-        <div className="container relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
-              Calculators-Hub
-            </h1>
-            <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm inline-flex items-center mb-6 border border-white/20">
-              <Award className="h-4 w-4 mr-2" />
-              <span>Trusted by thousands of users daily</span>
-            </div>
-            <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto animate-fade-in text-white/90" style={{ animationDelay: '0.1s' }}>
-              Simple, accurate calculators for all your financial, health, mathematical, business, and construction needs.
-            </p>
-            <div className="animate-fade-in flex flex-wrap justify-center gap-4" style={{ animationDelay: '0.2s' }}>
-              <Button asChild size="lg" variant="secondary" className="font-medium">
-                <Link to="/calculators/finance">Explore Calculators</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10">
-                <Link to="/about">Learn More</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="container py-16 md:py-24">
-        <h2 className="text-3xl font-bold text-center mb-2">Our Calculator Categories</h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Explore our comprehensive suite of calculators designed to help you make informed decisions.
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {calculatorCategories.map((category, index) => (
-            <div key={index} className="animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-              <Card className="h-full border border-muted hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
-                <Link to={category.path} className="block">
-                  <div className={`${category.background} p-6 flex items-center justify-center`}>
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent)]"></div>
-                    <div className="backdrop-blur-sm bg-black/10 rounded-full p-4 relative">
-                      {category.icon}
+    <CalculatorLayout
+      title="Unit Converter"
+      description="Convert between various units of measurement including length, weight, volume, temperature, area, and time."
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Unit Converter</CardTitle>
+          <CardDescription>
+            Select a category and units to convert between different measurements.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="length" onValueChange={(value) => {
+            setCategory(value);
+            // Reset units for the new category
+            const units = getUnitsForCategory(value);
+            setFromUnit(units[0]);
+            setToUnit(units[1]);
+            setShowResult(false);
+          }}>
+            <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6">
+              <TabsTrigger value="length">Length</TabsTrigger>
+              <TabsTrigger value="weight">Weight</TabsTrigger>
+              <TabsTrigger value="volume">Volume</TabsTrigger>
+              <TabsTrigger value="temperature">Temp</TabsTrigger>
+              <TabsTrigger value="area">Area</TabsTrigger>
+              <TabsTrigger value="time">Time</TabsTrigger>
+            </TabsList>
+
+            {Object.keys(UNITS).map((cat) => (
+              <TabsContent key={cat} value={cat} className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="inputValue">Value</Label>
+                    <Input
+                      id="inputValue"
+                      type="number"
+                      placeholder="Enter value"
+                      value={inputValue}
+                      onChange={(e) => {
+                        setInputValue(e.target.value);
+                        setShowResult(false);
+                      }}
+                      className="mt-1"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <div className="w-full">
+                      <Label htmlFor="fromUnit">From</Label>
+                      <Select
+                        value={fromUnit}
+                        onValueChange={(value) => {
+                          setFromUnit(value);
+                          setShowResult(false);
+                        }}
+                      >
+                        <SelectTrigger id="fromUnit" className="mt-1">
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getUnitsForCategory(category).map((unit) => (
+                            <SelectItem key={unit} value={unit}>
+                              {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex items-center justify-center">
+                      <button
+                        onClick={handleSwapUnits}
+                        className="rounded-full p-2 hover:bg-muted transition-colors"
+                        aria-label="Swap units"
+                      >
+                        <ArrowRightLeft className="h-5 w-5" />
+                      </button>
+                    </div>
+                    
+                    <div className="w-full">
+                      <Label htmlFor="toUnit">To</Label>
+                      <Select
+                        value={toUnit}
+                        onValueChange={(value) => {
+                          setToUnit(value);
+                          setShowResult(false);
+                        }}
+                      >
+                        <SelectTrigger id="toUnit" className="mt-1">
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getUnitsForCategory(category).map((unit) => (
+                            <SelectItem key={unit} value={unit}>
+                              {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
-                </Link>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-2xl">
-                    <Link to={category.path} className="hover:text-primary transition-colors">
-                      {category.title}
-                    </Link>
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground">{category.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {category.calculators.map((calculator, i) => (
-                      <li key={i}>
-                        {calculator.comingSoon ? (
-                          <div className="flex items-center text-muted-foreground">
-                            <Calculator className="h-4 w-4 mr-2" />
-                            {calculator.name}
-                            <span className="text-xs ml-2 py-1 px-2 bg-muted rounded-full">Coming Soon</span>
-                          </div>
-                        ) : (
-                          <Link 
-                            to={calculator.path} 
-                            className="text-primary hover:text-primary-hover hover:underline transition-colors flex items-center"
-                          >
-                            <Calculator className="h-4 w-4 mr-2" />
-                            {calculator.name}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button asChild variant="outline" className="w-full mt-auto">
-                    <Link to={category.path}>View All</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </div>
-        
-        <div className="mt-24 text-center">
-          <h2 className="text-3xl font-bold mb-2">Why Choose Calculators-Hub?</h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Our calculators are designed to give you the most accurate information with the best user experience.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => (
-              <div key={index} className="flex flex-col items-center animate-fade-in" style={{ animationDelay: `${index * 0.1 + 0.2}s` }}>
-                <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-md`}>
-                  {feature.icon}
+                  
+                  <div className="pt-2">
+                    <button
+                      onClick={handleConvert}
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md font-medium transition-colors"
+                    >
+                      Convert
+                    </button>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-center">{feature.description}</p>
-              </div>
+              </TabsContent>
             ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* Latest Blog Posts Section */}
-      <div className="bg-muted/30 py-16">
-        <div className="container">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">Latest from Our Blog</h2>
-              <p className="text-muted-foreground max-w-2xl">
-                Read our latest articles about calculators, financial planning, health metrics, and more.
-              </p>
-            </div>
-            <Button asChild variant="outline" className="mt-4 md:mt-0">
-              <Link to="/blog">View All Posts</Link>
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
-                <div className="aspect-[16/9] overflow-hidden">
-                  <img 
-                    src={post.coverImage} 
-                    alt={post.title} 
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="line-clamp-2">
-                    <Link to={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
-                      {post.title}
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground line-clamp-3 mb-4">{post.excerpt}</p>
-                  <Button asChild variant="link" className="p-0 h-auto font-medium">
-                    <Link to={`/blog/${post.slug}`}>
-                      Read More
-                      <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* FAQ Section */}
-      <div className="container py-16 md:py-24">
-        <h2 className="text-3xl font-bold text-center mb-2">Frequently Asked Questions</h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Get answers to common questions about our calculators and how to use them effectively.
-        </p>
-        
-        <div className="max-w-3xl mx-auto">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-lg">{faq.question}</AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-muted-foreground">{faq.answer}</p>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </div>
-      
-      <div className="bg-muted py-16">
-        <div className="container text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Our calculators are designed to make complex calculations simple. Try our most popular calculators now!
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild className="bg-primary hover:bg-primary-hover text-white">
-              <Link to="/calculators/finance/mortgage-calculator">
-                Mortgage Calculator
-              </Link>
-            </Button>
-            <Button asChild className="bg-primary hover:bg-primary-hover text-white">
-              <Link to="/calculators/health/bmi-calculator">
-                BMI Calculator
-              </Link>
-            </Button>
-            <Button asChild className="bg-primary hover:bg-primary-hover text-white">
-              <Link to="/calculators/math/percentage-calculator">
-                Percentage Calculator
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Layout>
+          </Tabs>
+
+          {showResult && result && (
+            <ResultDisplay title="Conversion Result">
+              <p className="text-lg font-medium text-center">{result}</p>
+            </ResultDisplay>
+          )}
+        </CardContent>
+      </Card>
+    </CalculatorLayout>
   );
 };
 
-export default Index;
+export default UnitConverter;

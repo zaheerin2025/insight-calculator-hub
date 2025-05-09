@@ -9,7 +9,7 @@ const WaterBillCalculatorPage: React.FC = () => {
     <Layout>
       <SEOMeta 
         title="Water Bill Calculator | InsightCalc" 
-        description="Calculate your water bill based on usage and local rates."
+        description="Calculate your water bill based on usage and local rates. Estimate water costs and identify ways to save."
       />
       <WaterBillCalculator />
     </Layout>

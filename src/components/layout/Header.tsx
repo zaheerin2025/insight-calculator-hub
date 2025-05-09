@@ -1,13 +1,25 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Calculator } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, Calculator, ChevronDown, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+
+import { calculatorCategories } from '@/data/calculator-categories';
 
 const Header: React.FC = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
-    <header className="w-full py-4 border-b bg-white sticky top-0 z-50 shadow-sm">
+    <header className="w-full py-3 border-b bg-white sticky top-0 z-50 shadow-sm">
       <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
           <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-10 w-10">
@@ -19,44 +31,111 @@ const Header: React.FC = () => {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-foreground font-medium hover:text-primary transition-colors">
-            Home
-          </Link>
-          <div className="relative group">
-            <button className="text-foreground font-medium hover:text-primary transition-colors flex items-center">
-              Calculators
-            </button>
-            <div className="absolute top-full left-0 min-w-52 bg-white shadow-lg rounded-md p-3 hidden group-hover:block animate-fade-in z-10 border border-muted">
-              <div className="grid grid-cols-1 gap-2">
-                <Link to="/calculators/finance" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
-                  Finance
-                </Link>
-                <Link to="/calculators/health" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
-                  Health
-                </Link>
-                <Link to="/calculators/math" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
-                  Math
-                </Link>
-                <Link to="/calculators/business" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
-                  Business
-                </Link>
-                <Link to="/calculators/construction" className="block px-4 py-2 hover:bg-muted rounded-md transition-colors">
-                  Construction
-                </Link>
+        <div className="hidden md:flex items-center space-x-6">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={cn(
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
+                    isActive("/") && "bg-accent/50"
+                )}>
+                  <Link to="/">Home</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className={cn(
+                  location.pathname.includes('/calculators') && "bg-accent/50"
+                )}>
+                  Calculators
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-[550px] grid grid-cols-2 gap-3 p-4">
+                    {calculatorCategories.map((category, index) => (
+                      <Link 
+                        key={index}
+                        to={category.path}
+                        className="flex items-center space-x-2 rounded-md p-2 hover:bg-muted transition-colors"
+                      >
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${category.background}`}>
+                          {React.cloneElement(category.icon, { className: "h-5 w-5 text-white" })}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium">{category.title}</div>
+                          <div className="text-xs text-muted-foreground line-clamp-1">{category.description}</div>
+                        </div>
+                      </Link>
+                    ))}
+                    
+                    <Link 
+                      to="/all-calculators"
+                      className="col-span-2 flex items-center justify-center space-x-2 rounded-md p-2 bg-muted hover:bg-muted/70 transition-colors mt-2 font-medium"
+                    >
+                      View All Calculators
+                    </Link>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={cn(
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
+                    isActive("/blog") && "bg-accent/50"
+                )}>
+                  <Link to="/blog">Blog</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={cn(
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
+                    isActive("/about") && "bg-accent/50"
+                )}>
+                  <Link to="/about">About</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={cn(
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
+                    isActive("/contact") && "bg-accent/50"
+                )}>
+                  <Link to="/contact">Contact</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          
+          <div className="relative">
+            {isSearchOpen ? (
+              <div className="absolute right-0 top-0 flex items-center bg-white shadow-lg rounded-md p-1 z-20">
+                <Input 
+                  placeholder="Search calculators..." 
+                  className="w-64 h-9"
+                  autoFocus
+                  onBlur={() => setTimeout(() => setIsSearchOpen(false), 100)}
+                />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9"
+                  onClick={() => setIsSearchOpen(false)}
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
               </div>
-            </div>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSearchOpen(true)}
+                className="h-9 w-9"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            )}
           </div>
-          <Link to="/blog" className="text-foreground font-medium hover:text-primary transition-colors">
-            Blog
-          </Link>
-          <Link to="/about" className="text-foreground font-medium hover:text-primary transition-colors">
-            About
-          </Link>
-          <Link to="/contact" className="text-foreground font-medium hover:text-primary transition-colors">
-            Contact
-          </Link>
-        </nav>
+        </div>
         
         {/* Mobile Navigation */}
         <Sheet>
@@ -66,44 +145,83 @@ const Header: React.FC = () => {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="overflow-y-auto">
             <div className="flex items-center mb-8 mt-4">
               <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-8 w-8 mr-2">
                 <Calculator className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold text-primary">Calculators-Hub</span>
             </div>
+            
+            <div className="mb-4">
+              <Input placeholder="Search calculators..." />
+            </div>
+            
             <nav className="flex flex-col space-y-4">
-              <Link to="/" className="text-lg font-medium">
+              <Link to="/" className={cn(
+                "text-lg font-medium py-2",
+                isActive("/") && "text-primary"
+              )}>
                 Home
               </Link>
+              
               <div className="space-y-2">
-                <h3 className="text-lg font-medium">Calculators</h3>
-                <div className="ml-4 space-y-3 border-l-2 border-muted pl-4">
-                  <Link to="/calculators/finance" className="block text-muted-foreground hover:text-primary transition-colors">
-                    Finance
-                  </Link>
-                  <Link to="/calculators/health" className="block text-muted-foreground hover:text-primary transition-colors">
-                    Health
-                  </Link>
-                  <Link to="/calculators/math" className="block text-muted-foreground hover:text-primary transition-colors">
-                    Math
-                  </Link>
-                  <Link to="/calculators/business" className="block text-muted-foreground hover:text-primary transition-colors">
-                    Business
-                  </Link>
-                  <Link to="/calculators/construction" className="block text-muted-foreground hover:text-primary transition-colors">
-                    Construction
-                  </Link>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium">Calculators</h3>
+                  <Link to="/all-calculators" className="text-xs text-primary">View All</Link>
+                </div>
+                
+                <div className="space-y-6 mt-3">
+                  {calculatorCategories.map((category, index) => (
+                    <div key={index} className="space-y-2">
+                      <Link 
+                        to={category.path} 
+                        className="flex items-center space-x-2 font-medium text-sm"
+                      >
+                        <div className={`w-6 h-6 rounded-md flex items-center justify-center ${category.background}`}>
+                          {React.cloneElement(category.icon, { className: "h-3 w-3 text-white" })}
+                        </div>
+                        <span>{category.title}</span>
+                      </Link>
+                      
+                      <div className="ml-8 space-y-1">
+                        {category.calculators.slice(0, 3).map((calculator, calcIndex) => (
+                          <Link 
+                            key={calcIndex}
+                            to={calculator.comingSoon ? "#" : calculator.path}
+                            className={cn(
+                              "block text-sm text-muted-foreground hover:text-foreground transition-colors",
+                              calculator.comingSoon && "opacity-60"
+                            )}
+                          >
+                            {calculator.name}
+                            {calculator.comingSoon && " (Soon)"}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <Link to="/blog" className="text-lg font-medium">
+              
+              <Link to="/blog" className={cn(
+                "text-lg font-medium py-2",
+                isActive("/blog") && "text-primary"
+              )}>
                 Blog
               </Link>
-              <Link to="/about" className="text-lg font-medium">
+              
+              <Link to="/about" className={cn(
+                "text-lg font-medium py-2",
+                isActive("/about") && "text-primary"
+              )}>
                 About
               </Link>
-              <Link to="/contact" className="text-lg font-medium">
+              
+              <Link to="/contact" className={cn(
+                "text-lg font-medium py-2",
+                isActive("/contact") && "text-primary"
+              )}>
                 Contact
               </Link>
             </nav>

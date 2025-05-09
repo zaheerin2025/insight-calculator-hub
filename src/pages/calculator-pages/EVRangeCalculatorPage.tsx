@@ -9,7 +9,7 @@ const EVRangeCalculatorPage: React.FC = () => {
     <Layout>
       <SEOMeta 
         title="Electric Vehicle Range Calculator | InsightCalc" 
-        description="Estimate how far your electric vehicle can travel on a single charge."
+        description="Estimate how far your electric vehicle can travel on a single charge based on battery capacity, efficiency, and driving conditions."
       />
       <EVRangeCalculator />
     </Layout>
