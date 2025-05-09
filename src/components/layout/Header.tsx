@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
+import { SearchDialog } from '@/components/ui/search-dialog';
 
 import { calculatorCategories } from '@/data/calculator-categories';
 
@@ -106,128 +106,127 @@ const Header: React.FC = () => {
             </NavigationMenuList>
           </NavigationMenu>
           
-          <div className="relative">
-            {isSearchOpen ? (
-              <div className="absolute right-0 top-0 flex items-center bg-white shadow-lg rounded-md p-1 z-20">
-                <Input 
-                  placeholder="Search calculators..." 
-                  className="w-64 h-9"
-                  autoFocus
-                  onBlur={() => setTimeout(() => setIsSearchOpen(false), 100)}
-                />
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-9 w-9"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setIsSearchOpen(true)}
-                className="h-9 w-9"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSearchOpen(true)}
+            className="h-9 w-9"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
         </div>
         
         {/* Mobile Navigation */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="overflow-y-auto">
-            <div className="flex items-center mb-8 mt-4">
-              <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-8 w-8 mr-2">
-                <Calculator className="h-5 w-5 text-white" />
+        <div className="md:hidden flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSearchOpen(true)}
+            className="h-9 w-9"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+          
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="overflow-y-auto">
+              <div className="flex items-center mb-8 mt-4">
+                <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-8 w-8 mr-2">
+                  <Calculator className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-primary">Calculators-Hub</span>
               </div>
-              <span className="text-xl font-bold text-primary">Calculators-Hub</span>
-            </div>
-            
-            <div className="mb-4">
-              <Input placeholder="Search calculators..." />
-            </div>
-            
-            <nav className="flex flex-col space-y-4">
-              <Link to="/" className={cn(
-                "text-lg font-medium py-2",
-                isActive("/") && "text-primary"
-              )}>
-                Home
-              </Link>
               
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Calculators</h3>
-                  <Link to="/all-calculators" className="text-xs text-primary">View All</Link>
+              <div className="mb-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start" 
+                  onClick={() => setIsSearchOpen(true)}
+                >
+                  <Search className="mr-2 h-4 w-4" />
+                  Search calculators...
+                </Button>
+              </div>
+              
+              <nav className="flex flex-col space-y-4">
+                <Link to="/" className={cn(
+                  "text-lg font-medium py-2",
+                  isActive("/") && "text-primary"
+                )}>
+                  Home
+                </Link>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium">Calculators</h3>
+                    <Link to="/all-calculators" className="text-xs text-primary">View All</Link>
+                  </div>
+                  
+                  <div className="space-y-6 mt-3">
+                    {calculatorCategories.map((category, index) => (
+                      <div key={index} className="space-y-2">
+                        <Link 
+                          to={category.path} 
+                          className="flex items-center space-x-2 font-medium text-sm"
+                        >
+                          <div className={`w-6 h-6 rounded-md flex items-center justify-center ${category.background}`}>
+                            {React.cloneElement(category.icon, { className: "h-3 w-3 text-white" })}
+                          </div>
+                          <span>{category.title}</span>
+                        </Link>
+                        
+                        <div className="ml-8 space-y-1">
+                          {category.calculators.slice(0, 3).map((calculator, calcIndex) => (
+                            <Link 
+                              key={calcIndex}
+                              to={calculator.comingSoon ? "#" : calculator.path}
+                              className={cn(
+                                "block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                              )}
+                            >
+                              {calculator.name}
+                              {calculator.comingSoon && " (Soon)"}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 
-                <div className="space-y-6 mt-3">
-                  {calculatorCategories.map((category, index) => (
-                    <div key={index} className="space-y-2">
-                      <Link 
-                        to={category.path} 
-                        className="flex items-center space-x-2 font-medium text-sm"
-                      >
-                        <div className={`w-6 h-6 rounded-md flex items-center justify-center ${category.background}`}>
-                          {React.cloneElement(category.icon, { className: "h-3 w-3 text-white" })}
-                        </div>
-                        <span>{category.title}</span>
-                      </Link>
-                      
-                      <div className="ml-8 space-y-1">
-                        {category.calculators.slice(0, 3).map((calculator, calcIndex) => (
-                          <Link 
-                            key={calcIndex}
-                            to={calculator.comingSoon ? "#" : calculator.path}
-                            className={cn(
-                              "block text-sm text-muted-foreground hover:text-foreground transition-colors",
-                              calculator.comingSoon && "opacity-60"
-                            )}
-                          >
-                            {calculator.name}
-                            {calculator.comingSoon && " (Soon)"}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <Link to="/blog" className={cn(
-                "text-lg font-medium py-2",
-                isActive("/blog") && "text-primary"
-              )}>
-                Blog
-              </Link>
-              
-              <Link to="/about" className={cn(
-                "text-lg font-medium py-2",
-                isActive("/about") && "text-primary"
-              )}>
-                About
-              </Link>
-              
-              <Link to="/contact" className={cn(
-                "text-lg font-medium py-2",
-                isActive("/contact") && "text-primary"
-              )}>
-                Contact
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
+                <Link to="/blog" className={cn(
+                  "text-lg font-medium py-2",
+                  isActive("/blog") && "text-primary"
+                )}>
+                  Blog
+                </Link>
+                
+                <Link to="/about" className={cn(
+                  "text-lg font-medium py-2",
+                  isActive("/about") && "text-primary"
+                )}>
+                  About
+                </Link>
+                
+                <Link to="/contact" className={cn(
+                  "text-lg font-medium py-2",
+                  isActive("/contact") && "text-primary"
+                )}>
+                  Contact
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
+
+      {/* Search Dialog */}
+      <SearchDialog open={isSearchOpen} setOpen={setIsSearchOpen} />
     </header>
   );
 };

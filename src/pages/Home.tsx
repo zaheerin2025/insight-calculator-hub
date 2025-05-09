@@ -13,6 +13,12 @@ const Home: React.FC = () => {
         description="Access free online calculators for finance, health, math, business, construction, and utility needs. Simple, accurate tools to make informed decisions."
         canonicalUrl="https://calculators-hub.com"
       />
+      {/* Google AdSense Code */}
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1264514278457797"
+        crossOrigin="anonymous"
+      />
       <Index />
     </>
   );

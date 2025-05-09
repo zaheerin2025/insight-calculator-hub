@@ -19,7 +19,7 @@ export const calculatorCategories = [
       { name: 'Debt-to-Income Calculator', path: '/calculators/finance/debt-to-income-calculator' },
       { name: 'Auto Loan Calculator', path: '/calculators/finance/auto-loan-calculator' },
       { name: 'Simple Interest Calculator', path: '/calculators/finance/simple-interest-calculator' },
-      { name: 'Retirement Savings Calculator', path: '/calculators/finance/retirement-savings-calculator', comingSoon: true },
+      { name: 'Retirement Savings Calculator', path: '/calculators/finance/retirement-savings-calculator' },
     ]
   },
   {
@@ -36,9 +36,9 @@ export const calculatorCategories = [
       { name: 'Heart Rate Calculator', path: '/calculators/health/heart-rate-calculator' },
       { name: 'BMR Calculator', path: '/calculators/health/bmr-calculator' },
       { name: 'Water Intake Calculator', path: '/calculators/health/water-intake-calculator' },
-      { name: 'Pregnancy Due Date Calculator', path: '/calculators/health/pregnancy-due-date-calculator', comingSoon: true },
-      { name: 'Macro Nutrient Calculator', path: '/calculators/health/macro-nutrient-calculator', comingSoon: true },
-      { name: 'Waist-Hip Ratio Calculator', path: '/calculators/health/waist-hip-ratio-calculator', comingSoon: true },
+      { name: 'Pregnancy Due Date Calculator', path: '/calculators/health/pregnancy-due-date-calculator' },
+      { name: 'Macro Nutrient Calculator', path: '/calculators/health/macro-nutrient-calculator' },
+      { name: 'Waist-Hip Ratio Calculator', path: '/calculators/health/waist-hip-ratio-calculator' },
     ]
   },
   {
@@ -108,10 +108,10 @@ export const calculatorCategories = [
       { name: 'Carbon Footprint Calculator', path: '/calculators/utility/carbon-footprint-calculator' },
       { name: 'Gas Mileage (MPG) Calculator', path: '/calculators/utility/gas-mileage-calculator' },
       { name: 'Electric Vehicle Range Calculator', path: '/calculators/utility/ev-range-calculator' },
-      { name: 'Date Calculator', path: '/calculators/utility/date-calculator', comingSoon: true },
-      { name: 'Password Generator', path: '/calculators/utility/password-generator', comingSoon: true },
-      { name: 'GPA Calculator', path: '/calculators/utility/gpa-calculator', comingSoon: true },
-      { name: 'Fuel Cost Calculator', path: '/calculators/utility/fuel-cost-calculator', comingSoon: true },
+      { name: 'Date Calculator', path: '/calculators/utility/date-calculator' },
+      { name: 'Password Generator', path: '/calculators/utility/password-generator' },
+      { name: 'GPA Calculator', path: '/calculators/utility/gpa-calculator' },
+      { name: 'Fuel Cost Calculator', path: '/calculators/utility/fuel-cost-calculator' },
     ]
   }
 ];

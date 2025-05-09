@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
-import { Wrench, Calculator, Lightbulb, Activity, Droplet, Thermometer, Sun, Zap, Gauge, Car } from 'lucide-react';
+import { Wrench, Calculator, Lightbulb, Activity, Droplet, Thermometer, Sun, Zap, Gauge, Car, Calendar, Lock, Key, Fuel } from 'lucide-react';
 
 const calculators = [
   {
@@ -79,30 +79,26 @@ const calculators = [
   {
     title: 'Date Calculator',
     description: 'Calculate the difference between dates or add/subtract days, months, or years from a date.',
-    icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/date-calculator',
-    comingSoon: true
+    icon: <Calendar className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/date-calculator'
   },
   {
     title: 'Password Generator',
     description: 'Create strong, secure passwords with customizable options for length and character types.',
-    icon: <Wrench className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/password-generator',
-    comingSoon: true
+    icon: <Key className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/password-generator'
   },
   {
     title: 'GPA Calculator',
     description: 'Calculate your Grade Point Average (GPA) based on grades and credit hours.',
     icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/gpa-calculator',
-    comingSoon: true
+    path: '/calculators/utility/gpa-calculator'
   },
   {
     title: 'Fuel Cost Calculator',
     description: 'Estimate fuel costs for trips based on distance, fuel efficiency, and current fuel prices.',
-    icon: <Calculator className="h-6 w-6 text-primary" />,
-    path: '/calculators/utility/fuel-cost-calculator',
-    comingSoon: true
+    icon: <Fuel className="h-6 w-6 text-primary" />,
+    path: '/calculators/utility/fuel-cost-calculator'
   },
 ];
 

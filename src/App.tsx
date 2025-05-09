@@ -81,6 +81,10 @@ import LightbulbSavingsCalculatorPage from './pages/calculator-pages/LightbulbSa
 import CarbonFootprintCalculatorPage from './pages/calculator-pages/CarbonFootprintCalculatorPage';
 import GasMileageCalculatorPage from './pages/calculator-pages/GasMileageCalculatorPage';
 import EVRangeCalculatorPage from './pages/calculator-pages/EVRangeCalculatorPage';
+import DateCalculatorPage from './pages/calculator-pages/DateCalculatorPage';
+import PasswordGeneratorPage from './pages/calculator-pages/PasswordGeneratorPage';
+import GPACalculatorPage from './pages/calculator-pages/GPACalculatorPage';
+import FuelCostCalculatorPage from './pages/calculator-pages/FuelCostCalculatorPage';
 
 const App = () => {
   return (
@@ -167,6 +171,10 @@ const App = () => {
         <Route path="/calculators/utility/carbon-footprint-calculator" element={<CarbonFootprintCalculatorPage />} />
         <Route path="/calculators/utility/gas-mileage-calculator" element={<GasMileageCalculatorPage />} />
         <Route path="/calculators/utility/ev-range-calculator" element={<EVRangeCalculatorPage />} />
+        <Route path="/calculators/utility/date-calculator" element={<DateCalculatorPage />} />
+        <Route path="/calculators/utility/password-generator" element={<PasswordGeneratorPage />} />
+        <Route path="/calculators/utility/gpa-calculator" element={<GPACalculatorPage />} />
+        <Route path="/calculators/utility/fuel-cost-calculator" element={<FuelCostCalculatorPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
