@@ -393,3 +393,8 @@ export const blogPosts = [
     tags: ["compound interest calculator", "investing", "retirement planning", "financial growth"]
   }
 ];
+
+// Add the missing findPostBySlug function
+export const findPostBySlug = (slug: string) => {
+  return blogPosts.find(post => post.slug === slug);
+};
