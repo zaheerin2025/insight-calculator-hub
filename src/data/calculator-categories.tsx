@@ -2,6 +2,13 @@
 import React from 'react';
 import { Home, Heart, Percent, Construction, DollarSign, Wrench } from 'lucide-react';
 
+// Define the Calculator type to include the comingSoon property
+interface Calculator {
+  name: string;
+  path: string;
+  comingSoon?: boolean;
+}
+
 export const calculatorCategories = [
   {
     title: 'Finance Calculators',
@@ -115,3 +122,8 @@ export const calculatorCategories = [
     ]
   }
 ];
+
+// Add the missing findPostBySlug function
+export const findPostBySlug = (slug: string) => {
+  return blogPosts.find(post => post.slug === slug);
+};

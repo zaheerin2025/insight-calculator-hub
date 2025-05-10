@@ -1,3 +1,4 @@
+
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
 import { Percent, Calculator, Square } from 'lucide-react';
