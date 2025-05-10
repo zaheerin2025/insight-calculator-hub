@@ -7,8 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { SearchDialog } from '@/components/ui/search-dialog';
-
-import { calculatorCategories } from '@/data/calculator-categories';
+import { calculatorCategories, Calculator as CalculatorType } from '@/data/calculator-categories';
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -181,7 +180,7 @@ const Header: React.FC = () => {
                         </Link>
                         
                         <div className="ml-8 space-y-1">
-                          {category.calculators.slice(0, 3).map((calculator, calcIndex) => (
+                          {category.calculators.slice(0, 3).map((calculator: CalculatorType, calcIndex: number) => (
                             <Link 
                               key={calcIndex}
                               to={calculator.comingSoon ? "#" : calculator.path}

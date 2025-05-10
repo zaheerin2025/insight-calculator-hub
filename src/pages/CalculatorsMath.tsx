@@ -2,6 +2,7 @@
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
 import { Percent, Calculator, Square } from 'lucide-react';
+import { Calculator as CalculatorType } from '@/data/calculator-categories';
 
 const calculators = [
   {
@@ -65,7 +66,7 @@ const calculators = [
     icon: <Calculator className="h-6 w-6 text-primary" />,
     path: '/calculators/math/mean-median-mode-calculator'
   },
-];
+] as CalculatorType[];
 
 const CalculatorsMath: React.FC = () => {
   return (

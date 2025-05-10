@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator, Award, Home, Heart, Percent, Shield, Construction, DollarSign, Wrench } from 'lucide-react';
 
 // Import calculator categories
-import { calculatorCategories } from '@/data/calculator-categories';
+import { calculatorCategories, Calculator as CalculatorType } from '@/data/calculator-categories';
 
 const AllCalculators: React.FC = () => {
   return (
@@ -40,7 +40,7 @@ const AllCalculators: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {category.calculators.map((calculator, calcIndex) => (
+              {category.calculators.map((calculator: CalculatorType, calcIndex: number) => (
                 <Card key={calcIndex} className="hover:shadow-md transition-shadow duration-300">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg flex items-center">

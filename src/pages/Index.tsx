@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -11,7 +10,7 @@ import { formatDate } from '@/lib/utils';
 // Blog post data
 import { blogPosts } from '@/data/blog-posts';
 // Calculator categories
-import { calculatorCategories } from '@/data/calculator-categories';
+import { calculatorCategories, Calculator as CalculatorType } from '@/data/calculator-categories';
 
 const features = [
   {
@@ -138,7 +137,7 @@ const Index: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3 mb-6">
-                    {category.calculators.slice(0, 3).map((calculator, i) => (
+                    {category.calculators.slice(0, 3).map((calculator: CalculatorType, i: number) => (
                       <li key={i}>
                         {calculator.comingSoon ? (
                           <div className="flex items-center text-muted-foreground">

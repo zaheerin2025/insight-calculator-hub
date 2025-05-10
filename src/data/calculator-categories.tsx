@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Home, Heart, Percent, Construction, DollarSign, Wrench } from 'lucide-react';
+import { blogPosts } from '@/data/blog-posts';
 
 // Define the Calculator type to include the comingSoon property
-interface Calculator {
+export interface Calculator {
   name: string;
   path: string;
   comingSoon?: boolean;
@@ -27,7 +28,7 @@ export const calculatorCategories = [
       { name: 'Auto Loan Calculator', path: '/calculators/finance/auto-loan-calculator' },
       { name: 'Simple Interest Calculator', path: '/calculators/finance/simple-interest-calculator' },
       { name: 'Retirement Savings Calculator', path: '/calculators/finance/retirement-savings-calculator' },
-    ]
+    ] as Calculator[]
   },
   {
     title: 'Health Calculators',
@@ -46,7 +47,7 @@ export const calculatorCategories = [
       { name: 'Pregnancy Due Date Calculator', path: '/calculators/health/pregnancy-due-date-calculator' },
       { name: 'Macro Nutrient Calculator', path: '/calculators/health/macro-nutrient-calculator' },
       { name: 'Waist-Hip Ratio Calculator', path: '/calculators/health/waist-hip-ratio-calculator' },
-    ]
+    ] as Calculator[]
   },
   {
     title: 'Math Calculators',
@@ -64,7 +65,7 @@ export const calculatorCategories = [
       { name: 'Pythagorean Theorem Calculator', path: '/calculators/math/pythagorean-theorem-calculator' },
       { name: 'Fractions Calculator', path: '/calculators/math/fractions-calculator' },
       { name: 'Mean Median Mode Calculator', path: '/calculators/math/mean-median-mode-calculator' },
-    ]
+    ] as Calculator[]
   },
   {
     title: 'Business Calculators',
@@ -79,7 +80,7 @@ export const calculatorCategories = [
       { name: 'Markup Calculator', path: '/calculators/business/markup-calculator' },
       { name: 'Sales Tax Calculator', path: '/calculators/business/sales-tax-calculator' },
       { name: 'Inventory Turnover Calculator', path: '/calculators/business/inventory-turnover-calculator' },
-    ]
+    ] as Calculator[]
   },
   {
     title: 'Construction Calculators',
@@ -94,7 +95,7 @@ export const calculatorCategories = [
       { name: 'Roofing Calculator', path: '/calculators/construction/roofing-calculator' },
       { name: 'Tile Calculator', path: '/calculators/construction/tile-calculator' },
       { name: 'Wall Framing Calculator', path: '/calculators/construction/wall-framing-calculator' },
-    ]
+    ] as Calculator[]
   },
   {
     title: 'Utility Calculators',
@@ -119,11 +120,11 @@ export const calculatorCategories = [
       { name: 'Password Generator', path: '/calculators/utility/password-generator' },
       { name: 'GPA Calculator', path: '/calculators/utility/gpa-calculator' },
       { name: 'Fuel Cost Calculator', path: '/calculators/utility/fuel-cost-calculator' },
-    ]
+    ] as Calculator[]
   }
 ];
 
-// Add the missing findPostBySlug function
+// Add the findPostBySlug function
 export const findPostBySlug = (slug: string) => {
   return blogPosts.find(post => post.slug === slug);
 };

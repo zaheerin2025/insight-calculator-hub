@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '@/components/layout/Layout';
 import SEOMeta from '@/components/ui/seo-meta';
 import { Link } from 'react-router-dom';
-import { calculatorCategories } from '@/data/calculator-categories';
+import { calculatorCategories, Calculator as CalculatorType } from '@/data/calculator-categories';
 
 const Sitemap: React.FC = () => {
   return (
@@ -46,8 +46,8 @@ const Sitemap: React.FC = () => {
                   </Link>
                 </li>
                 {category.calculators
-                  .filter(calc => !calc.comingSoon)
-                  .map((calculator, calcIndex) => (
+                  .filter((calc: CalculatorType) => !calc.comingSoon)
+                  .map((calculator: CalculatorType, calcIndex: number) => (
                     <li key={calcIndex}>
                       <Link to={calculator.path} className="text-primary hover:underline">
                         {calculator.name}
