@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import CalculatorLayout from '@/components/calculators/CalculatorLayout';
 import ResultDisplay from '@/components/calculators/ResultDisplay';
 import { ArrowRightLeft } from 'lucide-react';
 
@@ -139,196 +138,126 @@ const UnitConverter: React.FC = () => {
   };
 
   return (
-    <CalculatorLayout
-      title="Unit Converter"
-      description="Convert between various units of measurement including length, weight, volume, temperature, area, and time."
-      intro="Use this calculator to convert values between different units of measurement. Select a category, enter a value, and choose your units to get accurate conversions."
-      formula={
-        <>
-          <p>Unit conversion is based on conversion factors between different units of measurement. The basic formula is:</p>
-          <div className="bg-muted p-4 rounded-md my-4 overflow-x-auto">
-            <code>Result = Value × (From Unit Factor ÷ To Unit Factor)</code>
-          </div>
-          <p>For temperature conversions, we use specific formulas:</p>
-          <ul className="list-disc pl-6 space-y-2 mt-3">
-            <li>Celsius to Fahrenheit: °F = (°C × 9/5) + 32</li>
-            <li>Fahrenheit to Celsius: °C = (°F - 32) × 5/9</li>
-            <li>Celsius to Kelvin: K = °C + 273.15</li>
-            <li>Kelvin to Celsius: °C = K - 273.15</li>
-            <li>Fahrenheit to Kelvin: K = (°F - 32) × 5/9 + 273.15</li>
-            <li>Kelvin to Fahrenheit: °F = (K - 273.15) × 9/5 + 32</li>
-          </ul>
-        </>
-      }
-      faq={[
-        {
-          question: "Why do my conversion results sometimes show scientific notation?",
-          answer: "For very large or very small numbers (≥1000 or <0.001), scientific notation provides a more readable format. For example, 0.0000001 is displayed as 1e-7, which means 1×10^-7."
-        },
-        {
-          question: "Are the temperature conversions exact?",
-          answer: "Yes, the temperature conversion formulas are exact mathematical relationships. For example, 0°C is exactly 32°F and 273.15K."
-        },
-        {
-          question: "How accurate are the conversion factors?",
-          answer: "The conversion factors used in this calculator are precise to several decimal places, which is sufficient for most everyday calculations and even many scientific applications."
-        },
-        {
-          question: "Why are there different ton measurements?",
-          answer: "There are several types of ton measurements: the metric ton (1,000 kg), the short ton (2,000 lb) used in the US, and the long ton (2,240 lb) used in the UK. Our calculator uses the metric ton."
-        }
-      ]}
-      relatedCalculators={[
-        {
-          title: "Fuel Cost Calculator",
-          path: "/calculators/utility/fuel-cost-calculator",
-          category: "Utility"
-        },
-        {
-          title: "Gas Mileage Calculator",
-          path: "/calculators/utility/gas-mileage-calculator",
-          category: "Utility"
-        },
-        {
-          title: "Area Calculator",
-          path: "/calculators/math/area-calculator",
-          category: "Math"
-        }
-      ]}
-      schemaMarkup={{
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Unit Converter",
-        "applicationCategory": "UtilityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Convert between various units of measurement including length, weight, volume, temperature, area, and time."
-      }}
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Unit Converter</CardTitle>
-          <CardDescription>
-            Select a category and units to convert between different measurements.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="length" onValueChange={(value) => {
-            setCategory(value);
-            // Reset units for the new category
-            const units = getUnitsForCategory(value);
-            setFromUnit(units[0]);
-            setToUnit(units[1]);
-            setShowResult(false);
-          }}>
-            <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6">
-              <TabsTrigger value="length">Length</TabsTrigger>
-              <TabsTrigger value="weight">Weight</TabsTrigger>
-              <TabsTrigger value="volume">Volume</TabsTrigger>
-              <TabsTrigger value="temperature">Temp</TabsTrigger>
-              <TabsTrigger value="area">Area</TabsTrigger>
-              <TabsTrigger value="time">Time</TabsTrigger>
-            </TabsList>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl">Unit Converter</CardTitle>
+        <CardDescription>
+          Select a category and units to convert between different measurements.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="length" onValueChange={(value) => {
+          setCategory(value);
+          // Reset units for the new category
+          const units = getUnitsForCategory(value);
+          setFromUnit(units[0]);
+          setToUnit(units[1]);
+          setShowResult(false);
+        }}>
+          <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6">
+            <TabsTrigger value="length">Length</TabsTrigger>
+            <TabsTrigger value="weight">Weight</TabsTrigger>
+            <TabsTrigger value="volume">Volume</TabsTrigger>
+            <TabsTrigger value="temperature">Temp</TabsTrigger>
+            <TabsTrigger value="area">Area</TabsTrigger>
+            <TabsTrigger value="time">Time</TabsTrigger>
+          </TabsList>
 
-            {Object.keys(UNITS).map((cat) => (
-              <TabsContent key={cat} value={cat} className="space-y-4">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="inputValue">Value</Label>
-                    <Input
-                      id="inputValue"
-                      type="number"
-                      placeholder="Enter value"
-                      value={inputValue}
-                      onChange={(e) => {
-                        setInputValue(e.target.value);
+          {Object.keys(UNITS).map((cat) => (
+            <TabsContent key={cat} value={cat} className="space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="inputValue">Value</Label>
+                  <Input
+                    id="inputValue"
+                    type="number"
+                    placeholder="Enter value"
+                    value={inputValue}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                      setShowResult(false);
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                  <div className="w-full">
+                    <Label htmlFor="fromUnit">From</Label>
+                    <Select
+                      value={fromUnit}
+                      onValueChange={(value) => {
+                        setFromUnit(value);
                         setShowResult(false);
                       }}
-                      className="mt-1"
-                    />
-                  </div>
-                  
-                  <div className="flex flex-col md:flex-row gap-4 items-center">
-                    <div className="w-full">
-                      <Label htmlFor="fromUnit">From</Label>
-                      <Select
-                        value={fromUnit}
-                        onValueChange={(value) => {
-                          setFromUnit(value);
-                          setShowResult(false);
-                        }}
-                      >
-                        <SelectTrigger id="fromUnit" className="mt-1">
-                          <SelectValue placeholder="Select unit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getUnitsForCategory(category).map((unit) => (
-                            <SelectItem key={unit} value={unit}>
-                              {unit.charAt(0).toUpperCase() + unit.slice(1)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div className="flex items-center justify-center">
-                      <button
-                        onClick={handleSwapUnits}
-                        className="rounded-full p-2 hover:bg-muted transition-colors"
-                        aria-label="Swap units"
-                      >
-                        <ArrowRightLeft className="h-5 w-5" />
-                      </button>
-                    </div>
-                    
-                    <div className="w-full">
-                      <Label htmlFor="toUnit">To</Label>
-                      <Select
-                        value={toUnit}
-                        onValueChange={(value) => {
-                          setToUnit(value);
-                          setShowResult(false);
-                        }}
-                      >
-                        <SelectTrigger id="toUnit" className="mt-1">
-                          <SelectValue placeholder="Select unit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getUnitsForCategory(category).map((unit) => (
-                            <SelectItem key={unit} value={unit}>
-                              {unit.charAt(0).toUpperCase() + unit.slice(1)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-2">
-                    <button
-                      onClick={handleConvert}
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md font-medium transition-colors"
                     >
-                      Convert
+                      <SelectTrigger id="fromUnit" className="mt-1">
+                        <SelectValue placeholder="Select unit" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getUnitsForCategory(category).map((unit) => (
+                          <SelectItem key={unit} value={unit}>
+                            {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={handleSwapUnits}
+                      className="rounded-full p-2 hover:bg-muted transition-colors"
+                      aria-label="Swap units"
+                    >
+                      <ArrowRightLeft className="h-5 w-5" />
                     </button>
                   </div>
+                  
+                  <div className="w-full">
+                    <Label htmlFor="toUnit">To</Label>
+                    <Select
+                      value={toUnit}
+                      onValueChange={(value) => {
+                        setToUnit(value);
+                        setShowResult(false);
+                      }}
+                    >
+                      <SelectTrigger id="toUnit" className="mt-1">
+                        <SelectValue placeholder="Select unit" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getUnitsForCategory(category).map((unit) => (
+                          <SelectItem key={unit} value={unit}>
+                            {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+                
+                <div className="pt-2">
+                  <button
+                    onClick={handleConvert}
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md font-medium transition-colors"
+                  >
+                    Convert
+                  </button>
+                </div>
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
 
-          {showResult && result && (
-            <ResultDisplay 
-              title="Conversion Result"
-              value={result}
-            />
-          )}
-        </CardContent>
-      </Card>
-    </CalculatorLayout>
+        {showResult && result && (
+          <ResultDisplay 
+            title="Conversion Result"
+            value={result}
+          />
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
