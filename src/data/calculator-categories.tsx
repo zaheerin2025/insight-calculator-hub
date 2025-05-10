@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Home, Heart, Percent, Construction, DollarSign, Wrench } from 'lucide-react';
 import { blogPosts } from '@/data/blog-posts';

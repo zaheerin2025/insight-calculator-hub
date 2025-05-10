@@ -2,9 +2,9 @@
 import React from 'react';
 import CategoryLayout from '@/components/ui/category-layout';
 import { Percent, Calculator, Square } from 'lucide-react';
-import { Calculator as CalculatorType } from '@/data/calculator-categories';
+import { CalculatorItem } from '@/components/ui/category-layout';
 
-const calculators = [
+const calculators: CalculatorItem[] = [
   {
     title: 'Percentage Calculator',
     description: 'Calculate percentages easily. Find percentages of values, what percentage one value is of another, and more.',
@@ -66,7 +66,7 @@ const calculators = [
     icon: <Calculator className="h-6 w-6 text-primary" />,
     path: '/calculators/math/mean-median-mode-calculator'
   },
-] as CalculatorType[];
+];
 
 const CalculatorsMath: React.FC = () => {
   return (
