@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -436,4 +437,16 @@ export const blogPosts = [
           <p className="mb-4">Use our <a href="/calculators/health/bmi-calculator" className="text-primary font-medium hover:underline">BMI calculator</a> as a first step in understanding your body composition. For a more comprehensive assessment, consider tracking other health metrics and consulting with healthcare professionals.</p>
           <Button asChild>
             <Link to="/calculators/health/bmi-calculator">Calculate Your BMI Now</Link>
-          </Button
+          </Button>
+        </div>
+      </>
+    ),
+    categories: ["Health", "Fitness", "Wellness"],
+    tags: ["BMI calculator", "body mass index", "health assessment", "weight management", "body composition"]
+  }
+];
+
+// Helper function to find a blog post by slug
+export const findPostBySlug = (slug: string) => {
+  return blogPosts.find(post => post.slug === slug);
+};
