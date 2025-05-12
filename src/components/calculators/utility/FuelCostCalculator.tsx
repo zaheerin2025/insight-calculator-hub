@@ -1,423 +1,213 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import CalculatorInput from '@/components/ui/calculator-input';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import CalculatorLayout from '@/components/calculators/CalculatorLayout';
-import ResultDisplay from '@/components/calculators/ResultDisplay';
-import { Fuel } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import ResultDisplay from '../ResultDisplay';
+import { Car, Calculator, Gauge } from 'lucide-react';
+import { toast } from 'sonner';
 
 const FuelCostCalculator: React.FC = () => {
-  // Trip calculation
-  const [distance, setDistance] = useState<string>('100');
-  const [fuelEfficiency, setFuelEfficiency] = useState<string>('25');
-  const [fuelPrice, setFuelPrice] = useState<string>('3.50');
-  const [distanceUnit, setDistanceUnit] = useState<'miles' | 'kilometers'>('miles');
-  const [efficiencyUnit, setEfficiencyUnit] = useState<'mpg' | 'kml' | 'l/100km'>('mpg');
-  const [fuelUnit, setFuelUnit] = useState<'usd_gal' | 'usd_liter'>('usd_gal');
-  const [tripResult, setTripResult] = useState<string | null>(null);
+  // Inputs
+  const [distance, setDistance] = useState<number>(500);
+  const [fuelEfficiency, setFuelEfficiency] = useState<number>(25);
+  const [fuelPrice, setFuelPrice] = useState<number>(3.5);
+  const [roundTrip, setRoundTrip] = useState<boolean>(false);
   
-  // Annual calculation
-  const [annualDistance, setAnnualDistance] = useState<string>('12000');
-  const [annualFuelEfficiency, setAnnualFuelEfficiency] = useState<string>('25');
-  const [annualFuelPrice, setAnnualFuelPrice] = useState<string>('3.50');
-  const [annualDistanceUnit, setAnnualDistanceUnit] = useState<'miles' | 'kilometers'>('miles');
-  const [annualEfficiencyUnit, setAnnualEfficiencyUnit] = useState<'mpg' | 'kml' | 'l/100km'>('mpg');
-  const [annualFuelUnit, setAnnualFuelUnit] = useState<'usd_gal' | 'usd_liter'>('usd_gal');
-  const [annualResult, setAnnualResult] = useState<string | null>(null);
+  // Results
+  const [results, setResults] = useState<{
+    fuelUsed: number;
+    totalCost: number;
+    costPerMile: number;
+    actualDistance: number;
+  } | null>(null);
   
-  // Comparison calculation
-  const [vehicle1Efficiency, setVehicle1Efficiency] = useState<string>('22');
-  const [vehicle2Efficiency, setVehicle2Efficiency] = useState<string>('32');
-  const [comparisonDistance, setComparisonDistance] = useState<string>('12000');
-  const [comparisonFuelPrice, setComparisonFuelPrice] = useState<string>('3.50');
-  const [comparisonEfficiencyUnit, setComparisonEfficiencyUnit] = useState<'mpg' | 'kml' | 'l/100km'>('mpg');
-  const [comparisonResult, setComparisonResult] = useState<string | null>(null);
-  
-  // Helper functions for unit conversion
-  const convertToGallons = (amount: number, fromUnit: 'mpg' | 'kml' | 'l/100km'): number => {
-    if (fromUnit === 'mpg') return amount;
-    if (fromUnit === 'kml') return amount * 2.35215;
-    if (fromUnit === 'l/100km') return 235.215 / amount;
-    return amount;
-  };
-  
-  const convertToMiles = (distance: number, fromUnit: 'miles' | 'kilometers'): number => {
-    return fromUnit === 'miles' ? distance : distance * 0.621371;
-  };
-  
-  const convertToUsdGallon = (price: number, fromUnit: 'usd_gal' | 'usd_liter'): number => {
-    return fromUnit === 'usd_gal' ? price : price * 3.78541;
-  };
-  
-  const calculateTripCost = () => {
-    const dist = parseFloat(distance);
-    const efficiency = parseFloat(fuelEfficiency);
-    const price = parseFloat(fuelPrice);
-    
-    if (!isNaN(dist) && !isNaN(efficiency) && !isNaN(price)) {
-      // Convert everything to miles, mpg, and USD/gallon for calculation
-      const milesDistance = convertToMiles(dist, distanceUnit);
-      const mpgEfficiency = convertToGallons(efficiency, efficiencyUnit);
-      const usdGallonPrice = convertToUsdGallon(price, fuelUnit);
+  // Calculate fuel cost
+  const calculateFuelCost = () => {
+    try {
+      if (
+        isNaN(distance) || isNaN(fuelEfficiency) || isNaN(fuelPrice) ||
+        distance <= 0 || fuelEfficiency <= 0 || fuelPrice <= 0
+      ) {
+        toast.error('Please enter valid positive numbers');
+        return;
+      }
       
-      // Calculate gallons needed and cost
-      const gallonsNeeded = milesDistance / mpgEfficiency;
-      const cost = gallonsNeeded * usdGallonPrice;
+      // Calculate actual distance (accounting for round trip)
+      const actualDistance = roundTrip ? distance * 2 : distance;
       
-      setTripResult(`Cost for ${distance} ${distanceUnit} trip: $${cost.toFixed(2)}`);
-    } else {
-      setTripResult('Please enter valid numbers for all fields');
-    }
-  };
-  
-  const calculateAnnualCost = () => {
-    const dist = parseFloat(annualDistance);
-    const efficiency = parseFloat(annualFuelEfficiency);
-    const price = parseFloat(annualFuelPrice);
-    
-    if (!isNaN(dist) && !isNaN(efficiency) && !isNaN(price)) {
-      // Convert everything to miles, mpg, and USD/gallon for calculation
-      const milesDistance = convertToMiles(dist, annualDistanceUnit);
-      const mpgEfficiency = convertToGallons(efficiency, annualEfficiencyUnit);
-      const usdGallonPrice = convertToUsdGallon(price, annualFuelUnit);
+      // Calculate fuel used
+      const fuelUsed = actualDistance / fuelEfficiency;
       
-      // Calculate gallons needed and cost
-      const gallonsNeeded = milesDistance / mpgEfficiency;
-      const cost = gallonsNeeded * usdGallonPrice;
-      const monthlyCost = cost / 12;
+      // Calculate total cost
+      const totalCost = fuelUsed * fuelPrice;
       
-      setAnnualResult(`Annual fuel cost: $${cost.toFixed(2)} ($${monthlyCost.toFixed(2)}/month)`);
-    } else {
-      setAnnualResult('Please enter valid numbers for all fields');
-    }
-  };
-  
-  const calculateComparison = () => {
-    const dist = parseFloat(comparisonDistance);
-    const efficiency1 = parseFloat(vehicle1Efficiency);
-    const efficiency2 = parseFloat(vehicle2Efficiency);
-    const price = parseFloat(comparisonFuelPrice);
-    
-    if (!isNaN(dist) && !isNaN(efficiency1) && !isNaN(efficiency2) && !isNaN(price)) {
-      // Convert efficiencies to mpg
-      const mpgEfficiency1 = convertToGallons(efficiency1, comparisonEfficiencyUnit);
-      const mpgEfficiency2 = convertToGallons(efficiency2, comparisonEfficiencyUnit);
+      // Calculate cost per mile
+      const costPerMile = totalCost / actualDistance;
       
-      // Calculate costs
-      const gallonsNeeded1 = dist / mpgEfficiency1;
-      const gallonsNeeded2 = dist / mpgEfficiency2;
-      const cost1 = gallonsNeeded1 * price;
-      const cost2 = gallonsNeeded2 * price;
-      const savings = Math.abs(cost1 - cost2);
+      setResults({
+        fuelUsed,
+        totalCost,
+        costPerMile,
+        actualDistance
+      });
       
-      const moreEfficient = mpgEfficiency1 > mpgEfficiency2 ? 'Vehicle 1' : 'Vehicle 2';
-      setComparisonResult(
-        `Vehicle 1 cost: $${cost1.toFixed(2)}\n` +
-        `Vehicle 2 cost: $${cost2.toFixed(2)}\n` +
-        `Annual savings with ${moreEfficient}: $${savings.toFixed(2)}`
-      );
-    } else {
-      setComparisonResult('Please enter valid numbers for all fields');
+      toast.success('Calculation complete!');
+    } catch (error) {
+      console.error('Calculation error:', error);
+      toast.error('An error occurred during calculation');
     }
   };
 
   return (
-    <CalculatorLayout
-      title="Fuel Cost Calculator"
-      description="Estimate fuel costs for trips based on distance, fuel efficiency, and current fuel prices."
-      intro="Calculate how much you'll spend on fuel for a single trip or estimate your annual fuel costs. You can also compare fuel costs between two different vehicles."
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Fuel className="mr-2 h-5 w-5" />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-5">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border border-blue-100 mb-6 shadow-sm">
+          <h3 className="flex items-center text-blue-700 font-medium mb-2">
+            <Gauge className="h-4 w-4 mr-2" />
             Fuel Cost Calculator
-          </CardTitle>
-          <CardDescription>
-            Calculate fuel costs for trips or compare vehicles
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="trip" className="space-y-6">
-            <TabsList className="grid grid-cols-3">
-              <TabsTrigger value="trip">Trip Cost</TabsTrigger>
-              <TabsTrigger value="annual">Annual Cost</TabsTrigger>
-              <TabsTrigger value="compare">Compare Vehicles</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="trip" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="distance">Distance</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="distance"
-                      type="number"
-                      value={distance}
-                      onChange={(e) => setDistance(e.target.value)}
-                      placeholder="Enter distance"
-                      className="flex-grow"
-                    />
-                    <Select 
-                      value={distanceUnit} 
-                      onValueChange={(value: 'miles' | 'kilometers') => setDistanceUnit(value)}
-                    >
-                      <SelectTrigger className="w-28">
-                        <SelectValue placeholder="Unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="miles">miles</SelectItem>
-                        <SelectItem value="kilometers">km</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="fuelEfficiency">Fuel Efficiency</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="fuelEfficiency"
-                      type="number"
-                      value={fuelEfficiency}
-                      onChange={(e) => setFuelEfficiency(e.target.value)}
-                      placeholder="Enter efficiency"
-                      className="flex-grow"
-                    />
-                    <Select 
-                      value={efficiencyUnit} 
-                      onValueChange={(value: 'mpg' | 'kml' | 'l/100km') => setEfficiencyUnit(value)}
-                    >
-                      <SelectTrigger className="w-28">
-                        <SelectValue placeholder="Unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="mpg">MPG</SelectItem>
-                        <SelectItem value="kml">km/L</SelectItem>
-                        <SelectItem value="l/100km">L/100km</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
+          </h3>
+          <p className="text-sm text-slate-600">
+            Estimate how much you'll spend on fuel for your trips or commutes.
+          </p>
+        </div>
+        
+        <CalculatorInput
+          id="distance"
+          label="Distance"
+          type="number"
+          value={distance}
+          onChange={(value) => setDistance(parseFloat(value) || 0)}
+          min={1}
+          step={10}
+          suffix=" miles"
+          helperText="Enter the one-way trip distance"
+        />
+        
+        <CalculatorInput
+          id="fuel-efficiency"
+          label="Fuel Efficiency"
+          type="number"
+          value={fuelEfficiency}
+          onChange={(value) => setFuelEfficiency(parseFloat(value) || 0)}
+          min={1}
+          step={0.5}
+          suffix=" mpg"
+          helperText="Enter your vehicle's miles per gallon"
+        />
+        
+        <CalculatorInput
+          id="fuel-price"
+          label="Fuel Price"
+          type="number"
+          value={fuelPrice}
+          onChange={(value) => setFuelPrice(parseFloat(value) || 0)}
+          min={0.1}
+          step={0.1}
+          prefix="$"
+          suffix=" / gallon"
+          helperText="Enter the current fuel price per gallon"
+        />
+        
+        <div className="flex items-center space-x-2 mt-4">
+          <input
+            id="round-trip"
+            type="checkbox"
+            checked={roundTrip}
+            onChange={(e) => setRoundTrip(e.target.checked)}
+            className="h-4 w-4 border-gray-300 rounded"
+          />
+          <label htmlFor="round-trip" className="text-sm font-medium">
+            Round Trip (calculate both ways)
+          </label>
+        </div>
+        
+        <Button 
+          onClick={calculateFuelCost}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-4 shadow-md transition-all duration-300"
+        >
+          <Calculator className="mr-2 h-4 w-4" />
+          Calculate Fuel Cost
+        </Button>
+      </div>
+      
+      <div>
+        {results ? (
+          <Card className="animate-fade-in h-full border-blue-100 shadow-md bg-white">
+            <CardContent className="p-6 flex flex-col justify-center h-full">
+              <h3 className="text-lg font-medium mb-4 border-b pb-3">Fuel Cost Summary</h3>
               
-              <div className="space-y-2">
-                <Label htmlFor="fuelPrice">Fuel Price</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    id="fuelPrice"
-                    type="number"
-                    value={fuelPrice}
-                    onChange={(e) => setFuelPrice(e.target.value)}
-                    placeholder="Enter fuel price"
-                    className="flex-grow"
-                  />
-                  <Select 
-                    value={fuelUnit} 
-                    onValueChange={(value: 'usd_gal' | 'usd_liter') => setFuelUnit(value)}
-                  >
-                    <SelectTrigger className="w-28">
-                      <SelectValue placeholder="Unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="usd_gal">$/gal</SelectItem>
-                      <SelectItem value="usd_liter">$/L</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <Button className="w-full" onClick={calculateTripCost}>
-                Calculate Trip Cost
-              </Button>
-              
-              {tripResult && (
+              <div className="space-y-3">
                 <ResultDisplay
-                  title="Trip Fuel Cost"
-                  value={tripResult}
+                  label="Trip Distance"
+                  value={`${results.actualDistance.toFixed(0)} miles`}
+                  icon={<Car className="h-5 w-5 text-blue-500" />}
                 />
-              )}
-            </TabsContent>
-            
-            <TabsContent value="annual" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="annualDistance">Annual Distance</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="annualDistance"
-                      type="number"
-                      value={annualDistance}
-                      onChange={(e) => setAnnualDistance(e.target.value)}
-                      placeholder="Enter annual distance"
-                      className="flex-grow"
-                    />
-                    <Select 
-                      value={annualDistanceUnit} 
-                      onValueChange={(value: 'miles' | 'kilometers') => setAnnualDistanceUnit(value)}
-                    >
-                      <SelectTrigger className="w-28">
-                        <SelectValue placeholder="Unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="miles">miles</SelectItem>
-                        <SelectItem value="kilometers">km</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="annualFuelEfficiency">Fuel Efficiency</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="annualFuelEfficiency"
-                      type="number"
-                      value={annualFuelEfficiency}
-                      onChange={(e) => setAnnualFuelEfficiency(e.target.value)}
-                      placeholder="Enter efficiency"
-                      className="flex-grow"
-                    />
-                    <Select 
-                      value={annualEfficiencyUnit} 
-                      onValueChange={(value: 'mpg' | 'kml' | 'l/100km') => setAnnualEfficiencyUnit(value)}
-                    >
-                      <SelectTrigger className="w-28">
-                        <SelectValue placeholder="Unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="mpg">MPG</SelectItem>
-                        <SelectItem value="kml">km/L</SelectItem>
-                        <SelectItem value="l/100km">L/100km</SelectItem>
-                      </SelectContent>
-                    </Select>
+                <ResultDisplay
+                  label="Fuel Required"
+                  value={`${results.fuelUsed.toFixed(2)} gallons`}
+                  icon={<Gauge className="h-5 w-5 text-blue-500" />}
+                />
+                
+                <ResultDisplay
+                  label="Total Fuel Cost"
+                  value={`$${results.totalCost.toFixed(2)}`}
+                  icon={<Calculator className="h-5 w-5 text-blue-600" />}
+                  isHighlighted={true}
+                />
+                
+                <ResultDisplay
+                  label="Cost Per Mile"
+                  value={`$${results.costPerMile.toFixed(2)}/mile`}
+                  icon={<Calculator className="h-5 w-5 text-blue-500" />}
+                />
+              </div>
+              
+              <div className="mt-6 text-sm text-muted-foreground border-t pt-4">
+                <p>For a {results.actualDistance} mile {roundTrip ? 'round trip' : 'one-way trip'} with a {fuelEfficiency} mpg vehicle:</p>
+                <p className="mt-2">You'll need approximately <strong>{results.fuelUsed.toFixed(2)} gallons</strong> of fuel</p>
+                <p className="mt-1">At ${fuelPrice.toFixed(2)}/gallon, this will cost <strong>${results.totalCost.toFixed(2)}</strong></p>
+                <p className="mt-1">Your cost per mile is <strong>${results.costPerMile.toFixed(2)}</strong></p>
+                
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-md text-amber-700">
+                  <p className="font-medium">Driving Tip:</p>
+                  <p>Maintaining a steady speed and avoiding rapid acceleration can improve your fuel economy by up to 20%, saving you money on fuel costs.</p>
+                </div>
+              </div>
+              
+              <div className="mt-6 border-t pt-4">
+                <h4 className="font-medium mb-2">Compare with Different Vehicles:</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Compact Car (35 mpg):</span>
+                    <span className="font-medium">${((results.actualDistance / 35) * fuelPrice).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>SUV (20 mpg):</span>
+                    <span className="font-medium">${((results.actualDistance / 20) * fuelPrice).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Electric Vehicle (3.5 mi/kWh):</span>
+                    <span className="font-medium">${((results.actualDistance / 3.5) * 0.13).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="annualFuelPrice">Fuel Price</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    id="annualFuelPrice"
-                    type="number"
-                    value={annualFuelPrice}
-                    onChange={(e) => setAnnualFuelPrice(e.target.value)}
-                    placeholder="Enter fuel price"
-                    className="flex-grow"
-                  />
-                  <Select 
-                    value={annualFuelUnit} 
-                    onValueChange={(value: 'usd_gal' | 'usd_liter') => setAnnualFuelUnit(value)}
-                  >
-                    <SelectTrigger className="w-28">
-                      <SelectValue placeholder="Unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="usd_gal">$/gal</SelectItem>
-                      <SelectItem value="usd_liter">$/L</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <Button className="w-full" onClick={calculateAnnualCost}>
-                Calculate Annual Cost
-              </Button>
-              
-              {annualResult && (
-                <ResultDisplay
-                  title="Annual Fuel Cost"
-                  value={annualResult}
-                />
-              )}
-            </TabsContent>
-            
-            <TabsContent value="compare" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="vehicle1Efficiency">Vehicle 1 Efficiency</Label>
-                  <Input
-                    id="vehicle1Efficiency"
-                    type="number"
-                    value={vehicle1Efficiency}
-                    onChange={(e) => setVehicle1Efficiency(e.target.value)}
-                    placeholder="Enter efficiency"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="vehicle2Efficiency">Vehicle 2 Efficiency</Label>
-                  <Input
-                    id="vehicle2Efficiency"
-                    type="number"
-                    value={vehicle2Efficiency}
-                    onChange={(e) => setVehicle2Efficiency(e.target.value)}
-                    placeholder="Enter efficiency"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="comparisonEfficiencyUnit">Efficiency Unit</Label>
-                  <Select 
-                    value={comparisonEfficiencyUnit} 
-                    onValueChange={(value: 'mpg' | 'kml' | 'l/100km') => setComparisonEfficiencyUnit(value)}
-                  >
-                    <SelectTrigger id="comparisonEfficiencyUnit">
-                      <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="mpg">MPG</SelectItem>
-                      <SelectItem value="kml">km/L</SelectItem>
-                      <SelectItem value="l/100km">L/100km</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="comparisonFuelPrice">Fuel Price ($/gal)</Label>
-                  <Input
-                    id="comparisonFuelPrice"
-                    type="number"
-                    value={comparisonFuelPrice}
-                    onChange={(e) => setComparisonFuelPrice(e.target.value)}
-                    placeholder="Enter price per gallon"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="comparisonDistance">Annual Distance (miles)</Label>
-                <Input
-                  id="comparisonDistance"
-                  type="number"
-                  value={comparisonDistance}
-                  onChange={(e) => setComparisonDistance(e.target.value)}
-                  placeholder="Enter annual distance"
-                />
-              </div>
-              
-              <Button className="w-full" onClick={calculateComparison}>
-                Compare Vehicles
-              </Button>
-              
-              {comparisonResult && (
-                <ResultDisplay
-                  title="Vehicle Comparison"
-                  value={comparisonResult}
-                />
-              )}
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </CalculatorLayout>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="h-full flex items-center justify-center p-6 border-2 border-dashed border-blue-200 rounded-lg bg-blue-50/50">
+            <div className="text-center">
+              <Gauge className="h-12 w-12 mx-auto text-blue-300 mb-3" />
+              <h3 className="text-lg font-medium text-blue-700 mb-1">No Results Yet</h3>
+              <p className="text-sm text-blue-600/70 max-w-xs mx-auto">
+                Enter your trip details and click calculate to see your fuel costs.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import CalculatorLayout from '../CalculatorLayout';
 import CalculatorInput from '@/components/ui/calculator-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -94,269 +93,222 @@ const GasMileageCalculator: React.FC = () => {
       toast.error('An error occurred during calculation');
     }
   };
-  
-  // Schema markup for SEO
-  const schemaMarkup = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Gas Mileage (MPG) Calculator",
-    "applicationCategory": "UtilityApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "operatingSystem": "Web Browser"
-  };
-  
-  // Related calculators
-  const relatedCalculators = [
-    { title: "Electric Vehicle Range Calculator", path: "/calculators/utility/ev-range-calculator" },
-    { title: "Carbon Footprint Calculator", path: "/calculators/utility/carbon-footprint-calculator" },
-    { title: "Trip Cost Calculator", path: "/calculators/utility/fuel-cost-calculator", comingSoon: true }
-  ];
 
   return (
-    <CalculatorLayout
-      title="Gas Mileage (MPG) Calculator"
-      description="Calculate your vehicle's fuel economy and estimate fuel costs for trips."
-      intro="Our gas mileage calculator helps you determine your vehicle's fuel efficiency in MPG and estimate how much you'll spend on fuel for upcoming trips."
-      formula={
-        <div>
-          <p>The gas mileage calculation uses the following formulas:</p>
-          <div className="bg-muted p-4 rounded-md my-4 space-y-3 overflow-x-auto">
-            <p><strong>Miles Per Gallon (MPG):</strong></p>
-            <code>MPG = Miles Driven ÷ Gallons Used</code>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-6">
+        <Card className="border border-muted">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-4">Calculate Your MPG</h3>
             
-            <p className="mt-3"><strong>Trip Fuel Needed:</strong></p>
-            <code>Fuel Needed = Trip Distance ÷ MPG</code>
-            
-            <p className="mt-3"><strong>Trip Cost:</strong></p>
-            <code>Trip Cost = Fuel Needed × Fuel Price per Gallon</code>
-          </div>
-        </div>
-      }
-      faq={[
-        {
-          question: "How can I improve my gas mileage?",
-          answer: "To improve gas mileage: 1) Maintain proper tire pressure, 2) Remove excess weight from your vehicle, 3) Drive at moderate speeds (fuel economy typically peaks around 50-60 mph), 4) Avoid aggressive acceleration and braking, 5) Use cruise control on highways, 6) Turn off the engine when idling for extended periods, 7) Keep up with regular maintenance like oil changes and air filter replacements, and 8) Plan efficient routes to minimize distance traveled."
-        },
-        {
-          question: "How accurate is the MPG reading on my car's dashboard?",
-          answer: "Dashboard MPG displays can vary in accuracy. Many are within 5-10% of actual fuel economy, but some can be off by more. For the most accurate measurement, use the manual calculation method: fill your tank completely, reset your trip odometer, drive normally until the tank is low, then refill completely. Divide the miles driven by the exact number of gallons it took to refill the tank."
-        },
-        {
-          question: "What affects fuel economy the most?",
-          answer: "The biggest factors affecting fuel economy are: 1) Vehicle weight and aerodynamics, 2) Engine size and efficiency, 3) Driving style (aggressive driving can lower MPG by 15-30%), 4) Speed (fuel economy drops significantly above 50 mph due to increased air resistance), 5) Cold weather (can reduce MPG by 15-24%), 6) Air conditioning use (can reduce MPG by 1-4%), 7) Tire inflation (underinflated tires can lower MPG by 0.2% for each 1 PSI drop), and 8) Vehicle maintenance issues like dirty air filters or worn spark plugs."
-        }
-      ]}
-      schemaMarkup={schemaMarkup}
-      canonicalUrl="https://calculators-hub.com/calculators/utility/gas-mileage-calculator"
-      relatedCalculators={relatedCalculators}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <Card className="border border-muted">
-            <CardContent className="pt-6">
-              <h3 className="text-lg font-medium mb-4">Calculate Your MPG</h3>
+            <div className="space-y-4">
+              <CalculatorInput
+                id="miles-driven"
+                label="Miles Driven"
+                type="number"
+                value={milesDriven}
+                onChange={(value) => setMilesDriven(parseFloat(value) || 0)}
+                min={1}
+                step={1}
+                suffix=" miles"
+                helperText="Enter the distance driven since last fill-up"
+              />
               
-              <div className="space-y-4">
-                <CalculatorInput
-                  id="miles-driven"
-                  label="Miles Driven"
-                  type="number"
-                  value={milesDriven}
-                  onChange={(value) => setMilesDriven(parseFloat(value) || 0)}
-                  min={1}
-                  step={1}
-                  suffix=" miles"
-                  helperText="Enter the distance driven since last fill-up"
-                />
-                
-                <CalculatorInput
-                  id="gallons-used"
-                  label="Gallons Used"
-                  type="number"
-                  value={gallonsUsed}
-                  onChange={(value) => setGallonsUsed(parseFloat(value) || 0)}
-                  min={0.1}
-                  step={0.1}
-                  suffix=" gallons"
-                  helperText="Enter the amount of fuel used"
-                />
-                
-                <Button 
-                  onClick={calculateMpg}
-                  className="w-full bg-primary hover:bg-primary-hover text-white"
-                >
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Calculate MPG
-                </Button>
-                
-                {mpgResults && (
-                  <div className="mt-4 pt-4 border-t">
-                    <div className="space-y-3">
-                      <ResultDisplay
-                        label="Miles Per Gallon (MPG)"
-                        value={`${mpgResults.mpg.toFixed(1)} mpg`}
-                        icon={<Car className="h-5 w-5" />}
-                        isHighlighted={true}
-                      />
-                      
-                      <ResultDisplay
-                        label="Kilometers Per Liter"
-                        value={`${mpgResults.kml.toFixed(1)} km/L`}
-                        icon={<Car className="h-5 w-5" />}
-                      />
-                      
-                      <ResultDisplay
-                        label="Liters Per 100 km"
-                        value={`${mpgResults.l100km.toFixed(1)} L/100km`}
-                        icon={<Car className="h-5 w-5" />}
-                      />
-                    </div>
+              <CalculatorInput
+                id="gallons-used"
+                label="Gallons Used"
+                type="number"
+                value={gallonsUsed}
+                onChange={(value) => setGallonsUsed(parseFloat(value) || 0)}
+                min={0.1}
+                step={0.1}
+                suffix=" gallons"
+                helperText="Enter the amount of fuel used"
+              />
+              
+              <Button 
+                onClick={calculateMpg}
+                className="w-full bg-primary hover:bg-primary/90 text-white"
+              >
+                <Calculator className="mr-2 h-4 w-4" />
+                Calculate MPG
+              </Button>
+              
+              {mpgResults && (
+                <div className="mt-4 pt-4 border-t">
+                  <div className="space-y-3">
+                    <ResultDisplay
+                      label="Miles Per Gallon (MPG)"
+                      value={`${mpgResults.mpg.toFixed(1)} mpg`}
+                      icon={<Car className="h-5 w-5" />}
+                      isHighlighted={true}
+                    />
                     
-                    <div className="mt-4 text-sm text-muted-foreground">
-                      {mpgResults.mpg < 20 ? (
-                        <p>Your fuel economy is below average. Consider a tune-up or more efficient driving habits.</p>
-                      ) : mpgResults.mpg < 30 ? (
-                        <p>Your fuel economy is average. Small changes to driving habits could improve it.</p>
-                      ) : (
-                        <p>Your fuel economy is good! You're saving money and reducing emissions.</p>
-                      )}
-                    </div>
+                    <ResultDisplay
+                      label="Kilometers Per Liter"
+                      value={`${mpgResults.kml.toFixed(1)} km/L`}
+                      icon={<Car className="h-5 w-5" />}
+                    />
+                    
+                    <ResultDisplay
+                      label="Liters Per 100 km"
+                      value={`${mpgResults.l100km.toFixed(1)} L/100km`}
+                      icon={<Car className="h-5 w-5" />}
+                    />
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="border border-muted">
-            <CardContent className="pt-6">
-              <h3 className="text-lg font-medium mb-4">Calculate Trip Cost</h3>
-              
-              <div className="space-y-4">
-                <CalculatorInput
-                  id="trip-distance"
-                  label="Trip Distance"
-                  type="number"
-                  value={tripDistance}
-                  onChange={(value) => setTripDistance(parseFloat(value) || 0)}
-                  min={1}
-                  step={1}
-                  suffix=" miles"
-                  helperText="Enter the distance of your planned trip"
-                />
-                
-                <CalculatorInput
-                  id="fuel-price"
-                  label="Fuel Price"
-                  type="number"
-                  value={fuelPrice}
-                  onChange={(value) => setFuelPrice(parseFloat(value) || 0)}
-                  min={0.1}
-                  step={0.01}
-                  prefix="$"
-                  suffix=" / gallon"
-                  helperText="Enter the current price per gallon"
-                />
-                
-                <CalculatorInput
-                  id="vehicle-mpg"
-                  label="Vehicle MPG"
-                  type="number"
-                  value={vehicleMpg}
-                  onChange={(value) => setVehicleMpg(parseFloat(value) || 0)}
-                  min={1}
-                  step={0.1}
-                  suffix=" mpg"
-                  helperText="Enter your vehicle's fuel economy"
-                />
-                
-                <Button 
-                  onClick={calculateTripCost}
-                  className="w-full bg-primary hover:bg-primary-hover text-white"
-                >
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Calculate Trip Cost
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  
+                  <div className="mt-4 text-sm text-muted-foreground">
+                    {mpgResults.mpg < 20 ? (
+                      <p>Your fuel economy is below average. Consider a tune-up or more efficient driving habits.</p>
+                    ) : mpgResults.mpg < 30 ? (
+                      <p>Your fuel economy is average. Small changes to driving habits could improve it.</p>
+                    ) : (
+                      <p>Your fuel economy is good! You're saving money and reducing emissions.</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
         
-        <div>
-          {tripResults && (
-            <Card className="animate-fade-in h-full">
-              <CardContent className="p-6 flex flex-col justify-center h-full">
-                <h3 className="text-lg font-medium mb-4">Trip Cost Summary</h3>
-                
-                <div className="space-y-3">
-                  <ResultDisplay
-                    label="Fuel Needed"
-                    value={`${tripResults.fuelNeeded.toFixed(1)} gallons`}
-                    icon={<Gauge className="h-5 w-5" />}
-                  />
-                  
-                  <ResultDisplay
-                    label="Trip Fuel Cost"
-                    value={`$${tripResults.tripCost.toFixed(2)}`}
-                    icon={<Calculator className="h-5 w-5" />}
-                    isHighlighted={true}
-                  />
-                  
-                  <ResultDisplay
-                    label="CO₂ Emissions"
-                    value={`${tripResults.co2Emissions.toFixed(0)} lbs`}
-                    icon={<Car className="h-5 w-5" />}
-                  />
-                  
-                  <ResultDisplay
-                    label="Cost Per Mile"
-                    value={`$${(tripResults.tripCost / tripDistance).toFixed(2)}/mile`}
-                    icon={<Calculator className="h-5 w-5" />}
-                  />
-                </div>
-                
-                <div className="mt-6 text-sm text-muted-foreground border-t pt-4">
-                  <p>For a {tripDistance} mile trip at {fuelPrice.toFixed(2)}/gallon:</p>
-                  <p className="mt-2">Your {vehicleMpg.toFixed(1)} mpg vehicle will use approximately <strong>{tripResults.fuelNeeded.toFixed(1)} gallons</strong> of fuel</p>
-                  <p className="mt-1">This will cost approximately <strong>${tripResults.tripCost.toFixed(2)}</strong></p>
-                  <p className="mt-1">Your trip will emit approximately <strong>{tripResults.co2Emissions.toFixed(0)} pounds</strong> of CO₂</p>
-                  
-                  <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-md text-amber-700">
-                    <p className="font-medium">Trip Planning Tip:</p>
-                    <p>Consider mapping your route to avoid traffic and minimize stops. Each stop-and-go cycle can reduce your fuel economy by up to 10%.</p>
-                  </div>
-                </div>
-                
-                <div className="mt-6 border-t pt-4">
-                  <h4 className="font-medium mb-2">Compare with Other Vehicles:</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Compact Car (35 mpg):</span>
-                      <span className="font-medium">${((tripDistance / 35) * fuelPrice).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Mid-Size (28 mpg):</span>
-                      <span className="font-medium">${((tripDistance / 28) * fuelPrice).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>SUV (20 mpg):</span>
-                      <span className="font-medium">${((tripDistance / 20) * fuelPrice).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Electric Vehicle:</span>
-                      <span className="font-medium">${((tripDistance / 100) * 3.8).toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+        <Card className="border border-muted">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-4">Calculate Trip Cost</h3>
+            
+            <div className="space-y-4">
+              <CalculatorInput
+                id="trip-distance"
+                label="Trip Distance"
+                type="number"
+                value={tripDistance}
+                onChange={(value) => setTripDistance(parseFloat(value) || 0)}
+                min={1}
+                step={1}
+                suffix=" miles"
+                helperText="Enter the distance of your planned trip"
+              />
+              
+              <CalculatorInput
+                id="fuel-price"
+                label="Fuel Price"
+                type="number"
+                value={fuelPrice}
+                onChange={(value) => setFuelPrice(parseFloat(value) || 0)}
+                min={0.1}
+                step={0.01}
+                prefix="$"
+                suffix=" / gallon"
+                helperText="Enter the current price per gallon"
+              />
+              
+              <CalculatorInput
+                id="vehicle-mpg"
+                label="Vehicle MPG"
+                type="number"
+                value={vehicleMpg}
+                onChange={(value) => setVehicleMpg(parseFloat(value) || 0)}
+                min={1}
+                step={0.1}
+                suffix=" mpg"
+                helperText="Enter your vehicle's fuel economy"
+              />
+              
+              <Button 
+                onClick={calculateTripCost}
+                className="w-full bg-primary hover:bg-primary/90 text-white"
+              >
+                <Calculator className="mr-2 h-4 w-4" />
+                Calculate Trip Cost
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </CalculatorLayout>
+      
+      <div>
+        {tripResults && (
+          <Card className="animate-fade-in h-full">
+            <CardContent className="p-6 flex flex-col justify-center h-full">
+              <h3 className="text-lg font-medium mb-4">Trip Cost Summary</h3>
+              
+              <div className="space-y-3">
+                <ResultDisplay
+                  label="Fuel Needed"
+                  value={`${tripResults.fuelNeeded.toFixed(1)} gallons`}
+                  icon={<Gauge className="h-5 w-5" />}
+                />
+                
+                <ResultDisplay
+                  label="Trip Fuel Cost"
+                  value={`$${tripResults.tripCost.toFixed(2)}`}
+                  icon={<Calculator className="h-5 w-5" />}
+                  isHighlighted={true}
+                />
+                
+                <ResultDisplay
+                  label="CO₂ Emissions"
+                  value={`${tripResults.co2Emissions.toFixed(0)} lbs`}
+                  icon={<Car className="h-5 w-5" />}
+                />
+                
+                <ResultDisplay
+                  label="Cost Per Mile"
+                  value={`$${(tripResults.tripCost / tripDistance).toFixed(2)}/mile`}
+                  icon={<Calculator className="h-5 w-5" />}
+                />
+              </div>
+              
+              <div className="mt-6 text-sm text-muted-foreground border-t pt-4">
+                <p>For a {tripDistance} mile trip at {fuelPrice.toFixed(2)}/gallon:</p>
+                <p className="mt-2">Your {vehicleMpg.toFixed(1)} mpg vehicle will use approximately <strong>{tripResults.fuelNeeded.toFixed(1)} gallons</strong> of fuel</p>
+                <p className="mt-1">This will cost approximately <strong>${tripResults.tripCost.toFixed(2)}</strong></p>
+                <p className="mt-1">Your trip will emit approximately <strong>{tripResults.co2Emissions.toFixed(0)} pounds</strong> of CO₂</p>
+                
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-md text-amber-700">
+                  <p className="font-medium">Trip Planning Tip:</p>
+                  <p>Consider mapping your route to avoid traffic and minimize stops. Each stop-and-go cycle can reduce your fuel economy by up to 10%.</p>
+                </div>
+              </div>
+              
+              <div className="mt-6 border-t pt-4">
+                <h4 className="font-medium mb-2">Compare with Other Vehicles:</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Compact Car (35 mpg):</span>
+                    <span className="font-medium">${((tripDistance / 35) * fuelPrice).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Mid-Size (28 mpg):</span>
+                    <span className="font-medium">${((tripDistance / 28) * fuelPrice).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>SUV (20 mpg):</span>
+                    <span className="font-medium">${((tripDistance / 20) * fuelPrice).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Electric Vehicle:</span>
+                    <span className="font-medium">${((tripDistance / 100) * 3.8).toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        
+        {!tripResults && (
+          <div className="h-full flex items-center justify-center p-6 border-2 border-dashed border-blue-200 rounded-lg bg-blue-50/50">
+            <div className="text-center">
+              <Car className="h-12 w-12 mx-auto text-blue-300 mb-3" />
+              <h3 className="text-lg font-medium text-blue-700 mb-1">No Results Yet</h3>
+              <p className="text-sm text-blue-600/70 max-w-xs mx-auto">
+                Calculate your MPG and enter trip details to see cost estimates.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

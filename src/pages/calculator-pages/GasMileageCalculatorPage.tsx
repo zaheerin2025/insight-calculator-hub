@@ -2,7 +2,6 @@
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import GasMileageCalculator from '@/components/calculators/utility/GasMileageCalculator';
-import SEOMeta from '@/components/ui/seo-meta';
 import CalculatorLayout from '@/components/calculators/CalculatorLayout';
 
 const GasMileageCalculatorPage: React.FC = () => {
