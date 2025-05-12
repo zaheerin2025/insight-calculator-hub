@@ -2,7 +2,6 @@
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import HeatingCostCalculator from '@/components/calculators/utility/HeatingCostCalculator';
-import SEOMeta from '@/components/ui/seo-meta';
 import CalculatorLayout from '@/components/calculators/CalculatorLayout';
 
 const HeatingCostCalculatorPage: React.FC = () => {
