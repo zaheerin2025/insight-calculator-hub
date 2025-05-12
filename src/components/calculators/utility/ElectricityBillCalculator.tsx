@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import ResultDisplay from '../ResultDisplay';
-import { Zap, Calculator } from 'lucide-react';
+import { Zap, Calculator, AlertTriangle, Lightbulb } from 'lucide-react';
 import { toast } from 'sonner';
 import CalculatorInput from '@/components/ui/calculator-input';
 
@@ -58,7 +58,17 @@ const ElectricityBillCalculator: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="space-y-4">
+      <div className="space-y-5">
+        <div className="bg-primary/5 p-4 rounded-lg border border-primary/10 mb-6">
+          <h3 className="flex items-center text-primary font-medium mb-2">
+            <Lightbulb className="h-4 w-4 mr-2" />
+            Electricity Bill Calculator
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Calculate your estimated monthly electricity bill based on your consumption and local rates.
+          </p>
+        </div>
+      
         <CalculatorInput
           id="kwh"
           label="Energy Consumption"
@@ -110,7 +120,7 @@ const ElectricityBillCalculator: React.FC = () => {
         
         <Button 
           onClick={calculateElectricityBill}
-          className="w-full bg-primary hover:bg-primary-hover text-white mt-4"
+          className="w-full bg-primary hover:bg-primary-hover text-white mt-6 shadow-sm"
         >
           <Calculator className="mr-2 h-4 w-4" />
           Calculate Electricity Bill
@@ -118,34 +128,34 @@ const ElectricityBillCalculator: React.FC = () => {
       </div>
       
       <div>
-        {results && (
-          <Card className="animate-fade-in h-full">
+        {results ? (
+          <Card className="animate-fade-in h-full border-primary/10 shadow-sm">
             <CardContent className="p-6 flex flex-col justify-center h-full">
-              <h3 className="text-lg font-medium mb-4">Electricity Bill Summary</h3>
+              <h3 className="text-lg font-medium mb-6 border-b pb-2">Electricity Bill Summary</h3>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <ResultDisplay
                   label="Energy Charge"
                   value={`$${results.energyCharge.toFixed(2)}`}
-                  icon={<Zap className="h-5 w-5" />}
+                  icon={<Zap className="h-5 w-5 text-amber-500" />}
                 />
                 
                 <ResultDisplay
                   label="Fixed Charges"
                   value={`$${results.fixedCharge.toFixed(2)}`}
-                  icon={<Zap className="h-5 w-5" />}
+                  icon={<Zap className="h-5 w-5 text-blue-500" />}
                 />
                 
                 <ResultDisplay
                   label="Taxes"
                   value={`$${results.taxAmount.toFixed(2)}`}
-                  icon={<Zap className="h-5 w-5" />}
+                  icon={<Zap className="h-5 w-5 text-red-500" />}
                 />
                 
                 <ResultDisplay
                   label="Total Monthly Bill"
                   value={`$${results.totalBill.toFixed(2)}`}
-                  icon={<Zap className="h-5 w-5" />}
+                  icon={<Zap className="h-5 w-5 text-primary" />}
                   isHighlighted={true}
                 />
               </div>
@@ -155,17 +165,30 @@ const ElectricityBillCalculator: React.FC = () => {
                 <p className="mt-2">Your energy charge is <strong>${results.energyCharge.toFixed(2)}</strong></p>
                 <p className="mt-1">Fixed charges add <strong>${results.fixedCharge.toFixed(2)}</strong></p>
                 <p className="mt-1">Taxes ({taxes}%) add <strong>${results.taxAmount.toFixed(2)}</strong></p>
-                <p className="mt-2">Your total monthly electricity bill is <strong>${results.totalBill.toFixed(2)}</strong></p>
+                <p className="mt-2 text-base font-medium">Your total monthly electricity bill is <strong>${results.totalBill.toFixed(2)}</strong></p>
                 
                 {kwh > 800 && (
-                  <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-md text-amber-700">
-                    <p className="font-medium">Energy Saving Tip:</p>
-                    <p>Your consumption is relatively high. Consider energy-efficient appliances or reducing usage during peak hours to lower your bill.</p>
+                  <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-md text-amber-700 flex items-start">
+                    <AlertTriangle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">Energy Saving Tip:</p>
+                      <p>Your consumption is relatively high. Consider energy-efficient appliances or reducing usage during peak hours to lower your bill.</p>
+                    </div>
                   </div>
                 )}
               </div>
             </CardContent>
           </Card>
+        ) : (
+          <div className="h-full flex items-center justify-center p-6 border-2 border-dashed border-muted rounded-lg bg-muted/5">
+            <div className="text-center">
+              <Zap className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
+              <h3 className="text-lg font-medium text-muted-foreground mb-1">No Results Yet</h3>
+              <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                Enter your electricity usage details and click the calculate button to see your bill breakdown.
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </div>

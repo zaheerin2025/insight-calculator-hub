@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Calculator, ChevronDown, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,17 +11,33 @@ import { calculatorCategories, Calculator as CalculatorType } from '@/data/calcu
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
   return (
-    <header className="w-full py-3 border-b bg-white sticky top-0 z-50 shadow-sm">
+    <header className={cn(
+      "w-full py-3 sticky top-0 z-50 transition-all duration-200", 
+      isScrolled ? "bg-white/95 backdrop-blur-sm border-b shadow-sm" : "bg-white border-b"
+    )}>
       <div className="container flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-10 w-10">
+        <Link to="/" className="flex items-center space-x-2 group">
+          <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-light rounded-lg h-10 w-10 transition-transform group-hover:scale-105 shadow-sm">
             <Calculator className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
@@ -49,26 +65,28 @@ const Header: React.FC = () => {
                   Calculators
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="w-[550px] grid grid-cols-2 gap-3 p-4">
-                    {calculatorCategories.map((category, index) => (
-                      <Link 
-                        key={index}
-                        to={category.path}
-                        className="flex items-center space-x-2 rounded-md p-2 hover:bg-muted transition-colors"
-                      >
-                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${category.background}`}>
-                          {React.cloneElement(category.icon, { className: "h-5 w-5 text-white" })}
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">{category.title}</div>
-                          <div className="text-xs text-muted-foreground line-clamp-1">{category.description}</div>
-                        </div>
-                      </Link>
-                    ))}
+                  <div className="w-[600px] p-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      {calculatorCategories.map((category, index) => (
+                        <Link 
+                          key={index}
+                          to={category.path}
+                          className="flex items-center space-x-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                        >
+                          <div className={`w-10 h-10 rounded-md flex items-center justify-center ${category.background}`}>
+                            {React.cloneElement(category.icon, { className: "h-5 w-5 text-white" })}
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium">{category.title}</div>
+                            <div className="text-xs text-muted-foreground line-clamp-1">{category.description}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
                     
                     <Link 
                       to="/all-calculators"
-                      className="col-span-2 flex items-center justify-center space-x-2 rounded-md p-2 bg-muted hover:bg-muted/70 transition-colors mt-2 font-medium"
+                      className="flex items-center justify-center space-x-2 rounded-md p-3 bg-muted hover:bg-muted/70 transition-colors mt-4 font-medium"
                     >
                       View All Calculators
                     </Link>
@@ -109,7 +127,7 @@ const Header: React.FC = () => {
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSearchOpen(true)}
-            className="h-9 w-9"
+            className="h-9 w-9 rounded-full hover:bg-accent/80"
           >
             <Search className="h-4 w-4" />
           </Button>
@@ -121,14 +139,14 @@ const Header: React.FC = () => {
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSearchOpen(true)}
-            className="h-9 w-9"
+            className="h-9 w-9 rounded-full"
           >
             <Search className="h-4 w-4" />
           </Button>
           
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="rounded-full">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
